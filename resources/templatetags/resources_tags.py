@@ -17,6 +17,7 @@ def highlight_query(text, query):
 
     # Necessary to escape characters that may be interpreted as html in the text
     # and query strings to avoid erroneous highlighting.
+    # (See bottom comment for why the same name is used for the text variable.)
     text = escape(text)
     html_escaped_query = escape(query)
 
