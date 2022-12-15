@@ -1,0 +1,198 @@
+from django.test import TestCase
+from django.contrib.auth import get_user_model
+
+from ..models import Glossary
+
+from freezegun import freeze_time
+
+
+class GlossaryModelTests(TestCase):
+
+    @classmethod
+    @freeze_time("2022-11-11")
+    def setUpTestData(cls):
+        User = get_user_model()
+        cls.user = User.objects.create_user(
+            username="testuser",
+            email="testuser@email.com",
+            password="testuser123",
+        )
+        Glossary.objects.create(
+            title="test glossary",
+            notes="Test note.",
+            type="用語集",
+            created_by=cls.user,
+            updated_by=cls.user,
+        )
+
+    # Check field labels created correctly
+
+    def test_glossary_file_label(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        field_label = glossary_obj._meta.get_field("glossary_file").verbose_name
+        self.assertEqual(field_label, "glossary file")
+        self.assertNotEqual(field_label, "glossary_file")
+        self.assertNotEqual(field_label, "")
+
+    def test_title_label(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        field_label = glossary_obj._meta.get_field("title").verbose_name
+        self.assertEqual(field_label, "title")
+        self.assertNotEqual(field_label, "")
+
+    def test_created_by_label(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        field_label = glossary_obj._meta.get_field("created_by").verbose_name
+        self.assertEqual(field_label, "created by")
+        self.assertNotEqual(field_label, "created_by")
+        self.assertNotEqual(field_label, "")
+
+    def test_updated_by_label(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        field_label = glossary_obj._meta.get_field("updated_by").verbose_name
+        self.assertEqual(field_label, "updated by")
+        self.assertNotEqual(field_label, "updated_by")
+        self.assertNotEqual(field_label, "")
+
+    def test_notes_label(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        field_label = glossary_obj._meta.get_field("notes").verbose_name
+        self.assertEqual(field_label, "notes")
+        self.assertNotEqual(field_label, "")
+
+    def test_type_label(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        field_label = glossary_obj._meta.get_field("type").verbose_name
+        self.assertEqual(field_label, "type")
+        self.assertNotEqual(field_label, "")
+
+    # Check whether object is created correctly
+
+    def test_glossary_title_when_created(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual(glossary_obj.title, "test glossary")
+        self.assertNotEqual(glossary_obj.title, "")
+
+    def test_glossary_notes_when_created(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual(glossary_obj.notes, "Test note.")
+        self.assertNotEqual(glossary_obj.notes, "")
+
+    def test_glossary_type_when_created(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual(glossary_obj.type, "用語集")
+        self.assertNotEqual(glossary_obj.type, "")
+
+    def test_glossary_created_by_when_created(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual(glossary_obj.created_by, self.user)
+
+    def test_glossary_updated_by_when_created(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual(glossary_obj.updated_by, self.user)
+
+    def test_object_created_on_when_created(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual("2022-11-11 00:00:00+00:00", str(glossary_obj.created_on))
+        self.assertNotEqual("", str(glossary_obj.created_on))
+
+    def test_object_updated_on_when_created(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual("2022-11-11 00:00:00+00:00", str(glossary_obj.updated_on))
+        self.assertNotEqual("", str(glossary_obj.updated_on))
+
+    # Check field properties
+
+    def test_glossary_file_null(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        null_bool = glossary_obj._meta.get_field("glossary_file").null
+        self.assertEqual(null_bool, True)
+        self.assertNotEqual(null_bool, False)
+
+    def test_glossary_title_max_length(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        max_length = glossary_obj._meta.get_field("glossary_file").max_length
+        self.assertEqual(max_length, 100)
+
+    def test_created_on_auto_now_add_true(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        auto_now_add_bool = glossary_obj._meta.get_field("created_on").auto_now_add
+        self.assertEqual(auto_now_add_bool, True)
+        self.assertNotEqual(auto_now_add_bool, False)
+
+    def test_updated_on_auto_now_add_true(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        auto_now_bool = glossary_obj._meta.get_field("updated_on").auto_now
+        self.assertEqual(auto_now_bool, True)
+        self.assertNotEqual(auto_now_bool, False)
+
+    def test_created_by_null(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        null_bool = glossary_obj._meta.get_field("created_by").null
+        self.assertEqual(null_bool, True)
+        self.assertNotEqual(null_bool, False)
+
+    # def test_created_by_related_name(self):
+        # glossary_obj = Glossary.objects.get(id=1)
+        # related_name = glossary_obj._meta.get_field("created_by").related_name
+        # self.assertEqual(related_name, "created_glossaries")
+
+        # self.user.username
+        # print("\n----------")
+        # print(self.user.username)
+        # print(self.user.email)
+        # print(self.user.created_glossaries)
+        # print("----------")
+
+    # need to also check the following for created_by in addition to the above
+    # the ForeignKey link to the user model
+    # the related_name attribute
+    # the on_delete attribute
+    # then add the same tests for updated_by below
+
+    def test_updated_by_null(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        null_bool = glossary_obj._meta.get_field("updated_by").null
+        self.assertEqual(null_bool, True)
+        self.assertNotEqual(null_bool, False)
+
+    def test_verbose_name(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        verbose_name = glossary_obj._meta.verbose_name
+        self.assertEqual(verbose_name, "glossary")
+        self.assertNotEqual(verbose_name, "")
+
+    # Check meta fields
+
+    def test_verbose_name_plural(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        verbose_name = glossary_obj._meta.verbose_name_plural
+        self.assertEqual(verbose_name, "glossaries")
+        self.assertNotEqual(verbose_name, "glossary")
+        self.assertNotEqual(verbose_name, "")
+
+
+"""
+    # Check whether object is updated properly
+
+    def test_object_price_when_updated(self):
+        fruit = Fruit.objects.get(id=1)
+        fruit.price = 200
+        fruit.save()
+        self.assertEqual(200, fruit.price)
+        self.assertNotEqual(100, fruit.price)
+
+    @freeze_time("2021-04-02")
+    def test_object_update_datetime_when_updated(self):
+        fruit = Fruit.objects.get(id=1)
+        fruit.price = 300
+        fruit.save()
+        self.assertEqual("2021-04-02 00:00:00+00:00", str(fruit.updated_on))
+        self.assertNotEqual("2021-04-01 00:00:00+00:00", str(fruit.updated_on))
+
+    # Check object class methods
+
+    def test_str_representation(self):
+        fruit = Fruit.objects.get(id=1)
+        self.assertEqual("apple", str(fruit))
+"""

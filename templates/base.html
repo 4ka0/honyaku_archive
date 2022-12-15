@@ -1,0 +1,52 @@
+{% load static %}
+
+<!doctype html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <title>Honyaku Archive</title>
+</head>
+
+<body>
+
+    <main>
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <!-- Navigation sidebar -->
+
+                {% if user.is_authenticated %}
+
+                    {% include "navbar.html" %}
+
+                {% endif %}
+
+                <div class="col main-col">
+
+                    <div class="main-content">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bootstrap and Popper JS -->
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+
+</body>
+
+</html>

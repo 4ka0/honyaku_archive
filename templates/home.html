@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+
+        <div class="col-8 align-self-center p-5">
+
+            <h5 class="mb-4">利用可能なリソース</h5>
+
+            <p class="text-muted">
+                <small>
+                総計リソース数：{{ num_of_resources|intcomma }}（用語集数：{{ num_of_glossaries|intcomma }}、翻訳数：{{ num_of_translations|intcomma }}）
+                <br>
+                総計エントリー数：{{ num_of_all_entries|intcomma }}（用語集エントリー数：{{ num_of_gloss_entries|intcomma }}、翻訳セグメント数：{{ num_of_trans_segments|intcomma }}）
+                </small>
+            </p>
+            <br>
+
+            <table class="table table-sm">
+
+                <thead>
+                    <tr>
+                        <th scope="col" style="width: 50%">リソース名</th>
+                        <th scope="col" style="width: 20%">種類</th>
+                        <th scope="col" style="width: 30%">作成日時</th>
+                    </tr>
+                </thead>
+
+                <tbody class="font-15">
+
+                    {% for object in resources_table_list %}
+
+                        <tr>
+
+                            {% if object.type == "glossary" %}
+
+                                <td>
+                                    <a href="{% url 'glossary_detail' object.pk %}">{{ object }}</a>
+                                </td>
+
+                                <td>
+                                    用語集
+                                </td>
+
+                            {% elif object.type == "translation" %}
+
+                                <td>
+                                    <a href="{% url 'translation_detail' object.pk %}">{{ object }}</a>
+                                </td>
+
+                                <td>
+                                    翻訳
+                                </td>
+
+                            {% else %}
+
+                                <td>
+                                    {{ object }}
+                                </td>
+
+                                <td>
+                                    不明
+                                </td>
+
+                            {% endif %}
+
+                                <td>
+                                    {{ object.created_on|date:"d M Y" }}, {{ object.created_on|time:"H:i" }}
+                                </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}

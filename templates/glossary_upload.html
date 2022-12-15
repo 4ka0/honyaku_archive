@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="row justify-content-center mt-5">
+
+        <div class="col-6">
+
+            <div class="card">
+
+                <div class="card-header">
+                    用語集をインポートする
+                </div>
+
+                <div class="card-body">
+
+                    <form method="POST" enctype="multipart/form-data" novalidate>
+
+                        {% csrf_token %}
+
+                        {{ form.glossary_file|as_crispy_field }}
+                        {{ form.title|as_crispy_field }}
+                        {{ form.notes|as_crispy_field }}
+
+                        <!-- Help, cancel, and upload buttons -->
+                        <div class="text-center mt-4">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#uploadHelpModal" class="btn btn-secondary btn-sm" role="button">ヘルプ</a>
+                            <button type="submit" name="cancel" class="btn btn-secondary btn-sm mx-2">キャンセル</button>
+                            <button type="submit" class="btn btn-primary btn-sm">インポート</button>
+                        </div>
+
+                    </form>
+
+
+                    <!-- Help modal -->
+                    <div class="modal fade" id="uploadHelpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">インポートヘルプ</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>用語集全体をタブ区切りテキストファイル（.txt）としてアップロードすることができます。</p>
+                                    <p><span class="code">原文(tab)訳文(tab)備考</span></p>
+                                    <p>例えば：</p>
+                                    <p class="code block">
+                                        電極(tab)electrode<br>
+                                        ガラス基板(tab)glass substrate<br>
+                                        特許文献(tab)Patent Documents(tab)Specification subtitle
+                                    </p>
+                                    <small><p>なお：</p>
+                                    <ul>
+                                        <li>備考は任意です。</li>
+                                        <li>「(tab)」ではなく、実際のタブ文字を入力してください。</li>
+                                        <li>上記フォーマット以外のエントリーは無視されます。</li>
+                                    </ul></small>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>  <!-- Help modal end -->
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% include "file_selection.html" %}
+
+{% endblock %}

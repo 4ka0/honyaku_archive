@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center mt-5">
+
+    <div class="col-3">
+
+        <div class="card">
+
+            <div class="card-header">
+                Login
+            </div>
+
+            <div class="card-body">
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <div class="form-error text-center mt-2 mb-3">
+                            The username or password is not correct.<br>
+                            Please enter these again.
+                        </div>
+                    {% endif %}
+
+                    <!-- Username input field -->
+                    <div class="form-row mb-2">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Username:</label>
+                        <input id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" class="form-control">
+                    </div>
+
+                    <!-- Password input field -->
+                    <div class="form-row mb-2">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">Password:</label>
+                        <input id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" class="form-control">
+                    </div>
+
+                    <!-- Login button -->
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-outline-primary">Log in</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock content %}

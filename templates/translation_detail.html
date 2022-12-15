@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="col py-4 ps-5 pe-4">
+
+    <!-- Translation heading -->
+
+    <h4 class="my-4">{{ object.job_number }}</h4>
+
+    <small>
+        <p>
+            <a href="{% url 'translation_update' object.pk %}">翻訳の詳細を編集する</a> |
+            <a href="{% url 'translation_delete' object.pk %}">翻訳を削除する</a>
+        </p>
+    </small>
+
+
+    <!-- Translation details table -->
+
+    <h5 class="mt-5 mb-4">詳細</h5>
+
+    <div class="row justify-content-start">
+        <div class="col-8">
+            <table class="table table-bordered font-14">
+                <tbody class="table-body-bg">
+
+                    <tr>
+                        <td style="width: 25%">翻訳者:</td>
+                        {% if object.translator %}
+                            <td>{{ object.translator }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td>顧客:</td>
+                        {% if object.client %}
+                            <td>{{ object.client }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td>分野:</td>
+                        {% if object.field %}
+                            <td>{{ object.field }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td>作成者:</td>
+                        {% if object.created_by %}
+                            <td>{{ object.created_by }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td>作成日時:</td>
+                        {% if object.created_on %}
+                            <td>{{ object.created_on }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td>備考:</td>
+                        {% if object.notes %}
+                            <td>{{object.notes|linebreaksbr}}</td>
+                        {% else %}
+                            <td>なし</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <td>セグメント数:</td>
+                        <td>{{ num_of_segments }}</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+
+        </div>
+    </div>
+
+
+    <!-- Glossary content table -->
+
+    <br><br>
+    <h5 class="mb-4">翻訳の内容</h5>
+
+
+    <table class="table table-bordered table-hover font-14">
+
+        <thead class="table-primary">
+            <tr>
+            <th scope="col" style="width: 45%">原文</th>
+            <th scope="col" style="width: 55%">訳文</th>
+            </tr>
+        </thead>
+
+        <tbody class="table-body-bg">
+
+            {% for item in object.segments.all %}
+
+                <tr>
+                    <td>
+                        {% if item.source %}
+                            {{ item.source }}
+                        {% else %}
+                            <span class="table-muted-text">（原文なし）</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.target %}
+                            {{ item.target }}
+                        {% else %}
+                            <span class="table-muted-text">（訳文なし）</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

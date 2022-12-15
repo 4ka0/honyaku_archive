@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load resources_tags %}
+
+{% block content %}
+
+    <div class="row my-4">
+
+        <div class="col px-5">
+
+            {% if object_list %}  <!-- Results found -->
+
+                <div class="search-hits">
+
+                    {% if query %}  <!-- User wants to search for a specific word in the resources -->
+
+                        {% if target_resource == "すべてのリソースを検索する" %}
+
+                            {% if hits == 1 %}
+
+                                <p>{{ hits }} entry found for "{{ query }}" across all resources.</p>
+
+                            {% else %}
+
+                                <p>{{ hits }} entries found for "{{ query }}" across all resources.</p>
+
+                            {% endif %}
+
+                        {% else %}  <!-- User wants to search in a specific resource -->
+
+                            {% if hits == 1 %}
+
+                                <p>{{ hits }} entry found for "{{ query }}" in {{ target_resource }}.</p>
+
+                            {% else %}
+
+                                <p>{{ hits }} entries found for "{{ query }}" in {{ target_resource }}.</p>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    {% else %}  <!-- User wants to display entire content of a resource -->
+
+                        {% if target_resource == "すべてのリソースを検索する" %}
+
+                            {% if hits == 1 %}
+
+                                <p>{{ hits }} entry across all resources.</p>
+
+                            {% else %}
+
+                                <p>{{ hits }} entries across all resources.</p>
+
+                            {% endif %}
+
+                        {% else %}  <!-- In a specific resource -->
+
+                            {% if hits == 1 %}
+
+                                <p>{{ hits }} entry in {{ target_resource }}.</p>
+
+                            {% else %}
+
+                                <p>{{ hits }} entries in {{ target_resource }}.</p>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    {% endif %}
+
+                </div>
+
+                <!-- Table -->
+
+                <table class="table table-bordered table-hover font-14 mt-3">
+
+                    <thead class="table-primary">
+                        <tr>
+                            <th scope="col" style="width: 38%">原文</th>
+                            <th scope="col" style="width: 38%">訳文</th>
+                            <th scope="col" style="width: 14%">リソース</th>
+                            <th scope="col" class="col-center-align" style="width: 10%">アクション</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="table-body-bg">
+
+                        {% for item in object_list %}
+
+                            <tr>
+                                <!-- Source terms -->
+                                <td>
+                                    {% if item.source %}
+                                        {{ item.source|highlight_query:query }}
+                                    {% else %}
+                                        <span class="table-muted-text">（原文なし）</span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- Target terms -->
+                                <td>
+                                    {% if item.target %}
+                                        {{ item.target|highlight_query:query }}
+                                        <!-- Include notes if present -->
+                                        {% if item.notes %}
+                                            <br>
+                                            <div class="table-muted-text">
+                                                ＜備考＞<br>
+                                                {{ item.notes|linebreaksbr }}
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="table-muted-text">（訳文なし）</span>
+                                    {% endif %}
+                                </td>
+
+                                <!-- Resource name -->
+                                <td>
+
+                                        {% if item.glossary %}
+                                            <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
+                                        {% endif %}
+                                        {% if item.translation %}
+                                            <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.job_number }}</a>
+                                        {% endif %}
+
+                                </td>
+
+                                <!-- Actions -->
+                                <td class="col-center-align">
+                                    <small>
+                                        {% if item.glossary %}  <!-- If the current item belongs to a glossary, can edit etc. -->
+
+                                            {% include "table_action_buttons.html" %}
+
+                                        {% else %}  <!-- If the current item belongs to a translation, cannot edit etc. -->
+
+                                            <div class="table-muted-text">
+                                                編集不可
+                                            </div>
+
+                                        {% endif %}
+                                    </small>
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}  <!-- No results found -->
+
+                <div class="search-hits">
+
+                    {% if target_resource == "すべてのリソースを検索する" %}
+
+                        <p>No entries found for "{{ query }}" across all resources.</p>
+
+                    {% else %}
+
+                        <p>No entries found for "{{ query }}" in {{ target_resource }}.</p>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endblock %}

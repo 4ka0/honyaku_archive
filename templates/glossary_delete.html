@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row justify-content-center my-5">
+
+        <div class="col-5">
+
+            <div class="card">
+
+                <div class="card-header">
+                    <div class="text-center">
+                        用語集を削除する
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <dl class="row pt-2 mb-0">
+
+                        <dt class="col-4">タイトル：</dt>
+                        <dd class="col-8">
+                            {% if object.title %}
+                                <p>{{ object.title }}</p>
+                            {% else %}
+                                <p>（なし）</p>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-4">作成日時：</dt>
+                        <dd class="col-8">
+                            {% if object.created_on %}
+                                <p>{{ object.created_on }}</p>
+                            {% else %}
+                                <p>（不明）</p>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-4">作成者：</dt>
+                        <dd class="col-8">
+                            {% if object.created_by %}
+                                <p>{{ object.created_by }}</p>
+                            {% else %}
+                                <p>（不明）</p>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-4">最終更新日時：</dt>
+                        <dd class="col-8">
+                            {% if object.updated_on %}
+                                <p>{{ object.updated_on }}</p>
+                            {% else %}
+                                <p>（不明）</p>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-4">最終更新者：</dt>
+                        <dd class="col-8">
+                            {% if object.updated_by %}
+                                <p>{{ object.updated_by }}</p>
+                            {% else %}
+                                <p>（不明）</p>
+                            {% endif %}
+                        </dd>
+
+                        <dt class="col-4">備考：</dt>
+                        <dd class="col-8">
+                            {% if object.notes %}
+                                <p>{{ object.notes|linebreaksbr }}</p>
+                            {% else %}
+                                <p>（なし）</p>
+                            {% endif %}
+                        </dd>
+
+                    </dl>
+
+                    <hr class="mt-1">
+
+                    <p class="text-center pt-2">上記の用語集を削除してよろしいですか。</p>
+
+                    <form method="POST" novalidate>
+                        {% csrf_token %}
+                        <div class="text-center">
+                            <a href="{% url 'glossary_detail' object.pk %}"  class="btn btn-secondary btn-sm me-2" role="button">キャンセル</a>
+                            <button class="btn btn-danger btn-sm" type="submit">削除</button>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

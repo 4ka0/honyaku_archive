@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+ {% block content %}
+
+     <div class="row justify-content-center my-5">
+
+         <div class="col-6">
+
+             <div class="card">
+
+                 <div class="card-header">
+                     <div class="text-center">
+                         Entry Detail
+                     </div>
+                 </div>
+
+                 <div class="card-body">
+
+                     <dl class="row">
+
+                         <dt class="col-3">Source term:</dt>
+                         <dd class="col-9">
+                             <p>{{ object.source|capfirst }}</p>
+                         </dd>
+
+                         <dt class="col-3">Target term:</dt>
+                         <dd class="col-9">
+                             <p>{{ object.target|capfirst }}</p>
+                         </dd>
+
+                         <dt class="col-3">Glossary:</dt>
+                         <dd class="col-9">
+                             <p>
+                                 <a href="{% url 'glossary_detail' object.glossary.pk %}">{{ object.glossary }}</a>
+                             </p>
+                         </dd>
+
+                         <dt class="col-3">Notes:</dt>
+                         <dd class="col-9">
+                             {% if object.notes %}
+                                 <p>{{ object.notes|linebreaks }}</p>
+                             {% else %}
+                                 <p>(None)</p>
+                             {% endif %}
+                         </dd>
+
+                     </dl>
+
+                     <p class="text-center">
+                         <small>
+                         Created by {{ object.created_by }} on {{ object.created_on }}
+                         <br>
+                         Last updated by {{ object.updated_by }} on {{ object.updated_on }}
+                         </small>
+                     </p>
+
+                 </div>
+
+                 <div class="text-center pb-3">
+                     <a href="{% url 'entry_delete' object.pk %}"  class="btn btn-outline-danger me-2" role="button">Delete</a>
+                     <a href="{% url 'entry_update' object.pk %}"  class="btn btn-outline-primary" role="button">Edit</a>
+                 </div>
+
+             </div>
+
+         </div>
+
+     </div>
+
+ {% endblock %}

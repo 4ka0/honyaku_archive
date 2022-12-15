@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+    <a class="flex-grow-1 px-2" href="{% url 'home' %}">Honyaku Archive</a>
+
+    <li class="nav-item dropdown flex-grow-1">
+
+        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            メニュー
+        </a>
+
+        <ul class="dropdown-menu">
+
+            <li><a class="dropdown-item" href="{% url 'glossary_create' %}?previous_url={{ request.get_full_path|urlencode }}">用語集を作成する</a></li>
+            <li><a class="dropdown-item" href="{% url 'entry_create' %}?previous_url={{ request.get_full_path|urlencode }}">用語集エントリーを作成する</a></li>
+            <li><a class="dropdown-item" href="{% url 'glossary_upload' %}?previous_url={{ request.get_full_path|urlencode }}">用語集をインポートする</a></li>
+            <li><a class="dropdown-item" href="{% url 'translation_upload' %}?previous_url={{ request.get_full_path|urlencode }}">翻訳をインポートする</a></li>
+            <!--
+            {% comment %}
+            <li><a class="dropdown-item" href="{% url 'glossary_export' %}?previous_url={{ request.get_full_path|urlencode }}">用語集をエクスポートする</a></li>
+            {% endcomment %}
+            -->
+            <li><hr class="dropdown-divider"></li>
+
+            <li>
+                <div class="dropdown-item">"{{ user }}"としてログインしている</div>
+                <a class="dropdown-item" href="{% url 'logout' %}">ログアウト</a>
+            </li>
+
+        </ul>
+
+    </li>
+
+    <div class="flex-grow-1 d-flex">
+
+        <form action="{% url 'search_results' %}" method="get" class="d-flex search-form" >
+
+            <!-- Search bar -->
+            <input name="query"
+                   type="search"
+                   placeholder="検索クエリーを入力してください"
+                   class="form-control search-bar me-3"
+                   required
+                   {% if autofocus_searchbar %}autofocus{% endif %}
+                   />
+
+            <!-- Resources dropdown list -->
+            <div class="input-group glossary-dropdown me-3">
+                <select name="resource" id="inputGroupSelect" class="form-select">
+                    <option selected>すべてのリソースを検索する</option>
+                    {% for resource in resources %}
+                        <option value="{{ resource }}">{{ resource }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Search button -->
+            <button class="btn btn-primary btn-sm me-3 px-3" type="submit">検索</button>
+
+        </form>
+
+    </div>
+
+</nav>

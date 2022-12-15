@@ -1,0 +1,20 @@
+{% load static %}
+
+<!-- jquery for displaying a file selected by the user -->
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+
+<script>
+    $(document).on('change', ':file', function() {
+        var input = $(this),
+        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.parent().parent().next(':text').val(label);
+    });
+</script>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
