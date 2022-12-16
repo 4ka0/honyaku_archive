@@ -188,9 +188,9 @@ class TranslationUpdateForm(forms.ModelForm):
             "required": "このフィールドは入力必須です。",
         },
     )
-    translator = forms.CharField(label='翻訳者（任意）')
-    field = forms.CharField(label='分野（任意）')
-    client = forms.CharField(label='クライアント（任意）')
+    translator = forms.CharField(label='翻訳者（任意）', required=False)
+    field = forms.CharField(label='分野（任意）', required=False)
+    client = forms.CharField(label='クライアント（任意）', required=False)
     notes = forms.CharField(
         label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
