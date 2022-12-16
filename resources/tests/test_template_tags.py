@@ -37,10 +37,18 @@ class ResourcesTagTests(TestCase):
             target="key information",
             notes="Test note.",
         )
+        Entry.objects.create(
+            glossary=cls.test_glossary,
+            source="！”＃＄％＆（）＝～｜",
+            target='!"#$%&()=~|',
+            notes="Test note.",
+        )
 
     def setUp(self):
         self.client.force_login(self.test_user)
         self.url = reverse('search_results')
+
+    # Basic tests
 
     def test_simple_case_success(self):
         response = self.client.get(self.url, {'query': 'Information', 'resource': 'Test Glossary'})
@@ -53,18 +61,6 @@ class ResourcesTagTests(TestCase):
     def test_highlight_not_included_in_output_if_query_not_found(self):
         response = self.client.get(self.url, {'query': 'window', 'resource': 'Test Glossary'})
         self.assertNotContains(response, '<span class="highlight_query">window</span>')
-
-    def test_display_of_opening_angle_bracket(self):
-        response = self.client.get(self.url, {'query': '<Info', 'resource': 'Test Glossary'})
-        self.assertContains(response, '<span class="highlight_query">&lt;Info</span>')
-
-    def test_display_of_closing_angle_bracket(self):
-        response = self.client.get(self.url, {'query': 'device>', 'resource': 'Test Glossary'})
-        self.assertContains(response, '<span class="highlight_query">device&gt;</span>')
-
-    def test_display_of_ampersand(self):
-        response = self.client.get(self.url, {'query': 'device & display', 'resource': 'Test Glossary'})
-        self.assertContains(response, '<span class="highlight_query">device &amp; display</span>')
 
     def test_highlight_is_applied_in_case_insensitive_manner_lowercase(self):
         response = self.client.get(self.url, {'query': 'information', 'resource': 'Test Glossary'})
@@ -86,3 +82,29 @@ class ResourcesTagTests(TestCase):
         response = self.client.get(self.url, {'query': 'information', 'resource': 'Test Glossary'})
         self.assertContains(response, '<span class="highlight_query">Information</span> processing device')
         self.assertContains(response, 'key <span class="highlight_query">information</span>')
+
+    # Tests for special characters
+
+    def test_display_of_opening_angle_bracket(self):
+        response = self.client.get(self.url, {'query': '<Info', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">&lt;Info</span>')
+
+    def test_display_of_closing_angle_bracket(self):
+        response = self.client.get(self.url, {'query': 'device>', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">device&gt;</span>')
+
+    def test_display_of_ampersand(self):
+        response = self.client.get(self.url, {'query': 'device & display', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">device &amp; display</span>')
+
+    """
+    Add tests for all special chars on the keyboard.
+    Add tests for zenkaku normal chars and zenkaku special chars.
+
+    Top row chars
+    !"#$%&()=~|'
+
+    Side chars
+    -^\@[]`{};:+*,./\<>?_
+
+    """
