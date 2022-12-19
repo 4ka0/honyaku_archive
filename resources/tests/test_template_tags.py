@@ -173,6 +173,6 @@ class ResourcesTagTests(TestCase):
     Add tests for zenkaku normal chars and zenkaku special chars.
 
     Side chars
-    -^\@[]`{};:+*,./\<>?_
+    @[]{};:,./\<>_
 
     """
