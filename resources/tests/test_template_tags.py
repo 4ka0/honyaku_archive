@@ -39,8 +39,15 @@ class ResourcesTagTests(TestCase):
         )
         Entry.objects.create(
             glossary=cls.test_glossary,
-            source="！”＃＄％＆（）＝～｜",
-            target='!"#$%&()=~|',
+            source="! ? # $ % & |",
+            target='! ? # $ % & |',
+            notes="Test note.",
+        )
+
+        Entry.objects.create(
+            glossary=cls.test_glossary,
+            source="= + - * / ~ ^ × ± ≠ ÷ \\",
+            target='= + - * / ~ ^ × ± ≠ ÷ \\',
             notes="Test note.",
         )
 
@@ -86,27 +93,84 @@ class ResourcesTagTests(TestCase):
     # Tests for special characters
 
     def test_display_of_opening_angle_bracket(self):
-        response = self.client.get(self.url, {'query': '<Info', 'resource': 'Test Glossary'})
-        self.assertContains(response, '<span class="highlight_query">&lt;Info</span>')
+        response = self.client.get(self.url, {'query': '<', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">&lt;</span>')
 
     def test_display_of_closing_angle_bracket(self):
-        response = self.client.get(self.url, {'query': 'device>', 'resource': 'Test Glossary'})
-        self.assertContains(response, '<span class="highlight_query">device&gt;</span>')
+        response = self.client.get(self.url, {'query': '>', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">&gt;</span>')
 
     def test_display_of_ampersand(self):
-        response = self.client.get(self.url, {'query': 'device & display', 'resource': 'Test Glossary'})
-        self.assertContains(response, '<span class="highlight_query">device &amp; display</span>')
+        response = self.client.get(self.url, {'query': '&', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">&amp;</span>')
 
     def test_display_of_exclamation_mark(self):
         response = self.client.get(self.url, {'query': '!', 'resource': 'Test Glossary'})
         self.assertContains(response, '<span class="highlight_query">!</span>')
 
+    def test_display_of_question_mark(self):
+        response = self.client.get(self.url, {'query': '?', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">?</span>')
+
+    def test_display_of_hash_mark(self):
+        response = self.client.get(self.url, {'query': '#', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">#</span>')
+
+    def test_display_of_dollar_mark(self):
+        response = self.client.get(self.url, {'query': '$', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">$</span>')
+
+    def test_display_of_percent_mark(self):
+        response = self.client.get(self.url, {'query': '%', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">%</span>')
+
+    def test_display_of_vertical_bar_mark(self):
+        response = self.client.get(self.url, {'query': '|', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">|</span>')
+
+    def test_display_of_equals_mark(self):
+        response = self.client.get(self.url, {'query': '=', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">=</span>')
+
+    def test_display_of_plus_mark(self):
+        response = self.client.get(self.url, {'query': '+', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">+</span>')
+
+    def test_display_of_minus_mark(self):
+        response = self.client.get(self.url, {'query': '-', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">-</span>')
+
+    def test_display_of_multiply_mark(self):
+        response = self.client.get(self.url, {'query': '×', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">×</span>')
+
+    def test_display_of_divide_mark(self):
+        response = self.client.get(self.url, {'query': '÷', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">÷</span>')
+
+    def test_display_of_star_mark(self):
+        response = self.client.get(self.url, {'query': '*', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">*</span>')
+
+    def test_display_of_forward_slash_mark(self):
+        response = self.client.get(self.url, {'query': '/', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">/</span>')
+
+    def test_display_of_back_slash_mark(self):
+        response = self.client.get(self.url, {'query': '\\', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">\</span>')
+
+    def test_display_of_not_equals_mark(self):
+        response = self.client.get(self.url, {'query': '≠', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">≠</span>')
+
+    def test_display_of_plus_minus_mark(self):
+        response = self.client.get(self.url, {'query': '±', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">±</span>')
+
     """
     Add tests for all special chars on the keyboard.
     Add tests for zenkaku normal chars and zenkaku special chars.
-
-    Top row chars
-    !"#$%&()=~|'
 
     Side chars
     -^\@[]`{};:+*,./\<>?_
