@@ -97,6 +97,10 @@ class ResourcesTagTests(TestCase):
         response = self.client.get(self.url, {'query': 'device & display', 'resource': 'Test Glossary'})
         self.assertContains(response, '<span class="highlight_query">device &amp; display</span>')
 
+    def test_display_of_exclamation_mark(self):
+        response = self.client.get(self.url, {'query': '!', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">!</span>')
+
     """
     Add tests for all special chars on the keyboard.
     Add tests for zenkaku normal chars and zenkaku special chars.
