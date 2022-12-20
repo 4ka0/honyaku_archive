@@ -39,15 +39,14 @@ class ResourcesTagTests(TestCase):
         )
         Entry.objects.create(
             glossary=cls.test_glossary,
-            source="! ? # $ % & |",
-            target='! ? # $ % & |',
+            source="! ? # $ % & | = + - * / \\ ~ ^ × ± ≠ ÷ @ [ ] { } ; : , . < > _",
+            target="! ? # $ % & | = + - * / \\ ~ ^ × ± ≠ ÷ @ [ ] { } ; : , . < > _",
             notes="Test note.",
         )
-
         Entry.objects.create(
             glossary=cls.test_glossary,
-            source="= + - * / ~ ^ × ± ≠ ÷ \\",
-            target='= + - * / ~ ^ × ± ≠ ÷ \\',
+            source="【１２３４５６７８９０】",
+            target="[1234567890]",
             notes="Test note.",
         )
 
@@ -168,12 +167,58 @@ class ResourcesTagTests(TestCase):
         response = self.client.get(self.url, {'query': '±', 'resource': 'Test Glossary'})
         self.assertContains(response, '<span class="highlight_query">±</span>')
 
-    """
-    Add tests for all special chars on the keyboard.
-    Add tests for zenkaku normal chars and zenkaku special chars.
-    Any others?
+    def test_display_of_at_mark(self):
+        response = self.client.get(self.url, {'query': '@', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">@</span>')
 
-    Side chars
-    @[]{};:,./\<>_
+    def test_display_of_opening_bracket_mark(self):
+        response = self.client.get(self.url, {'query': '[', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">[</span>')
 
-    """
+    def test_display_of_closing_bracket_mark(self):
+        response = self.client.get(self.url, {'query': ']', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">]</span>')
+
+    def test_display_of_opening_curly_bracket_mark(self):
+        response = self.client.get(self.url, {'query': '{', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">{</span>')
+
+    def test_display_of_closing_curly_bracket_mark(self):
+        response = self.client.get(self.url, {'query': '}', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">}</span>')
+
+    def test_display_of_colon_mark(self):
+        response = self.client.get(self.url, {'query': ':', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">:</span>')
+
+    def test_display_of_semicolon_mark(self):
+        response = self.client.get(self.url, {'query': ':', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">:</span>')
+
+    def test_display_of_comma_mark(self):
+        response = self.client.get(self.url, {'query': ',', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">,</span>')
+
+    def test_display_of_period_mark(self):
+        response = self.client.get(self.url, {'query': '.', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">.</span>')
+
+    def test_display_of_underbar_mark(self):
+        response = self.client.get(self.url, {'query': '_', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">_</span>')
+
+    def test_display_of_zenkaku_numbers(self):
+        response = self.client.get(self.url, {'query': '１２３４５６７８９０', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">１２３４５６７８９０</span>')
+
+    def test_display_of_hankaku_numbers(self):
+        response = self.client.get(self.url, {'query': '1234567890', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">1234567890</span>')
+
+    def test_display_of_opening_lenticular_bracket(self):
+        response = self.client.get(self.url, {'query': '【', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">【</span>')
+
+    def test_display_of_closing_lenticular_bracket(self):
+        response = self.client.get(self.url, {'query': '】', 'resource': 'Test Glossary'})
+        self.assertContains(response, '<span class="highlight_query">】</span>')
