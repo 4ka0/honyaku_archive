@@ -53,16 +53,16 @@
                     </tr>
 
                     <tr>
-                        <td>作成者:</td>
+                        <td>アップローダー:</td>
                         {% if object.created_by %}
-                            <td>{{ object.created_by }}</td>
+                            <td>{{ object.created_by|title }}</td>
                         {% else %}
                             <td>不明</td>
                         {% endif %}
                     </tr>
 
                     <tr>
-                        <td>作成日時:</td>
+                        <td>アップロード日時:</td>
                         {% if object.created_on %}
                             <td>{{ object.created_on }}</td>
                         {% else %}
