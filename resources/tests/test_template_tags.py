@@ -171,6 +171,7 @@ class ResourcesTagTests(TestCase):
     """
     Add tests for all special chars on the keyboard.
     Add tests for zenkaku normal chars and zenkaku special chars.
+    Any others?
 
     Side chars
     @[]{};:,./\<>_
