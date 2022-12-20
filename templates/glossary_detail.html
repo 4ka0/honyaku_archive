@@ -43,7 +43,7 @@
                     <tr>
                         <td>作成者:</td>
                         {% if object.created_by %}
-                            <td>{{ object.created_by }}</td>
+                            <td>{{ object.created_by|title }}</td>
                         {% else %}
                             <td>不明</td>
                         {% endif %}
@@ -61,7 +61,7 @@
                     <tr>
                         <td>最終更新者:</td>
                         {% if object.updated_by %}
-                            <td>{{ object.updated_by }}</td>
+                            <td>{{ object.updated_by|title }}</td>
                         {% else %}
                             <td>不明</td>
                         {% endif %}
