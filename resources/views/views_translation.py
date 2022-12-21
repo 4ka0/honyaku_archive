@@ -85,7 +85,6 @@ class TranslationUploadView(LoginRequiredMixin, View):
             )
             translation_obj.save()
             build_segments(translation_obj)
-
             return redirect("home")
 
         return render(request, self.template_name, {"form": form})
@@ -93,10 +92,21 @@ class TranslationUploadView(LoginRequiredMixin, View):
 
 def build_segments(translation_obj):
     """ Helper method for TranslationUploadView.
-        Builds Segment objects from the content of an uploaded tmx file.
-        Receives new Translation object. Uses "tmxfile" from translate-toolkit
-        for parsing the tmx file. """
+        Chooses appropriate parser to parse the uploaded translation file, and
+        builds Segment objects from the parsed content. """
 
+    if translation_obj.translation_file.path.endswith(".tmx"):
+        new_segments = tmx_parser(translation_obj)
+    elif translation_obj.translation_file.path.endswith(".docx"):
+        new_segments = docx_parser(translation_obj)
+    else:
+        new_segments = xliff_parser(translation_obj)
+
+    Segment.objects.bulk_create(new_segments)
+    translation_obj.translation_file.delete()  # File no longer needed
+
+
+def tmx_parser(translation_obj):
     new_segments = []
     tmx_file = tmxfile(translation_obj.translation_file)
 
@@ -113,9 +123,7 @@ def build_segments(translation_obj):
         # robust in theory. Control characters are replaced with "", which can
         # be handled easily/cleanly in the template.
 
-        if (node.target and
-                len(node.target) == 1 and
-                ord(node.target) in range(0, 33)):
+        if (node.target and len(node.target) == 1 and ord(node.target) in range(0, 33)):
             target_text = ""
         else:
             target_text = node.target
@@ -127,5 +135,12 @@ def build_segments(translation_obj):
         )
         new_segments.append(new_segment)
 
-    Segment.objects.bulk_create(new_segments)
-    translation_obj.translation_file.delete()  # File no longer needed
+    return new_segments
+
+
+def docx_parser(translation_obj):
+    pass
+
+
+def xliff_parser(translation_obj):
+    pass
