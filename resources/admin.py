@@ -11,6 +11,7 @@ class EntryAdmin(admin.ModelAdmin):
         'target',
         'glossary',
     )
+    search_fields = ["source", "target"]
 
 
 class SegmentAdmin(admin.ModelAdmin):
@@ -19,6 +20,7 @@ class SegmentAdmin(admin.ModelAdmin):
         'target',
         'translation',
     )
+    search_fields = ["source", "target"]
 
 
 class GlossaryAdmin(admin.ModelAdmin):
@@ -38,7 +40,6 @@ class TranslationAdmin(admin.ModelAdmin):
         "notes",
         "type",
     )
-
     list_display = (
         'job_number',
         'field',
