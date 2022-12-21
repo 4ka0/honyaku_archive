@@ -29,6 +29,10 @@ class GlossaryAdmin(admin.ModelAdmin):
         "notes",
         "type",
     )
+    list_display = (
+        'title',
+        'notes',
+    )
 
 
 class TranslationAdmin(admin.ModelAdmin):
@@ -45,7 +49,6 @@ class TranslationAdmin(admin.ModelAdmin):
         'field',
         'client',
         "translator",
-        "type",
     )
 
 
