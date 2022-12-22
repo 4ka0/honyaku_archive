@@ -222,15 +222,19 @@ class GlossaryExportForm(forms.ModelForm):
 
 class TranslationUploadForm(forms.ModelForm):
     translation_file = forms.FileField(
+        label="ファイルを選択してください。",
         # mark_safe() used to include br tag in the label.
-        label=mark_safe("ファイルを選択してください。<br>DOCX、TMX、XLIFFファイルのみ読み込み可能です。"),
+        help_text=mark_safe(
+            ("DOCX又はTMXファイルのみ読み込み可能です。<br>"
+             "DOCXファイルには、2列を含む1つのテーブルがあると仮定します。")
+        ),
         error_messages={
             "required": "このフィールドは入力必須です。",
         },
         validators=[
             FileExtensionValidator(
-                allowed_extensions=["docx", "tmx", "xlf"],
-                message=['拡張子が .docx、.tmx、.xlf"のファイルをお選びください。'],
+                allowed_extensions=["docx", "tmx"],
+                message=['拡張子が 「.docx」又は「.tmx」のファイルをお選びください。'],
             )
         ],
     )
