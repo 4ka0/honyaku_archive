@@ -9,6 +9,7 @@ from ..models import Segment, Translation
 from ..forms import TranslationUploadForm, TranslationUpdateForm
 
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
+from docx import Document  # For reading docx files (from translate-toolkit)
 
 
 class TranslationDetailView(LoginRequiredMixin, DetailView):
@@ -97,10 +98,8 @@ def build_segments(translation_obj):
 
     if translation_obj.translation_file.path.endswith(".tmx"):
         new_segments = tmx_parser(translation_obj)
-    elif translation_obj.translation_file.path.endswith(".docx"):
-        new_segments = docx_parser(translation_obj)
     else:
-        new_segments = xliff_parser(translation_obj)
+        new_segments = docx_parser(translation_obj)
 
     Segment.objects.bulk_create(new_segments)
     translation_obj.translation_file.delete()  # File no longer needed
@@ -139,8 +138,51 @@ def tmx_parser(translation_obj):
 
 
 def docx_parser(translation_obj):
-    pass
 
+    # Presumes there is one table in the file, the table contains two columns,
+    # the first column is the source text, and the second column is the target
+    # text.
 
-def xliff_parser(translation_obj):
-    pass
+    document = Document(translation_obj.translation_file)
+
+    new_segments = []
+
+    if document.tables:
+
+        print("Table(s) found ...")
+
+        if len(document.tables) > 1:
+            print("More than one table found ...")
+            # What to do if there is more than one table?
+            pass
+
+        table = document.tables[0]
+        if table.rows:
+
+            print("Row(s) found ...")
+
+            for row in table.rows:
+                if row.cells:
+
+                    print("Cell(s) found ...")
+
+                    if len(row.cells) == 2:
+
+                        print("Two cells found ...")
+                        print("Cell 1 = " + row.cells[0].text)
+                        print("Cell 2 = " + row.cells[1].text)
+
+                        new_segment = Segment(
+                            translation=translation_obj,
+                            source=row.cells[0].text,
+                            target=row.cells[1].text,
+                        )
+                        new_segments.append(new_segment)
+
+                        print("")
+
+    else:
+        # What to do if there is no table?
+        print("No tables found")
+
+    return new_segments
