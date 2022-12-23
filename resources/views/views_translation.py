@@ -3,6 +3,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 # from django.http import FileResponse
 
 from ..models import Segment, Translation
@@ -84,14 +85,13 @@ class TranslationUploadView(LoginRequiredMixin, View):
                 created_by=request.user,
                 type="translation",
             )
-            translation_obj.save()
-            build_segments(translation_obj)
+            build_segments(request, translation_obj)
             return redirect("home")
 
         return render(request, self.template_name, {"form": form})
 
 
-def build_segments(translation_obj):
+def build_segments(request, translation_obj):
     """ Helper method for TranslationUploadView.
         Chooses appropriate parser to parse the uploaded translation file, and
         builds Segment objects from the parsed content. """
@@ -99,10 +99,15 @@ def build_segments(translation_obj):
     if translation_obj.translation_file.path.endswith(".tmx"):
         new_segments = tmx_parser(translation_obj)
     else:
-        new_segments = docx_parser(translation_obj)
+        new_segments = docx_parser(request, translation_obj)
 
-    Segment.objects.bulk_create(new_segments)
-    translation_obj.translation_file.delete()  # File no longer needed
+    if new_segments:
+        translation_obj.save()
+        Segment.objects.bulk_create(new_segments)
+    else:
+        messages.error(request, 'There was an error uploading the document.')
+
+    translation_obj.translation_file.delete()  # Uploaded file no longer needed
 
 
 def tmx_parser(translation_obj):
@@ -137,11 +142,16 @@ def tmx_parser(translation_obj):
     return new_segments
 
 
-def docx_parser(translation_obj):
+def docx_parser(request, translation_obj):
 
-    # Presumes there is one table in the file, the table contains two columns,
-    # the first column is the source text, and the second column is the target
-    # text.
+    # Presumes that is one table in the file and that the table contains two
+    # columns. If these are not found, None is returned.
+    # If found, presumes that the first column is the source text and the
+    # second column is the target text.
+
+    # BUG - If NG file, translation_obj being saved to DB
+    # Something to do with the form perhaps?
+    # Or something to do with how translation_obj is instansiated?
 
     document = Document(translation_obj.translation_file)
 
@@ -149,40 +159,24 @@ def docx_parser(translation_obj):
 
     if document.tables:
 
-        print("Table(s) found ...")
-
         if len(document.tables) > 1:
-            print("More than one table found ...")
-            # What to do if there is more than one table?
-            pass
+            messages.error(request, 'More than one table found in the selected document.')
 
         table = document.tables[0]
+
         if table.rows:
-
-            print("Row(s) found ...")
-
             for row in table.rows:
                 if row.cells:
-
-                    print("Cell(s) found ...")
-
                     if len(row.cells) == 2:
-
-                        print("Two cells found ...")
-                        print("Cell 1 = " + row.cells[0].text)
-                        print("Cell 2 = " + row.cells[1].text)
-
                         new_segment = Segment(
                             translation=translation_obj,
                             source=row.cells[0].text,
                             target=row.cells[1].text,
                         )
                         new_segments.append(new_segment)
-
-                        print("")
-
+        else:
+            messages.error(request, 'No rows found in the table in the selected document.')
     else:
-        # What to do if there is no table?
-        print("No tables found")
+        messages.error(request, 'No table found in the selected document.')
 
     return new_segments
