@@ -226,7 +226,7 @@ class TranslationUploadForm(forms.ModelForm):
         # mark_safe() used to include br tag in the label.
         help_text=mark_safe(
             ("DOCX又はTMXファイルのみ読み込み可能です。<br>"
-             "DOCXファイルには、2列を含む1つのテーブルがあると仮定します。")
+             "DOCXファイルの場合、日本語と英語対訳の2列からなる表のみ対象とします。")
         ),
         error_messages={
             "required": "このフィールドは入力必須です。",
