@@ -256,17 +256,10 @@ class TranslationUploadForm(forms.ModelForm):
         fields = ('translation_file', 'job_number', 'translator', 'field', 'client', 'notes')
 
     def clean(self):
-        cleaned_data = super().clean()
-
         # Check to prevent assigning a job number that already exists.
+        cleaned_data = super().clean()
         job_number = cleaned_data.get('job_number')
         if job_number:
             if Translation.objects.filter(job_number__iexact=job_number).exists():
                 msg = 'その案件番号の翻訳はすでに存在しています。'
                 self.add_error('job_number', msg)
-
-        # Check that only one file type has been selected.
-        file_type = cleaned_data.get('file_type')
-        if file_type and len(file_type) > 1:
-            msg = 'ファイルの種類を1つのみ選択してください。'
-            self.add_error('file_type', msg)
