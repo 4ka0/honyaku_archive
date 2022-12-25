@@ -102,12 +102,11 @@ def build_segments(request, translation_obj):
         new_segments = docx_parser(request, translation_obj)
 
     if new_segments:
-        translation_obj.save()
+        translation_obj.save()  # Need to save Translation obj to DB before bulk_create on next line
         Segment.objects.bulk_create(new_segments)
+        translation_obj.translation_file.delete()  # Uploaded file no longer needed
     else:
-        messages.error(request, 'There was an error uploading the document.')
-
-    translation_obj.translation_file.delete()  # Uploaded file no longer needed
+        messages.error(request, 'Error: Failed to upload translation.')
 
 
 def tmx_parser(translation_obj):
@@ -143,24 +142,21 @@ def tmx_parser(translation_obj):
 
 
 def docx_parser(request, translation_obj):
-
-    # Presumes that is one table in the file and that the table contains two
-    # columns. If these are not found, None is returned.
-    # If found, presumes that the first column is the source text and the
-    # second column is the target text.
-
-    # BUG - If NG file, translation_obj being saved to DB
-    # Something to do with the form perhaps?
-    # Or something to do with how translation_obj is instansiated?
+    """ Presumes that there is one table in the uploaded file, the table
+        contains two columns, the first column is the source text, and the
+        second column is the target text. """
 
     document = Document(translation_obj.translation_file)
-
     new_segments = []
 
     if document.tables:
 
         if len(document.tables) > 1:
-            messages.error(request, 'More than one table found in the selected document.')
+            messages.warning(
+                request,
+                ('Warning: More than one table found in the selected document.\n'
+                 'Only the first table has been read.')
+            )
 
         table = document.tables[0]
 
@@ -174,9 +170,8 @@ def docx_parser(request, translation_obj):
                             target=row.cells[1].text,
                         )
                         new_segments.append(new_segment)
-        else:
-            messages.error(request, 'No rows found in the table in the selected document.')
+
     else:
-        messages.error(request, 'No table found in the selected document.')
+        messages.error(request, 'Error: No table found in the selected document.')
 
     return new_segments
