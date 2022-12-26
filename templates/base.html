@@ -29,14 +29,12 @@
 
                     <!-- Messages -->
                     {% if messages %}
+                        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
                         {% for message in messages %}
-
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-
-                        {% endfor %}
+                                {{ message }}<br>
+                            {% endfor %}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     {% endif %}
 
                     <div class="col main-col">
