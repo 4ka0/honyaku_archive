@@ -105,8 +105,7 @@ def build_segments(request, translation_obj):
         translation_obj.save()  # Need to save Translation obj to DB before bulk_create on next line
         Segment.objects.bulk_create(new_segments)
         translation_obj.translation_file.delete()  # Uploaded file no longer needed
-    else:
-        messages.error(request, 'Error: Failed to upload translation.')
+        messages.success(request, 'Translation uploaded successfully.')
 
 
 def tmx_parser(translation_obj):
@@ -172,6 +171,10 @@ def docx_parser(request, translation_obj):
                         new_segments.append(new_segment)
 
     else:
-        messages.error(request, 'Error: No table found in the selected document.')
+        messages.error(
+            request,
+            ('Error: Failed to upload translation.\n'
+             'No table found in the selected document.')
+        )
 
     return new_segments
