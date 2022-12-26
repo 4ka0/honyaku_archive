@@ -105,7 +105,7 @@ def build_segments(request, translation_obj):
         translation_obj.save()  # Need to save Translation obj to DB before bulk_create on next line
         Segment.objects.bulk_create(new_segments)
         translation_obj.translation_file.delete()  # Uploaded file no longer needed
-        messages.success(request, 'Translation uploaded successfully.')
+        messages.success(request, '翻訳のアップロードが成功しました。')
 
 
 def tmx_parser(translation_obj):
@@ -153,8 +153,8 @@ def docx_parser(request, translation_obj):
         if len(document.tables) > 1:
             messages.warning(
                 request,
-                ('Warning: More than one table found in the selected document.\n'
-                 'Only the first table has been read.')
+                ('選択したファイルに複数のテーブルが見つかりました。\n'
+                 '最初のテーブルのみが読み込まれています。')
             )
 
         table = document.tables[0]
@@ -173,8 +173,8 @@ def docx_parser(request, translation_obj):
     else:
         messages.error(
             request,
-            ('Error: Failed to upload translation.\n'
-             'No table found in the selected document.')
+            ('翻訳のアップロードに失敗しました。\n'
+             '選択したファイルにテーブルが見つかりません。')
         )
 
     return new_segments
