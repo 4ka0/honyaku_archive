@@ -26,28 +26,32 @@
                         {% if user.is_authenticated %}
 
                             <!-- Display navigation bar -->
-                            {% include "navbar.html" %}
+                            {% include "_navbar.html" %}
 
                             <!-- Display messages if any -->
                             {% if messages %}
 
-                                {% for message in messages %}
+                                <div class="my-3 mx-5">
 
-                                    {% if message.tags == "success" %}
-                                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                                    {% elif message.tags == "warning" %}
-                                        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-                                    {% elif message.tags == "error" %}
-                                        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-                                    {% else %}
-                                        <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
-                                    {% endif %}
+                                    {% for message in messages %}
 
-                                            {{ message }}<br>
-                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div>
+                                        {% if message.tags == "success" %}
+                                            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                                        {% elif message.tags == "warning" %}
+                                            <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+                                        {% elif message.tags == "error" %}
+                                            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                                        {% else %}
+                                            <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+                                        {% endif %}
 
-                                {% endfor %}
+                                                {{ message }}<br>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+
+                                    {% endfor %}
+
+                                </div>
 
                             {% endif %}
 
