@@ -2,14 +2,12 @@
 
 {% block content %}
 
-<div class="row justify-content-center mt-5">
-
-    <div class="col-3">
+    <div class="col-3 m-5">
 
         <div class="card">
 
             <div class="card-header">
-                Login
+                ログイン
             </div>
 
             <div class="card-body">
@@ -26,20 +24,20 @@
                     {% endif %}
 
                     <!-- Username input field -->
-                    <div class="form-row mb-2">
-                        <label for="{{ form.username.id_for_label }}" class="form-label">Username:</label>
+                    <div class="form-row m-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">ユーザー名：</label>
                         <input id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" class="form-control">
                     </div>
 
                     <!-- Password input field -->
-                    <div class="form-row mb-2">
-                        <label for="{{ form.password.id_for_label }}" class="form-label">Password:</label>
+                    <div class="form-row mt-4 mb-3 mx-3">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">パスワード：</label>
                         <input id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" class="form-control">
                     </div>
 
                     <!-- Login button -->
-                    <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-outline-primary">Log in</button>
+                    <div class="text-center mt-4 mb-2">
+                        <button type="submit" class="btn btn-primary btn-sm">ログイン</button>
                     </div>
 
                 </form>
@@ -49,8 +47,5 @@
         </div>
 
     </div>
-
-</div>
-
 
 {% endblock content %}
