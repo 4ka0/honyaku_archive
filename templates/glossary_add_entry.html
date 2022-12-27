@@ -1,35 +1,31 @@
-{% extends 'base.html' %}
+{% extends '_base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
 
-    <div class="row justify-content-center my-5">
+    <div class="col-6 my-5">
 
-        <div class="col-6">
+        <div class="card">
 
-            <div class="card">
+            <div class="card-header">
+                New Entry
+            </div>
 
-                <div class="card-header">
-                    New Entry
-                </div>
+            <div class="card-body">
 
-                <div class="card-body">
+                <form method="POST" novalidate>
 
-                    <form method="POST" novalidate>
+                    {% csrf_token %}
 
-                        {% csrf_token %}
+                    {{ form|crispy }}
 
-                        {{ form|crispy }}
+                    <div class="text-center mt-3">
+                        <button type="submit" name="cancel" class="btn btn-outline-danger mx-2">Cancel</button>
+                        <button type="submit" class="btn btn-outline-primary mx-2">Add</button>
+                    </div>
 
-                        <div class="text-center mt-3">
-                            <button type="submit" name="cancel" class="btn btn-outline-danger mx-2">Cancel</button>
-                            <button type="submit" class="btn btn-outline-primary mx-2">Add</button>
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 

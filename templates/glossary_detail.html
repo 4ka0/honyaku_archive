@@ -1,179 +1,180 @@
-{% extends 'base.html' %}
+{% extends '_base.html' %}
+
 {% load humanize %}
 
 {% block content %}
 
-<div class="col py-4 ps-5 pe-4">
+    <div class="col m-5">
 
-    <!-- Glossary heading -->
+        <!-- Glossary heading -->
 
-    <h4 class="my-4">{{ object.title }}</h4>
+        <h4 class="my-4">{{ object.title }}</h4>
 
-    <small>
-        <p>
-            <a href="{% url 'glossary_update' object.pk %}">用語集の詳細を編集する</a> |
-            <a href="{% url 'glossary_delete' object.pk %}">用語集を削除する</a>
-        </p>
-    </small>
+        <small>
+            <p>
+                <a href="{% url 'glossary_update' object.pk %}">用語集の詳細を編集する</a> |
+                <a href="{% url 'glossary_delete' object.pk %}">用語集を削除する</a>
+            </p>
+        </small>
 
 
-    <!-- Glossary details table -->
+        <!-- Glossary details table -->
 
-    <h5 class="mt-5 mb-4">詳細</h5>
+        <h5 class="mt-5 mb-4">詳細</h5>
 
-    <div class="row justify-content-start">
-        <div class="col-8">
-            <table class="table table-bordered font-14">
-                <tbody class="table-body-bg">
+        <div class="row justify-content-start">
+            <div class="col-8">
+                <table class="table table-bordered font-14">
+                    <tbody class="table-body-bg">
 
-                    <tr>
-                        <td style="width: 25%">エントリー数:</td>
-                        <td>{{ num_of_entries|intcomma }}</td>
-                    </tr>
+                        <tr>
+                            <td style="width: 25%">エントリー数:</td>
+                            <td>{{ num_of_entries|intcomma }}</td>
+                        </tr>
 
-                    <tr>
-                        <td>作成日時:</td>
-                        {% if object.created_on %}
-                            <td>{{ object.created_on }}</td>
-                        {% else %}
-                            <td>不明</td>
-                        {% endif %}
-                    </tr>
+                        <tr>
+                            <td>作成日時:</td>
+                            {% if object.created_on %}
+                                <td>{{ object.created_on }}</td>
+                            {% else %}
+                                <td>不明</td>
+                            {% endif %}
+                        </tr>
 
-                    <tr>
-                        <td>作成者:</td>
-                        {% if object.created_by %}
-                            <td>{{ object.created_by|title }}</td>
-                        {% else %}
-                            <td>不明</td>
-                        {% endif %}
-                    </tr>
+                        <tr>
+                            <td>作成者:</td>
+                            {% if object.created_by %}
+                                <td>{{ object.created_by|title }}</td>
+                            {% else %}
+                                <td>不明</td>
+                            {% endif %}
+                        </tr>
 
-                    <tr>
-                        <td>最終更新日時:</td>
-                        {% if object.updated_on %}
-                            <td>{{ object.updated_on }}</td>
-                        {% else %}
-                            <td>不明</td>
-                        {% endif %}
-                    </tr>
+                        <tr>
+                            <td>最終更新日時:</td>
+                            {% if object.updated_on %}
+                                <td>{{ object.updated_on }}</td>
+                            {% else %}
+                                <td>不明</td>
+                            {% endif %}
+                        </tr>
 
-                    <tr>
-                        <td>最終更新者:</td>
-                        {% if object.updated_by %}
-                            <td>{{ object.updated_by|title }}</td>
-                        {% else %}
-                            <td>不明</td>
-                        {% endif %}
-                    </tr>
+                        <tr>
+                            <td>最終更新者:</td>
+                            {% if object.updated_by %}
+                                <td>{{ object.updated_by|title }}</td>
+                            {% else %}
+                                <td>不明</td>
+                            {% endif %}
+                        </tr>
 
-                    <tr>
-                        <td>備考:</td>
-                        {% if object.notes %}
-                            <td>{{object.notes|linebreaksbr}}</td>
-                        {% else %}
-                            <td>なし</td>
-                        {% endif %}
-                    </tr>
+                        <tr>
+                            <td>備考:</td>
+                            {% if object.notes %}
+                                <td>{{object.notes|linebreaksbr}}</td>
+                            {% else %}
+                                <td>なし</td>
+                            {% endif %}
+                        </tr>
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
 
-    <!-- Glossary content table -->
+        <!-- Glossary content table -->
 
-    {% if num_of_entries > 0 %}
+        {% if num_of_entries > 0 %}
 
-        {% if num_of_entries > 999 %}
+            {% if num_of_entries > 999 %}
 
-            <!-- Don't display table straight away -->
+                <!-- Don't display table straight away -->
+
+                <br>
+                <p>
+                    <a href="{% url 'glossary_all_entries' object.pk %}">
+                        全てのエントリーを表示する
+                    </a>
+                </p>
+
+                <p>＊この用語集のサイズが大きい（エントリー数：{{ num_of_entries|intcomma }}）ため、すべてのエントリーを表示するのに時間がかかるかもしれません。</p>
+
+            {% else %}
+
+                <!-- Display table straight away -->
+
+                <br><br>
+                <h5>すべてのエントリー</h5>
+
+                <p>
+                    <small>
+                        <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                            エントリーを追加する
+                        </a>
+                    </small>
+                </p>
+                <br>
+
+                <table class="table table-bordered font-14">
+
+                    <thead class="table-primary">
+                        <tr>
+                        <th scope="col" style="width: 2%">No.</th>
+                        <th scope="col" style="width: 30%">原文</th>
+                        <th scope="col" style="width: 35%">訳文</th>
+                        <th scope="col" class="col-center-align" style="width: 13%">アクション</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="table-body-bg">
+
+                        {% for item in object.entries.all %}
+
+                            <tr>
+
+                                <td>{{ forloop.counter }}</td>
+
+                                <td>{{ item.source }}</td>
+
+                                <td>
+                                    {{ item.target }}
+                                        {% if item.notes %}
+                                            <br>
+                                            <div class="table-muted-text">
+                                                ＜備考＞<br>
+                                                {{ item.notes|linebreaksbr|urlize }}
+                                            </div>
+                                        {% endif %}
+                                </td>
+
+                                <td class="col-center-align">
+                                    {% include "table_action_buttons.html" %}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% endif %}  <!-- End table display -->
+
+        {% else %}  <!-- If no entries -->
 
             <br>
             <p>
-                <a href="{% url 'glossary_all_entries' object.pk %}">
-                    全てのエントリーを表示する
-                </a>
-            </p>
-
-            <p>＊この用語集のサイズが大きい（エントリー数：{{ num_of_entries|intcomma }}）ため、すべてのエントリーを表示するのに時間がかかるかもしれません。</p>
-
-        {% else %}
-
-            <!-- Display table straight away -->
-
-            <br><br>
-            <h5>すべてのエントリー</h5>
-
-            <p>
                 <small>
-                    <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                        <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                         エントリーを追加する
                     </a>
                 </small>
             </p>
-            <br>
 
-            <table class="table table-bordered font-14">
+        {% endif %}
 
-                <thead class="table-primary">
-                    <tr>
-                    <th scope="col" style="width: 2%">No.</th>
-                    <th scope="col" style="width: 30%">原文</th>
-                    <th scope="col" style="width: 35%">訳文</th>
-                    <th scope="col" class="col-center-align" style="width: 13%">アクション</th>
-                    </tr>
-                </thead>
-
-                <tbody class="table-body-bg">
-
-                    {% for item in object.entries.all %}
-
-                        <tr>
-
-                            <td>{{ forloop.counter }}</td>
-
-                            <td>{{ item.source }}</td>
-
-                            <td>
-                                {{ item.target }}
-                                    {% if item.notes %}
-                                        <br>
-                                        <div class="table-muted-text">
-                                            ＜備考＞<br>
-                                            {{ item.notes|linebreaksbr|urlize }}
-                                        </div>
-                                    {% endif %}
-                            </td>
-
-                            <td class="col-center-align">
-                                {% include "table_action_buttons.html" %}
-                            </td>
-
-                        </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        {% endif %}  <!-- End table display -->
-
-    {% else %}  <!-- If no entries -->
-
-        <br>
-        <p>
-            <small>
-                    <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
-                    エントリーを追加する
-                </a>
-            </small>
-        </p>
-
-    {% endif %}
-
-</div>
+    </div>
 
 {% endblock %}

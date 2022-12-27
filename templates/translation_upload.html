@@ -1,48 +1,42 @@
-{% extends 'base.html' %}
+{% extends '_base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
 
-    <div class="row justify-content-center mt-5">
+    <div class="col-6 my-5">
 
-        <div class="col-6">
+        <div class="card mb-5">
 
-            <div class="card mb-5">
+            <div class="card-header">
+                翻訳をアップロードする
+            </div>
 
-                <div class="card-header">
-                    翻訳をアップロードする
-                </div>
+            <div class="card-body">
 
-                <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" novalidate>
 
-                    <form method="POST" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
 
-                        {% csrf_token %}
+                    {{ form.translation_file|as_crispy_field }}
+                    {{ form.job_number|as_crispy_field }}
+                    {{ form.translator|as_crispy_field }}
+                    {{ form.field|as_crispy_field }}
+                    {{ form.client|as_crispy_field }}
+                    {{ form.notes|as_crispy_field }}
 
-                        {{ form.translation_file|as_crispy_field }}
-                        {{ form.job_number|as_crispy_field }}
-                        {{ form.translator|as_crispy_field }}
-                        {{ form.field|as_crispy_field }}
-                        {{ form.client|as_crispy_field }}
-                        {{ form.notes|as_crispy_field }}
+                    <!-- Cancel and upload buttons -->
+                    <div class="text-center mt-4">
+                        <button type="submit" name="cancel" class="btn btn-secondary btn-sm mx-2">キャンセル</button>
+                        <button type="submit" class="btn btn-primary btn-sm">アップロード</button>
+                    </div>
 
-                        <!-- Cancel and upload buttons -->
-                        <div class="text-center mt-4">
-                            <button type="submit" name="cancel" class="btn btn-secondary btn-sm mx-2">キャンセル</button>
-                            <button type="submit" class="btn btn-primary btn-sm">アップロード</button>
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 
         </div>
 
     </div>
-
-    {% include "file_selection.html" %}
 
 {% endblock %}

@@ -1,165 +1,164 @@
-{% extends 'base.html' %}
+{% extends '_base.html' %}
 
 {% block content %}
 
-<div class="col py-4 ps-5 pe-4">
+    <div class="col m-5">
+
+        <div class="item-detail-heading">
+
+            <h4>{{ object.title }}</h4>
+
+        </div>
+
+        <p>
+            <a href="{% url 'glossary_update' object.pk %}">用語集の詳細を編集する</a> |
+            <a href="{% url 'glossary_delete' object.pk %}">用語集を削除する</a>
+        </p>
 
 
-    <div class="item-detail-heading">
+        <div class="item-details">
 
-        <h4>{{ object.title }}</h4>
-
-    </div>
-
-    <p>     
-        <a href="{% url 'glossary_update' object.pk %}">用語集の詳細を編集する</a> |
-        <a href="{% url 'glossary_delete' object.pk %}">用語集を削除する</a>
-    </p>
-
-
-    <div class="item-details">
-
-        <br><h5>詳細</h5><br>
-
-        <table class="table table-bordered">
-
-            <tbody>
-
-                <tr>
-                    <td>エントリー数:</td>
-                    <td>{{ num_of_entries }}</td>
-                </tr>
-
-                <tr>
-                    <td>作成日時:</td>
-                    {% if object.created_on %}
-                        <td>{{ object.created_on }}</td>
-                    {% else %}
-                        <td>不明</td>
-                    {% endif %}
-                </tr>
-
-                <tr>
-                    <td>作成者:</td>
-                    {% if object.created_by %}
-                        <td>{{ object.created_by }}</td>
-                    {% else %}
-                        <td>不明</td>
-                    {% endif %}
-                </tr>
-
-                <tr>
-                    <td>最終更新日時:</td>
-                    {% if object.updated_on %}
-                        <td>{{ object.updated_on }}</td>
-                    {% else %}
-                        <td>不明</td>
-                    {% endif %}
-                </tr>
-
-                <tr>
-                    <td>最終更新者:</td>
-                    {% if object.updated_by %}
-                        <td>{{ object.updated_by }}</td>
-                    {% else %}
-                        <td>不明</td>
-                    {% endif %}
-                </tr>
-
-                <tr>
-                    <td>備考:</td>
-                    {% if object.notes %}
-                        <td>{{object.notes|linebreaksbr}}</td>
-                    {% else %}
-                        <td>なし</td>
-                    {% endif %}
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-
-    {% if num_of_entries > 0 %}
-
-        
-
-            <! -- Display table -->
-
-            <br>
-            <h5>すべてのエントリー</h5>
-
-            <p>
-                <small>
-                    <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
-                        エントリーを追加する
-                    </a>
-                </small>
-            </p>
-            <br>
+            <br><h5>詳細</h5><br>
 
             <table class="table table-bordered">
 
-                <thead class="table-primary">
-                    <tr>
-                    <th scope="col" style="width: 2%">No.</th>
-                    <th scope="col" style="width: 30%">原文</th>
-                    <th scope="col" style="width: 35%">訳文</th>
-                    <th scope="col" class="col-center-align" style="width: 13%">アクション</th>
-                    </tr>
-                </thead>
-
                 <tbody>
 
-                    {% for item in object.entries.all %}
+                    <tr>
+                        <td>エントリー数:</td>
+                        <td>{{ num_of_entries }}</td>
+                    </tr>
 
-                        <tr>
+                    <tr>
+                        <td>作成日時:</td>
+                        {% if object.created_on %}
+                            <td>{{ object.created_on }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
 
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ item.source }}</td>
+                    <tr>
+                        <td>作成者:</td>
+                        {% if object.created_by %}
+                            <td>{{ object.created_by }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
 
-                            <td>
-                                {{ item.target }}
-                                    {% if item.notes %}
-                                        <br>
-                                        <div class="table-muted-text">
-                                            <small>
-                                                備考:<br>
-                                                {{ item.notes|linebreaksbr }}
-                                            </small>
-                                        </div>
-                                    {% endif %}
-                            </td>
+                    <tr>
+                        <td>最終更新日時:</td>
+                        {% if object.updated_on %}
+                            <td>{{ object.updated_on }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
 
-                            <td class="col-center-align">
-                                {% include "table_action_buttons.html" %}
-                            </td>
+                    <tr>
+                        <td>最終更新者:</td>
+                        {% if object.updated_by %}
+                            <td>{{ object.updated_by }}</td>
+                        {% else %}
+                            <td>不明</td>
+                        {% endif %}
+                    </tr>
 
-                        </tr>
-
-                    {% endfor %}
+                    <tr>
+                        <td>備考:</td>
+                        {% if object.notes %}
+                            <td>{{object.notes|linebreaksbr}}</td>
+                        {% else %}
+                            <td>なし</td>
+                        {% endif %}
+                    </tr>
 
                 </tbody>
 
             </table>
 
-        
+        </div>
 
-    {% else %}  <!-- If no entries -->  
 
-        <br>
-        <p>
-            <small>
-                    <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
-                    エントリーを追加する
-                </a>
-            </small>
-        </p>
+        {% if num_of_entries > 0 %}
 
-    {% endif %}
 
-</div>
+
+                <! -- Display table -->
+
+                <br>
+                <h5>すべてのエントリー</h5>
+
+                <p>
+                    <small>
+                        <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                            エントリーを追加する
+                        </a>
+                    </small>
+                </p>
+                <br>
+
+                <table class="table table-bordered">
+
+                    <thead class="table-primary">
+                        <tr>
+                        <th scope="col" style="width: 2%">No.</th>
+                        <th scope="col" style="width: 30%">原文</th>
+                        <th scope="col" style="width: 35%">訳文</th>
+                        <th scope="col" class="col-center-align" style="width: 13%">アクション</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in object.entries.all %}
+
+                            <tr>
+
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.source }}</td>
+
+                                <td>
+                                    {{ item.target }}
+                                        {% if item.notes %}
+                                            <br>
+                                            <div class="table-muted-text">
+                                                <small>
+                                                    備考:<br>
+                                                    {{ item.notes|linebreaksbr }}
+                                                </small>
+                                            </div>
+                                        {% endif %}
+                                </td>
+
+                                <td class="col-center-align">
+                                    {% include "table_action_buttons.html" %}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+
+
+        {% else %}  <!-- If no entries -->
+
+            <br>
+            <p>
+                <small>
+                        <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                        エントリーを追加する
+                    </a>
+                </small>
+            </p>
+
+        {% endif %}
+
+    </div>
 
 {% endblock %}

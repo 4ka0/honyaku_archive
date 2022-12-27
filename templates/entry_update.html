@@ -1,37 +1,33 @@
-{% extends 'base.html' %}
+{% extends '_base.html' %}
 
 {% load crispy_forms_tags %}
 
 {% block content %}
 
-    <div class="row justify-content-center my-5">
+    <div class="col-6 my-5">
 
-        <div class="col-6">
+        <div class="card">
 
-            <div class="card">
+            <div class="card-header">
+                <div class="text-center">
+                    エントリーを編集する
+                </div>
+            </div>
 
-                <div class="card-header">
-                    <div class="text-center">
-                        エントリーを編集する
+            <div class="card-body">
+
+                <form method="POST" novalidate autofocus>
+
+                    {% csrf_token %}
+
+                    {{ form|crispy }}
+
+                    <div class="text-center mt-3">
+                        <button type="submit" name="cancel" class="btn btn-secondary btn-sm me-2">キャンセル</button>
+                        <button type="submit" class="btn btn-primary btn-sm">更新</button>
                     </div>
-                </div>
 
-                <div class="card-body">
-
-                    <form method="POST" novalidate autofocus>
-
-                        {% csrf_token %}
-
-                        {{ form|crispy }}
-
-                        <div class="text-center mt-3">
-                            <button type="submit" name="cancel" class="btn btn-secondary btn-sm me-2">キャンセル</button>
-                            <button type="submit" class="btn btn-primary btn-sm">更新</button>
-                        </div>
-
-                    </form>
-
-                </div>
+                </form>
 
             </div>
 

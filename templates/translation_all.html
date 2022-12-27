@@ -1,46 +1,50 @@
-{% extends 'base.html' %}
+{% extends '_base.html' %}
 
 {% load humanize %}
 
 {% block content %}
 
-    <div class="item-detail-heading">
+    <div class="col m-5">
 
-        <h4 >{{ object.job_number }}</h4>
+        <div class="item-detail-heading">
 
-    </div>
+            <h4 >{{ object.job_number }}</h4>
 
-    <div class="item-details">
+        </div>
 
-        Number of segments: {{ num_of_segments }}
+        <div class="item-details">
 
-        <div class="item-table">
+            Number of segments: {{ num_of_segments }}
 
-            <table class="table table-bordered">
+            <div class="item-table">
 
-                <thead class="table-info">
-                    <tr>
-                        <th scope="col" style="width: 2%">No.</th>
-                        <th scope="col" style="width: 44%">Source Term</th>
-                        <th scope="col" style="width: 54%">Target Term</th>
-                    </tr>
-                </thead>
+                <table class="table table-bordered">
 
-                <tbody>
-
-                    {% for item in object.segments.all %}
-
+                    <thead class="table-info">
                         <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ item.source|capfirst }}</td>
-                            <td>{{ item.target|capfirst }}</td>
+                            <th scope="col" style="width: 2%">No.</th>
+                            <th scope="col" style="width: 44%">Source Term</th>
+                            <th scope="col" style="width: 54%">Target Term</th>
                         </tr>
+                    </thead>
 
-                    {% endfor %}
+                    <tbody>
 
-                </tbody>
+                        {% for item in object.segments.all %}
 
-            </table>
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ item.source|capfirst }}</td>
+                                <td>{{ item.target|capfirst }}</td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </div>
 

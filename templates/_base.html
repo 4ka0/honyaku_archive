@@ -1,0 +1,71 @@
+{% load static %}
+
+<!doctype html>
+<html lang="ja">
+
+    <head>
+        <meta charset="utf-8">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+        <title>Honyaku Archive</title>
+    </head>
+
+    <body>
+
+        <main>
+
+            <div class="container-fluid">
+
+                <div class="row justify-content-center">
+
+                        {% if user.is_authenticated %}
+
+                            <!-- Display navigation bar -->
+                            {% include "navbar.html" %}
+
+                            <!-- Display messages if any -->
+                            {% if messages %}
+
+                                {% for message in messages %}
+
+                                    {% if message.tags == "success" %}
+                                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                                    {% elif message.tags == "warning" %}
+                                        <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+                                    {% elif message.tags == "error" %}
+                                        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                                    {% else %}
+                                        <div class="alert alert-primary alert-dismissible fade show text-center" role="alert">
+                                    {% endif %}
+
+                                            {{ message }}<br>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        </div>
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                        {% endif %}
+
+                        <!-- Display page content -->
+                        {% block content %}
+                        {% endblock %}
+
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Bootstrap and Popper JS -->
+        <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+
+    </body>
+
+</html>
