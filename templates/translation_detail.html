@@ -8,12 +8,10 @@
 
         <h4 class="my-4">{{ object.job_number }}</h4>
 
-        <small>
-            <p>
-                <a href="{% url 'translation_update' object.pk %}">翻訳の詳細を編集する</a> |
-                <a href="{% url 'translation_delete' object.pk %}">翻訳を削除する</a>
-            </p>
-        </small>
+        <p>
+            <a href="{% url 'translation_update' object.pk %}">翻訳の詳細を編集する</a> |
+            <a href="{% url 'translation_delete' object.pk %}">翻訳を削除する</a>
+        </p>
 
 
         <!-- Translation details table -->

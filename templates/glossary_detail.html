@@ -108,11 +108,9 @@
                 <h5>すべてのエントリー</h5>
 
                 <p>
-                    <small>
-                        <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
-                            エントリーを追加する
-                        </a>
-                    </small>
+                    <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                        エントリーを追加する
+                    </a>
                 </p>
                 <br>
 
