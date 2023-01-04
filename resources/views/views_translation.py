@@ -96,16 +96,24 @@ def build_segments(request, translation_obj):
         Chooses appropriate parser to parse the uploaded translation file, and
         builds Segment objects from the parsed content. """
 
+    # Select appropriate parser
     if translation_obj.translation_file.path.endswith(".tmx"):
         new_segments = tmx_parser(translation_obj)
     else:
         new_segments = docx_parser(request, translation_obj)
 
+    # Save content to database
     if new_segments:
-        translation_obj.save()  # Need to save Translation obj to DB before bulk_create on next line
+        translation_obj.save()
         Segment.objects.bulk_create(new_segments)
         translation_obj.translation_file.delete()  # Uploaded file no longer needed
-        messages.success(request, '翻訳のアップロードが成功しました。')
+
+        # Output success message if Translation and Segment objects successfully created in database
+        if Translation.objects.filter(job_number__iexact=translation_obj.job_number).exists():
+            if Segment.objects.filter(translation__job_number__iexact=translation_obj.job_number).exists:
+                messages.success(request, '翻訳のアップロードが成功しました。')
+        else:
+            messages.error(request, '翻訳のアップロードに失敗しました。')
 
 
 def tmx_parser(translation_obj):
