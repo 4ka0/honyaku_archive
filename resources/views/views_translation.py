@@ -159,16 +159,14 @@ def docx_parser(request, translation_obj):
 
         table = document.tables[0]
 
-        if table.rows:
-            for row in table.rows:
-                if row.cells:
-                    if len(row.cells) == 2:
-                        new_segment = Segment(
-                            translation=translation_obj,
-                            source=row.cells[0].text,
-                            target=row.cells[1].text,
-                        )
-                        new_segments.append(new_segment)
+        for row in table.rows:
+            if len(row.cells) >= 2:
+                new_segment = Segment(
+                    translation=translation_obj,
+                    source=row.cells[0].text,
+                    target=row.cells[1].text,
+                )
+                new_segments.append(new_segment)
 
     else:
         messages.error(
