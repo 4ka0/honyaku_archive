@@ -10,7 +10,7 @@ from ..models import Segment, Translation
 from ..forms import TranslationUploadForm, TranslationUpdateForm
 
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
-from docx import Document  # For reading docx files (from translate-toolkit)
+from docx import Document  # For reading docx files
 
 
 class TranslationDetailView(LoginRequiredMixin, DetailView):
