@@ -11,61 +11,13 @@
 
             <div class="search-hits">
 
-                {% if query %}  <!-- User wants to search for a specific word in the resources -->
+                {% if target_resource == "すべてのリソースを検索する" %}
 
-                    {% if target_resource == "すべてのリソースを検索する" %}
+                    <p>「{{ query }}」に該当するエントリーは、すべてのリソースで「{{ hits }}」件見つかりました。</p>
 
-                        {% if hits == 1 %}
+                {% else %}
 
-                            <p>{{ hits }} entry found for "{{ query }}" across all resources.</p>
-
-                        {% else %}
-
-                            <p>{{ hits }} entries found for "{{ query }}" across all resources.</p>
-
-                        {% endif %}
-
-                    {% else %}  <!-- User wants to search in a specific resource -->
-
-                        {% if hits == 1 %}
-
-                            <p>{{ hits }} entry found for "{{ query }}" in {{ target_resource }}.</p>
-
-                        {% else %}
-
-                            <p>{{ hits }} entries found for "{{ query }}" in {{ target_resource }}.</p>
-
-                        {% endif %}
-
-                    {% endif %}
-
-                {% else %}  <!-- User wants to display entire content of a resource -->
-
-                    {% if target_resource == "すべてのリソースを検索する" %}
-
-                        {% if hits == 1 %}
-
-                            <p>{{ hits }} entry across all resources.</p>
-
-                        {% else %}
-
-                            <p>{{ hits }} entries across all resources.</p>
-
-                        {% endif %}
-
-                    {% else %}  <!-- In a specific resource -->
-
-                        {% if hits == 1 %}
-
-                            <p>{{ hits }} entry in {{ target_resource }}.</p>
-
-                        {% else %}
-
-                            <p>{{ hits }} entries in {{ target_resource }}.</p>
-
-                        {% endif %}
-
-                    {% endif %}
+                    <p>「{{ query }}」に該当するエントリーは、{{ target_resource }}で「{{ hits }}」件見つかりました。</p>
 
                 {% endif %}
 
@@ -158,11 +110,11 @@
 
                 {% if target_resource == "すべてのリソースを検索する" %}
 
-                    <p>No entries found for "{{ query }}" across all resources.</p>
+                    <p>すべてのリソースで「{{ query }}」に該当する件は見つかりませんでした。</p>
 
                 {% else %}
 
-                    <p>No entries found for "{{ query }}" in {{ target_resource }}.</p>
+                    <p>{{ target_resource }}で「{{ query }}」に該当する件は見つかりませんでした。</p>
 
                 {% endif %}
 
