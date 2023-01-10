@@ -35,37 +35,37 @@
 
                         {% if object.type == "glossary" %}
 
-                            <td>
+                            <td class="align-middle">
                                 <a href="{% url 'glossary_detail' object.pk %}">{{ object }}</a>
                             </td>
 
-                            <td>
+                            <td class="align-middle">
                                 用語集
                             </td>
 
                         {% elif object.type == "translation" %}
 
-                            <td>
+                            <td class="align-middle">
                                 <a href="{% url 'translation_detail' object.pk %}">{{ object }}</a>
                             </td>
 
-                            <td>
+                            <td class="align-middle">
                                 翻訳
                             </td>
 
                         {% else %}
 
-                            <td>
+                            <td class="align-middle">
                                 {{ object }}
                             </td>
 
-                            <td>
+                            <td class="align-middle">
                                 不明
                             </td>
 
                         {% endif %}
 
-                            <td>
+                            <td class="align-middle">
                                 {{ object.created_on|date:"d M Y" }}, {{ object.created_on|time:"H:i" }}
                             </td>
 
