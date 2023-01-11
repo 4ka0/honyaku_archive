@@ -1,15 +1,15 @@
 from django.urls import path
 
-from .views.views_main import HomePageView, SearchResultsView
+from .views.main_views import HomePageView, SearchResultsView
 
-from .views.views_entry import EntryCreateView, EntryDetailView, EntryUpdateView, EntryDeleteView
+from .views.entry_views import EntryCreateView, EntryDetailView, EntryUpdateView, EntryDeleteView
 
-from .views.views_glossary import (
+from .views.glossary_views import (
     GlossaryUploadView, GlossaryDetailView, GlossaryCreateView, GlossaryDeleteView,
     GlossaryAddEntryView, GlossaryAllEntryView, GlossaryUpdateView
 )
 
-from .views.views_translation import (
+from .views.translation_views import (
     TranslationDetailView, TranslationUpdateView, TranslationDeleteView, TranslationShowAllView,
     TranslationUploadView
 )
