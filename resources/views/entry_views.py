@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
 from ..models import Entry
-from ..forms import EntryCreateForm, EntryUpdateForm
+from ..forms.entry_forms import EntryCreateForm, EntryUpdateForm
 
 
 class EntryDetailView(LoginRequiredMixin, DetailView):

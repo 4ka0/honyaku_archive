@@ -7,7 +7,7 @@ from django.contrib import messages
 # from django.http import FileResponse
 
 from ..models import Segment, Translation
-from ..forms import TranslationUploadForm, TranslationUpdateForm
+from ..forms.translation_forms import TranslationUploadForm, TranslationUpdateForm
 
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
 from docx import Document  # For reading docx files

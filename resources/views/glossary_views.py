@@ -6,14 +6,12 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.http import FileResponse
 
-from ..forms import (
+from ..forms.entry_forms import EntryAddToGlossaryForm
+from ..forms.glossary_forms import (
     GlossaryUploadForm,
     GlossaryCreateForm,
     GlossaryUpdateForm,
-    EntryAddToGlossaryForm,
-    # GlossaryExportForm,
 )
 from ..models import Entry, Glossary
 
