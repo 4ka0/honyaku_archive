@@ -95,10 +95,10 @@ class EntryUpdateForm(forms.ModelForm):
 
 
 class EntryAddToGlossaryForm(forms.ModelForm):
-    source = forms.CharField(label='Source language term')
-    target = forms.CharField(label='Target language term')
+    source = forms.CharField(label='原文')
+    target = forms.CharField(label='訳文')
     notes = forms.CharField(
-        label='Notes (optional)',
+        label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
         required=False
     )
