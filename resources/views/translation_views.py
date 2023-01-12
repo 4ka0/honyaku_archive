@@ -44,7 +44,12 @@ class TranslationDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("home")
 
 
-class TranslationShowAllView(LoginRequiredMixin, DetailView):  # Is this still needed?
+"""
+The below class is no longer used since the whole translation is always
+displayed when the translation detail view is brought up. Can also delete the
+"translation_all.html" template.
+
+class TranslationShowAllView(LoginRequiredMixin, DetailView):
     model = Translation
     template_name = "translation_all.html"
 
@@ -57,6 +62,7 @@ class TranslationShowAllView(LoginRequiredMixin, DetailView):  # Is this still n
             "num_of_segments": num_of_segments,
         })
         return context
+"""
 
 
 class TranslationUploadView(LoginRequiredMixin, View):

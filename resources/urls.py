@@ -10,10 +10,8 @@ from .views.glossary_views import (
 )
 
 from .views.translation_views import (
-    TranslationDetailView, TranslationUpdateView, TranslationDeleteView, TranslationShowAllView,
-    TranslationUploadView
+    TranslationDetailView, TranslationUpdateView, TranslationDeleteView, TranslationUploadView
 )
-
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
@@ -38,8 +36,5 @@ urlpatterns = [
     path('translation/<int:pk>/edit/', TranslationUpdateView.as_view(), name='translation_update'),
     path(
         'translation/<int:pk>/delete/', TranslationDeleteView.as_view(), name='translation_delete'
-    ),
-    path(
-        'translation/<int:pk>/all/', TranslationShowAllView.as_view(), name='translation_show_all'
     ),
 ]
