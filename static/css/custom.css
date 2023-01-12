@@ -112,9 +112,10 @@ tr {
     color: #909090;
 }
 
+/* Hover color for search results table */
 /*
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: #FFFAA0;
+  background-color: #fcfdff;
 }
 */
 
