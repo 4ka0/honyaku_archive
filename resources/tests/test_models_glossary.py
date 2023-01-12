@@ -68,42 +68,42 @@ class GlossaryModelTests(TestCase):
 
     # Check whether object is created correctly
 
-    def test_glossary_title_when_created(self):
+    def test_glossary_title_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
         self.assertEqual(glossary_obj.title, "test glossary")
         self.assertNotEqual(glossary_obj.title, "")
 
-    def test_glossary_notes_when_created(self):
+    def test_glossary_notes_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
         self.assertEqual(glossary_obj.notes, "Test note.")
         self.assertNotEqual(glossary_obj.notes, "")
 
-    def test_glossary_type_when_created(self):
+    def test_glossary_type_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
         self.assertEqual(glossary_obj.type, "用語集")
         self.assertNotEqual(glossary_obj.type, "")
 
-    def test_glossary_created_by_when_created(self):
+    def test_glossary_created_by_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
         self.assertEqual(glossary_obj.created_by, self.user)
 
-    def test_glossary_updated_by_when_created(self):
+    def test_glossary_updated_by_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
         self.assertEqual(glossary_obj.updated_by, self.user)
 
-    def test_object_created_on_when_created(self):
+    def test_object_created_on_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
         self.assertEqual("2022-11-11 00:00:00+00:00", str(glossary_obj.created_on))
         self.assertNotEqual("", str(glossary_obj.created_on))
 
-    def test_object_updated_on_when_created(self):
+    def test_object_updated_on_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
         self.assertEqual("2022-11-11 00:00:00+00:00", str(glossary_obj.updated_on))
         self.assertNotEqual("", str(glossary_obj.updated_on))
 
     # Check field properties
 
-    def test_glossary_file_null(self):
+    def test_glossary_file_null_can_be_null(self):
         glossary_obj = Glossary.objects.get(id=1)
         null_bool = glossary_obj._meta.get_field("glossary_file").null
         self.assertEqual(null_bool, True)
@@ -114,47 +114,115 @@ class GlossaryModelTests(TestCase):
         max_length = glossary_obj._meta.get_field("glossary_file").max_length
         self.assertEqual(max_length, 100)
 
-    def test_created_on_auto_now_add_true(self):
+    def test_created_on_auto_now_add_is_true(self):
         glossary_obj = Glossary.objects.get(id=1)
         auto_now_add_bool = glossary_obj._meta.get_field("created_on").auto_now_add
         self.assertEqual(auto_now_add_bool, True)
         self.assertNotEqual(auto_now_add_bool, False)
 
-    def test_updated_on_auto_now_add_true(self):
+    def test_updated_on_auto_now_add_is_true(self):
         glossary_obj = Glossary.objects.get(id=1)
         auto_now_bool = glossary_obj._meta.get_field("updated_on").auto_now
         self.assertEqual(auto_now_bool, True)
         self.assertNotEqual(auto_now_bool, False)
 
-    def test_created_by_null(self):
+    def test_created_by_can_be_null(self):
         glossary_obj = Glossary.objects.get(id=1)
         null_bool = glossary_obj._meta.get_field("created_by").null
         self.assertEqual(null_bool, True)
         self.assertNotEqual(null_bool, False)
 
-    # def test_created_by_related_name(self):
-        # glossary_obj = Glossary.objects.get(id=1)
-        # related_name = glossary_obj._meta.get_field("created_by").related_name
-        # self.assertEqual(related_name, "created_glossaries")
-
-        # self.user.username
-        # print("\n----------")
-        # print(self.user.username)
-        # print(self.user.email)
-        # print(self.user.created_glossaries)
-        # print("----------")
-
-    # need to also check the following for created_by in addition to the above
-    # the ForeignKey link to the user model
-    # the related_name attribute
-    # the on_delete attribute
-    # then add the same tests for updated_by below
-
-    def test_updated_by_null(self):
+    def test_updated_by_can_be_null(self):
         glossary_obj = Glossary.objects.get(id=1)
         null_bool = glossary_obj._meta.get_field("updated_by").null
         self.assertEqual(null_bool, True)
         self.assertNotEqual(null_bool, False)
+
+    def test_created_by_related_name(self):
+        user_created_glossaries = self.user.created_glossaries.all()
+        self.assertEqual(len(user_created_glossaries), 1)
+        self.assertEqual(user_created_glossaries[0].title, "test glossary")
+
+    def test_updated_by_related_name_when_glossary_created(self):
+        user_updated_glossaries = self.user.updated_glossaries.all()
+        self.assertEqual(len(user_updated_glossaries), 1)
+        self.assertEqual(user_updated_glossaries[0].title, "test glossary")
+
+    def test_updated_by_related_name_when_glossary_updated(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        glossary_obj.title = "new test glossary"
+        glossary_obj.save()
+        user_updated_glossaries = self.user.updated_glossaries.all()
+        self.assertEqual(len(user_updated_glossaries), 1)
+        self.assertEqual(user_updated_glossaries[0].title, "new test glossary")
+        self.assertNotEqual(user_updated_glossaries[0].title, "test glossary")
+
+    def test_created_by_foreign_key_set_to_null_when_user_is_deleted(self):
+        # glossary_obj = Glossary.objects.get(id=1)
+        # self.assertEqual(glossary_obj.created_by, self.user)
+        # self.user.delete()
+        # self.assertEqual(glossary_obj.created_by, None)
+        # print("")
+        # print("**********")
+        # print(str(glossary_obj.created_by))
+        # print("**********")
+
+        # Up to here, this test is not working, created_by foreign key field not being set to NULL
+
+        User = get_user_model()
+        new_user = User.objects.create_user(
+            username="testuser2",
+            email="testuser2@email.com",
+            password="testuser1234",
+        )
+        new_glossary = Glossary.objects.create(
+            title="New Glossary",
+            notes="Test note.",
+            type="用語集",
+            created_by=new_user,
+            updated_by=new_user,
+        )
+        self.assertEqual(new_glossary.created_by, new_user)
+        print()
+        print()
+        print("**********")
+        print()
+        print("All current users before delete")
+        for user in User.objects.all():
+            print("- " + str(user))
+
+        num_of_users = User.objects.count()
+        print()
+        print("Number of users before delete")
+        print("- " + str(num_of_users))
+
+        new_user.delete()
+        print()
+        print("Delete performed")
+
+        print()
+        print("All current users after delete")
+        for user in User.objects.all():
+            print("- " + str(user))
+
+        num_of_users = User.objects.count()
+        print()
+        print("Number of users after delete")
+        print("- " + str(num_of_users))
+
+        print()
+        print("new_glossary.created_by is ...")
+        print("- " + str(new_glossary.created_by))
+        print()
+        print("**********")
+        print()
+
+        # self.assertEqual(new_glossary.created_by, None)
+
+    def test_updated_by_foreign_key_set_to_null_when_user_is_deleted(self):
+        pass
+
+    # Check meta fields
 
     def test_verbose_name(self):
         glossary_obj = Glossary.objects.get(id=1)
@@ -162,18 +230,19 @@ class GlossaryModelTests(TestCase):
         self.assertEqual(verbose_name, "glossary")
         self.assertNotEqual(verbose_name, "")
 
-    # Check meta fields
-
     def test_verbose_name_plural(self):
         glossary_obj = Glossary.objects.get(id=1)
-        verbose_name = glossary_obj._meta.verbose_name_plural
-        self.assertEqual(verbose_name, "glossaries")
-        self.assertNotEqual(verbose_name, "glossary")
-        self.assertNotEqual(verbose_name, "")
+        verbose_name_plural = glossary_obj._meta.verbose_name_plural
+        self.assertEqual(verbose_name_plural, "glossaries")
+        self.assertNotEqual(verbose_name_plural, "")
+        self.assertNotEqual(verbose_name_plural, "glossary")
+
+    # test __str__() and get_absolute_url()
+    # look at the mozilla guide for how to do this
 
 
 """
-    # Check whether object is updated properly
+    # Test whether object is updated properly
 
     def test_object_price_when_updated(self):
         fruit = Fruit.objects.get(id=1)
@@ -196,3 +265,6 @@ class GlossaryModelTests(TestCase):
         fruit = Fruit.objects.get(id=1)
         self.assertEqual("apple", str(fruit))
 """
+
+# Then that should be enough tests
+# Then do the same for the other models
