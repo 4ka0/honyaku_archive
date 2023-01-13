@@ -250,17 +250,14 @@ class GlossaryModelTests(TestCase):
         self.assertNotEqual(verbose_name_plural, "")
         self.assertNotEqual(verbose_name_plural, "glossary")
 
-    # UP TO HERE
-    # Check object class methods.
-    # test __str__() and get_absolute_url().
-    # look at the mozilla guide for how to do this.
+    # Check class methods
 
-    """
     def test_str_representation(self):
-        fruit = Fruit.objects.get(id=1)
-        self.assertEqual("apple", str(fruit))
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual(str(glossary_obj), "test glossary")
+        self.assertNotEqual(str(glossary_obj), "")
 
-    """
-
-    # Then that should be enough tests for this model.
-    # Then do the same for the other models.
+    def test_absolute_url(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        self.assertEqual(glossary_obj.get_absolute_url(), "/glossary/1/")
+        self.assertNotEqual(glossary_obj.get_absolute_url(), "")
