@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.views.generic import View, DetailView, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from ..forms.entry_forms import EntryAddToGlossaryForm
@@ -42,8 +42,7 @@ class GlossaryUploadView(LoginRequiredMixin, View):
             )
             glossary_obj.save()
             build_entries(glossary_obj, request)
-
-            return redirect("home")
+            return HttpResponseRedirect(glossary_obj.get_absolute_url())
 
         return render(request, self.template_name, {"form": form})
 

@@ -1,7 +1,7 @@
 from django.views.generic import View, DetailView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 # from django.http import FileResponse
@@ -44,27 +44,6 @@ class TranslationDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("home")
 
 
-"""
-The below class is no longer used since the whole translation is always
-displayed when the translation detail view is brought up. Can also delete the
-"translation_all.html" template.
-
-class TranslationShowAllView(LoginRequiredMixin, DetailView):
-    model = Translation
-    template_name = "translation_all.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(TranslationShowAllView, self).get_context_data(**kwargs)
-        all_segs = context["translation"].segments.all()
-        num_of_segments = context["translation"].segments.all().count()
-        context.update({
-            "all_segs": all_segs,
-            "num_of_segments": num_of_segments,
-        })
-        return context
-"""
-
-
 class TranslationUploadView(LoginRequiredMixin, View):
     form_class = TranslationUploadForm
     template_name = "translation_upload.html"
@@ -91,8 +70,10 @@ class TranslationUploadView(LoginRequiredMixin, View):
                 created_by=request.user,
                 type="translation",
             )
-            build_segments(request, translation_obj)
-            return redirect("home")
+            successful = build_segments(request, translation_obj)
+            if successful:
+                return HttpResponseRedirect(translation_obj.get_absolute_url())
+            return HttpResponseRedirect(reverse("home"))
 
         return render(request, self.template_name, {"form": form})
 
@@ -114,12 +95,19 @@ def build_segments(request, translation_obj):
         Segment.objects.bulk_create(new_segments)
         translation_obj.translation_file.delete()  # Uploaded file no longer needed
 
+        """
         # Output success message if Translation and Segment objects successfully created in database
         if Translation.objects.filter(job_number__iexact=translation_obj.job_number).exists():
             if Segment.objects.filter(translation__job_number__iexact=translation_obj.job_number).exists:
                 messages.success(request, '翻訳のアップロードが成功しました。')
         else:
             messages.error(request, '翻訳のアップロードに失敗しました。')
+        """
+
+        return True
+
+    else:
+        return False
 
 
 def tmx_parser(translation_obj):
