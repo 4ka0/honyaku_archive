@@ -101,6 +101,43 @@ class GlossaryModelTests(TestCase):
         self.assertEqual("2022-11-11 00:00:00+00:00", str(glossary_obj.updated_on))
         self.assertNotEqual("", str(glossary_obj.updated_on))
 
+    # Test whether object is updated properly
+
+    def test_glossary_title_field_when_updated(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        glossary_obj.title = "new title"
+        glossary_obj.save()
+        self.assertEqual(glossary_obj.title, "new title")
+        self.assertNotEqual(glossary_obj.title, "test glossary")
+
+    def test_glossary_notes_field_when_updated(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        glossary_obj.notes = "A new note."
+        glossary_obj.save()
+        self.assertEqual(glossary_obj.notes, "A new note.")
+        self.assertNotEqual(glossary_obj.notes, "Test note.")
+
+    def test_glossary_updated_by_field_when_updated(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        User = get_user_model()
+        new_test_user = User.objects.create_user(
+            username="new_test_user",
+            email="new_test_user@email.com",
+            password="testuser1234",
+        )
+        glossary_obj.updated_by = new_test_user
+        glossary_obj.save()
+        self.assertEqual(glossary_obj.updated_by, new_test_user)
+        self.assertNotEqual(glossary_obj.updated_by, self.user)
+
+    @freeze_time("2023-01-01")
+    def test_object_updated_on_field_when_updated(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        glossary_obj.title = "New Title"
+        glossary_obj.save()
+        self.assertEqual(str(glossary_obj.updated_on), "2023-01-01 00:00:00+00:00")
+        self.assertNotEqual(str(glossary_obj.updated_on), "2022-11-11 00:00:00+00:00")
+
     # Check field properties
 
     def test_glossary_file_null_can_be_null(self):
@@ -173,12 +210,9 @@ class GlossaryModelTests(TestCase):
         )
         self.assertEqual(new_glossary_2.created_by, test_user_2)
         test_user_2.delete()
-        """
-        Model.refresh_from_db()
-        Necessary to use refresh_from_db() below because new_glossary_2 still
-        holds its initial values.
-        Using refresh_from_db() updates with up-to-date values.
-        """
+        # It is necessary to use Model.refresh_from_db() below because
+        # new_glossary_2 still holds its initial values.
+        # Using refresh_from_db() updates with up-to-date values.
         new_glossary_2.refresh_from_db()
         self.assertEqual(new_glossary_2.created_by, None)
 
@@ -217,34 +251,16 @@ class GlossaryModelTests(TestCase):
         self.assertNotEqual(verbose_name_plural, "glossary")
 
     # UP TO HERE
-    # test __str__() and get_absolute_url()
-    # look at the mozilla guide for how to do this
+    # Check object class methods.
+    # test __str__() and get_absolute_url().
+    # look at the mozilla guide for how to do this.
 
-
-"""
-    # Test whether object is updated properly
-
-    def test_object_price_when_updated(self):
-        fruit = Fruit.objects.get(id=1)
-        fruit.price = 200
-        fruit.save()
-        self.assertEqual(200, fruit.price)
-        self.assertNotEqual(100, fruit.price)
-
-    @freeze_time("2021-04-02")
-    def test_object_update_datetime_when_updated(self):
-        fruit = Fruit.objects.get(id=1)
-        fruit.price = 300
-        fruit.save()
-        self.assertEqual("2021-04-02 00:00:00+00:00", str(fruit.updated_on))
-        self.assertNotEqual("2021-04-01 00:00:00+00:00", str(fruit.updated_on))
-
-    # Check object class methods
-
+    """
     def test_str_representation(self):
         fruit = Fruit.objects.get(id=1)
         self.assertEqual("apple", str(fruit))
-"""
 
-# Then that should be enough tests
-# Then do the same for the other models
+    """
+
+    # Then that should be enough tests for this model.
+    # Then do the same for the other models.
