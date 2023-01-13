@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from ..models import Glossary
+from ...models import Glossary
 
 from freezegun import freeze_time
 
@@ -158,69 +158,48 @@ class GlossaryModelTests(TestCase):
         self.assertNotEqual(user_updated_glossaries[0].title, "test glossary")
 
     def test_created_by_foreign_key_set_to_null_when_user_is_deleted(self):
-        # glossary_obj = Glossary.objects.get(id=1)
-        # self.assertEqual(glossary_obj.created_by, self.user)
-        # self.user.delete()
-        # self.assertEqual(glossary_obj.created_by, None)
-        # print("")
-        # print("**********")
-        # print(str(glossary_obj.created_by))
-        # print("**********")
-
-        # Up to here, this test is not working, created_by foreign key field not being set to NULL
-
         User = get_user_model()
-        new_user = User.objects.create_user(
-            username="testuser2",
-            email="testuser2@email.com",
+        test_user_2 = User.objects.create_user(
+            username="test_user_2",
+            email="test_user_2@email.com",
             password="testuser1234",
         )
-        new_glossary = Glossary.objects.create(
-            title="New Glossary",
+        new_glossary_2 = Glossary.objects.create(
+            title="New Glossary 2",
             notes="Test note.",
             type="用語集",
-            created_by=new_user,
-            updated_by=new_user,
+            created_by=test_user_2,
+            updated_by=test_user_2,
         )
-        self.assertEqual(new_glossary.created_by, new_user)
-        print()
-        print()
-        print("**********")
-        print()
-        print("All current users before delete")
-        for user in User.objects.all():
-            print("- " + str(user))
-
-        num_of_users = User.objects.count()
-        print()
-        print("Number of users before delete")
-        print("- " + str(num_of_users))
-
-        new_user.delete()
-        print()
-        print("Delete performed")
-
-        print()
-        print("All current users after delete")
-        for user in User.objects.all():
-            print("- " + str(user))
-
-        num_of_users = User.objects.count()
-        print()
-        print("Number of users after delete")
-        print("- " + str(num_of_users))
-
-        print()
-        print("new_glossary.created_by is ...")
-        print("- " + str(new_glossary.created_by))
-        print()
-        print("**********")
-        print()
-
-        # self.assertEqual(new_glossary.created_by, None)
+        self.assertEqual(new_glossary_2.created_by, test_user_2)
+        test_user_2.delete()
+        """
+        Model.refresh_from_db()
+        Necessary to use refresh_from_db() below because new_glossary_2 still
+        holds its initial values.
+        Using refresh_from_db() updates with up-to-date values.
+        """
+        new_glossary_2.refresh_from_db()
+        self.assertEqual(new_glossary_2.created_by, None)
 
     def test_updated_by_foreign_key_set_to_null_when_user_is_deleted(self):
-        pass
+        User = get_user_model()
+        test_user_3 = User.objects.create_user(
+            username="test_user_3",
+            email="test_user_3@email.com",
+            password="testuser1234",
+        )
+        new_glossary_3 = Glossary.objects.create(
+            title="New Glossary 3",
+            notes="Test note.",
+            type="用語集",
+            created_by=test_user_3,
+            updated_by=test_user_3,
+        )
+        self.assertEqual(new_glossary_3.updated_by, test_user_3)
+        test_user_3.delete()
+        new_glossary_3.refresh_from_db()
+        self.assertEqual(new_glossary_3.updated_by, None)
 
     # Check meta fields
 
@@ -237,6 +216,7 @@ class GlossaryModelTests(TestCase):
         self.assertNotEqual(verbose_name_plural, "")
         self.assertNotEqual(verbose_name_plural, "glossary")
 
+    # UP TO HERE
     # test __str__() and get_absolute_url()
     # look at the mozilla guide for how to do this
 
