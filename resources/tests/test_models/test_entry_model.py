@@ -107,3 +107,60 @@ class EntryModelTests(TestCase):
         self.assertNotEqual("", str(self.entry_obj.updated_on))
 
     # Check field values are correct when updated
+
+    def test_entry_glossary_field_when_updated(self):
+        new_glossary_obj = Glossary.objects.create(
+            title="Test Glossary 1",
+            notes="Test note 2.",
+            type="用語集",
+            created_by=self.testuser,
+            updated_by=self.testuser,
+        )
+        self.entry_obj.glossary = new_glossary_obj
+        self.entry_obj.save()
+        self.assertEqual(self.entry_obj.glossary, new_glossary_obj)
+        self.assertEqual(self.entry_obj.glossary.title, "Test Glossary 1")
+        self.assertNotEqual(self.entry_obj.glossary, self.glossary_obj)
+
+    def test_entry_source_field_when_updated(self):
+        self.entry_obj.source = "情報"
+        self.entry_obj.save()
+        self.assertEqual(self.entry_obj.source, "情報")
+        self.assertNotEqual(self.entry_obj.source, "テスト")
+
+    def test_entry_target_field_when_updated(self):
+        self.entry_obj.target = "information"
+        self.entry_obj.save()
+        self.assertEqual(self.entry_obj.target, "information")
+        self.assertNotEqual(self.entry_obj.target, "test")
+
+    def test_entry_created_by_field_when_updated(self):
+        User = get_user_model()
+        new_testuser = User.objects.create_user(
+            username="new_test_user",
+            email="new_test_user@email.com",
+            password="testuser1234",
+        )
+        self.entry_obj.created_by = new_testuser
+        self.entry_obj.save()
+        self.assertEqual(self.entry_obj.created_by, new_testuser)
+        self.assertNotEqual(self.entry_obj.created_by, self.testuser)
+
+    def test_entry_updated_by_field_when_updated(self):
+        User = get_user_model()
+        new_testuser = User.objects.create_user(
+            username="new_test_user",
+            email="new_test_user@email.com",
+            password="testuser1234",
+        )
+        self.entry_obj.updated_by = new_testuser
+        self.entry_obj.save()
+        self.assertEqual(self.entry_obj.updated_by, new_testuser)
+        self.assertNotEqual(self.entry_obj.updated_by, self.testuser)
+
+    @freeze_time("2023-01-01")
+    def test_object_updated_on_field_when_updated(self):
+        self.entry_obj.source = "情報"
+        self.entry_obj.save()
+        self.assertEqual(str(self.entry_obj.updated_on), "2023-01-01 00:00:00+00:00")
+        self.assertNotEqual(str(self.entry_obj.updated_on), "2022-11-11 00:00:00+00:00")
