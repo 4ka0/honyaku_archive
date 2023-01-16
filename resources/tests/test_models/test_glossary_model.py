@@ -25,7 +25,7 @@ class GlossaryModelTests(TestCase):
             updated_by=cls.user,
         )
 
-    # Check field labels created correctly
+    # Check field labels are correct when object created
 
     def test_glossary_file_label(self):
         glossary_obj = Glossary.objects.get(id=1)
@@ -66,7 +66,7 @@ class GlossaryModelTests(TestCase):
         self.assertEqual(field_label, "type")
         self.assertNotEqual(field_label, "")
 
-    # Check whether object is created correctly
+    # Check field values are correct when object created
 
     def test_glossary_title_field_when_created(self):
         glossary_obj = Glossary.objects.get(id=1)
@@ -101,7 +101,7 @@ class GlossaryModelTests(TestCase):
         self.assertEqual("2022-11-11 00:00:00+00:00", str(glossary_obj.updated_on))
         self.assertNotEqual("", str(glossary_obj.updated_on))
 
-    # Test whether object is updated properly
+    # Check field values are correct when updated
 
     def test_glossary_title_field_when_updated(self):
         glossary_obj = Glossary.objects.get(id=1)
