@@ -157,7 +157,7 @@ class GlossaryModelTests(TestCase):
         self.assertEqual(auto_now_add_bool, True)
         self.assertNotEqual(auto_now_add_bool, False)
 
-    def test_updated_on_auto_now_add_is_true(self):
+    def test_updated_on_auto_now_is_true(self):
         glossary_obj = Glossary.objects.get(id=1)
         auto_now_bool = glossary_obj._meta.get_field("updated_on").auto_now
         self.assertEqual(auto_now_bool, True)

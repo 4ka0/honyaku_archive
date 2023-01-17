@@ -164,3 +164,157 @@ class EntryModelTests(TestCase):
         self.entry_obj.save()
         self.assertEqual(str(self.entry_obj.updated_on), "2023-01-01 00:00:00+00:00")
         self.assertNotEqual(str(self.entry_obj.updated_on), "2022-11-11 00:00:00+00:00")
+
+    # Check field properties
+
+    def test_entry_deleted_when_glossary_deleted(self):
+        new_glossary_obj = Glossary.objects.create(
+            title="Test Glossary 3",
+            notes="Test note.",
+            type="用語集",
+            created_by=self.testuser,
+            updated_by=self.testuser,
+        )
+        Entry.objects.create(
+            glossary=new_glossary_obj,
+            source="装置",
+            target="device",
+            notes="Just a test.",
+            created_by=self.testuser,
+            updated_by=self.testuser,
+        )
+        self.assertEqual(Glossary.objects.filter(title="Test Glossary 3").count(), 1)
+        self.assertEqual(Entry.objects.filter(glossary=new_glossary_obj).count(), 1)
+        new_glossary_obj.delete()
+        self.assertEqual(Glossary.objects.filter(title="Test Glossary 3").count(), 0)
+        self.assertEqual(Entry.objects.filter(glossary=new_glossary_obj).count(), 0)
+
+    def test_entry_source_max_length(self):
+        max_length = self.entry_obj._meta.get_field("source").max_length
+        self.assertEqual(max_length, 250)
+
+    def test_entry_target_max_length(self):
+        max_length = self.entry_obj._meta.get_field("target").max_length
+        self.assertEqual(max_length, 250)
+
+    def test_entry_sourcenotes_blank_is_true(self):
+        blank_bool = self.entry_obj._meta.get_field("notes").blank
+        self.assertEqual(blank_bool, True)
+        self.assertNotEqual(blank_bool, False)
+
+    def test_created_on_auto_now_add_is_true(self):
+        auto_now_add_bool = self.entry_obj._meta.get_field("created_on").auto_now_add
+        self.assertEqual(auto_now_add_bool, True)
+        self.assertNotEqual(auto_now_add_bool, False)
+
+    def test_updated_on_auto_now_is_true(self):
+        auto_now_bool = self.entry_obj._meta.get_field("updated_on").auto_now
+        self.assertEqual(auto_now_bool, True)
+        self.assertNotEqual(auto_now_bool, False)
+
+    def test_created_by_can_be_null(self):
+        null_bool = self.entry_obj._meta.get_field("created_by").null
+        self.assertEqual(null_bool, True)
+        self.assertNotEqual(null_bool, False)
+
+    def test_updated_by_can_be_null(self):
+        null_bool = self.entry_obj._meta.get_field("updated_by").null
+        self.assertEqual(null_bool, True)
+        self.assertNotEqual(null_bool, False)
+
+    def test_created_by_related_name(self):
+        user_created_entries = self.testuser.created_entries.all()
+        self.assertEqual(len(user_created_entries), 1)
+        self.assertEqual(user_created_entries[0].source, "テスト")
+        self.assertEqual(user_created_entries[0].target, "test")
+
+    def test_updated_by_related_name_when_entry_created(self):
+        user_updated_entries = self.testuser.updated_entries.all()
+        self.assertEqual(len(user_updated_entries), 1)
+        self.assertEqual(user_updated_entries[0].source, "テスト")
+        self.assertEqual(user_updated_entries[0].target, "test")
+
+    def test_updated_by_related_name_when_entry_updated(self):
+        self.entry_obj.source = "概念"
+        self.entry_obj.save()
+        user_updated_entries = self.testuser.updated_entries.all()
+        self.assertEqual(len(user_updated_entries), 1)
+        self.assertEqual(user_updated_entries[0].source, "概念")
+        self.assertNotEqual(user_updated_entries[0].source, "テスト")
+
+    def test_created_by_foreign_key_set_to_null_when_user_is_deleted(self):
+        User = get_user_model()
+        testuser_2 = User.objects.create_user(
+            username="testuser_2",
+            email="test_user_2@email.com",
+            password="testuser1234",
+        )
+        new_glossary_2 = Glossary.objects.create(
+            title="New Glossary 2",
+            notes="Test note.",
+            type="用語集",
+            created_by=testuser_2,
+            updated_by=testuser_2,
+        )
+        new_entry_2 = Entry.objects.create(
+            glossary=new_glossary_2,
+            source="コミュニケーション",
+            target="communication",
+            notes="Just a test.",
+            created_by=testuser_2,
+            updated_by=testuser_2,
+        )
+        self.assertEqual(new_entry_2.created_by, testuser_2)
+        testuser_2.delete()
+        new_entry_2.refresh_from_db()
+        self.assertEqual(new_entry_2.created_by, None)
+
+    def test_updated_by_foreign_key_set_to_null_when_user_is_deleted(self):
+        User = get_user_model()
+        testuser_3 = User.objects.create_user(
+            username="testuser_2",
+            email="test_user_2@email.com",
+            password="testuser1234",
+        )
+        new_glossary_3 = Glossary.objects.create(
+            title="New Glossary 2",
+            notes="Test note.",
+            type="用語集",
+            created_by=testuser_3,
+            updated_by=testuser_3,
+        )
+        new_entry_3 = Entry.objects.create(
+            glossary=new_glossary_3,
+            source="コミュニケーション",
+            target="communication",
+            notes="Just a test.",
+            created_by=testuser_3,
+            updated_by=testuser_3,
+        )
+        self.assertEqual(new_entry_3.updated_by, testuser_3)
+        testuser_3.delete()
+        new_entry_3.refresh_from_db()
+        self.assertEqual(new_entry_3.updated_by, None)
+
+    # Check meta fields
+
+    def test_verbose_name(self):
+        verbose_name = self.entry_obj._meta.verbose_name
+        self.assertEqual(verbose_name, "entry")
+        self.assertNotEqual(verbose_name, "")
+
+    def test_verbose_name_plural(self):
+        verbose_name_plural = self.entry_obj._meta.verbose_name_plural
+        self.assertEqual(verbose_name_plural, "entries")
+        self.assertNotEqual(verbose_name_plural, "")
+        self.assertNotEqual(verbose_name_plural, "entry")
+
+    # Check class methods
+
+    def test_str_representation(self):
+        self.assertEqual(str(self.entry_obj), "テスト : test")
+        self.assertNotEqual(str(self.entry_obj), "")
+
+    def test_absolute_url(self):
+        self.assertEqual(self.entry_obj.get_absolute_url(), "/entry/1/")
+        self.assertNotEqual(self.entry_obj.get_absolute_url(), "")
