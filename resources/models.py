@@ -87,7 +87,7 @@ class Translation(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name="uploaded_translations",
+        related_name="created_translations",
         null=True,
         on_delete=models.SET_NULL,
     )
