@@ -25,6 +25,7 @@ class TranslationModelTests(TestCase):
             translator="Lee",
             notes="Some notes.",
             type="翻訳",
+            created_by=cls.testuser,
         )
 
     # Check field labels are correct when object created
@@ -77,3 +78,79 @@ class TranslationModelTests(TestCase):
         field_label = self.translation_obj._meta.get_field("type").verbose_name
         self.assertEqual(field_label, "type")
         self.assertNotEqual(field_label, "")
+
+    # Check field values are correct when object created
+
+    def test_translation_translation_file_field_when_created(self):
+        self.assertEqual(self.translation_obj.translation_file, None)
+
+    def test_translation_job_number_field_when_created(self):
+        self.assertEqual(self.translation_obj.job_number, "ABC123")
+        self.assertNotEqual(self.translation_obj.job_number, "")
+
+    def test_translation_field_field_when_created(self):
+        self.assertEqual(self.translation_obj.field, "Chemical")
+        self.assertNotEqual(self.translation_obj.field, "")
+
+    def test_translation_client_field_when_created(self):
+        self.assertEqual(self.translation_obj.client, "BASF")
+        self.assertNotEqual(self.translation_obj.client, "")
+
+    def test_translation_translator_field_when_created(self):
+        self.assertEqual(self.translation_obj.translator, "Lee")
+        self.assertNotEqual(self.translation_obj.translator, "")
+
+    def test_translation_notes_field_when_created(self):
+        self.assertEqual(self.translation_obj.notes, "Some notes.")
+        self.assertNotEqual(self.translation_obj.notes, "")
+
+    def test_translation_type_field_when_created(self):
+        self.assertEqual(self.translation_obj.type, "翻訳")
+        self.assertNotEqual(self.translation_obj.type, "")
+
+    def test_translation_created_on_field_when_created(self):
+        self.assertEqual("2022-11-11 00:00:00+00:00", str(self.translation_obj.created_on))
+        self.assertNotEqual("", str(self.translation_obj.created_on))
+
+    def test_translation__created_by_field_when_created(self):
+        self.assertEqual(self.translation_obj.created_by, self.testuser)
+
+    # Check field values are correct when updated
+
+    def test_translation_job_number_field_when_updated(self):
+        self.translation_obj.job_number = "ZZZ369"
+        self.translation_obj.save()
+        self.assertEqual(self.translation_obj.job_number, "ZZZ369")
+        self.assertNotEqual(self.translation_obj.job_number, "ABC123")
+
+    def test_translation_field_field_when_updated(self):
+        self.translation_obj.field = "Mechanical"
+        self.translation_obj.save()
+        self.assertEqual(self.translation_obj.field, "Mechanical")
+        self.assertNotEqual(self.translation_obj.field, "Chemical")
+
+    def test_translation_client_field_when_updated(self):
+        self.translation_obj.client = "IBM"
+        self.translation_obj.save()
+        self.assertEqual(self.translation_obj.client, "IBM")
+        self.assertNotEqual(self.translation_obj.client, "BASF")
+
+    def test_translation_translator_field_when_updated(self):
+        self.translation_obj.translator = "Hashimoto"
+        self.translation_obj.save()
+        self.assertEqual(self.translation_obj.translator, "Hashimoto")
+        self.assertNotEqual(self.translation_obj.translator, "Lee")
+
+    def test_translation_notes_field_when_updated(self):
+        self.translation_obj.notes = "A new note."
+        self.translation_obj.save()
+        self.assertEqual(self.translation_obj.notes, "A new note.")
+        self.assertNotEqual(self.translation_obj.notes, "Some notes.")
+
+    def test_translation_type_field_when_updated(self):
+        self.translation_obj.type = "A new note."
+        self.translation_obj.save()
+        self.assertEqual(self.translation_obj.type, "A new note.")
+        self.assertNotEqual(self.translation_obj.type, "Some notes.")
+
+    # Check field properties
