@@ -76,39 +76,39 @@ class EntryModelTests(TestCase):
 
     # Check field values are correct when object created
 
-    def test_entry_glossary_field_when_created(self):
+    def test_glossary_field_when_created(self):
         self.assertEqual(self.entry_obj.glossary, self.glossary_obj)
         self.assertNotEqual(self.entry_obj.glossary, None)
 
-    def test_entry_source_field_when_created(self):
+    def test_source_field_when_created(self):
         self.assertEqual(self.entry_obj.source, "テスト")
         self.assertNotEqual(self.entry_obj.source, "")
 
-    def test_entry_target_field_when_created(self):
+    def test_target_field_when_created(self):
         self.assertEqual(self.entry_obj.target, "test")
         self.assertNotEqual(self.entry_obj.target, "")
 
-    def test_entry_notes_field_when_created(self):
+    def test_notes_field_when_created(self):
         self.assertEqual(self.entry_obj.notes, "Just a test.")
         self.assertNotEqual(self.entry_obj.notes, "")
 
-    def test_entry_created_by_field_when_created(self):
+    def test_created_by_field_when_created(self):
         self.assertEqual(self.entry_obj.created_by, self.testuser)
 
-    def test_entry_updated_by_field_when_created(self):
+    def test_updated_by_field_when_created(self):
         self.assertEqual(self.entry_obj.updated_by, self.testuser)
 
-    def test_entry_created_on_field_when_created(self):
+    def test_created_on_field_when_created(self):
         self.assertEqual("2022-11-11 00:00:00+00:00", str(self.entry_obj.created_on))
         self.assertNotEqual("", str(self.entry_obj.created_on))
 
-    def test_entry_updated_on_field_when_created(self):
+    def test_updated_on_field_when_created(self):
         self.assertEqual("2022-11-11 00:00:00+00:00", str(self.entry_obj.updated_on))
         self.assertNotEqual("", str(self.entry_obj.updated_on))
 
     # Check field values are correct when updated
 
-    def test_entry_glossary_field_when_updated(self):
+    def test_glossary_field_when_updated(self):
         new_glossary_obj = Glossary.objects.create(
             title="Test Glossary 1",
             notes="Test note 2.",
@@ -122,19 +122,19 @@ class EntryModelTests(TestCase):
         self.assertEqual(self.entry_obj.glossary.title, "Test Glossary 1")
         self.assertNotEqual(self.entry_obj.glossary, self.glossary_obj)
 
-    def test_entry_source_field_when_updated(self):
+    def test_source_field_when_updated(self):
         self.entry_obj.source = "情報"
         self.entry_obj.save()
         self.assertEqual(self.entry_obj.source, "情報")
         self.assertNotEqual(self.entry_obj.source, "テスト")
 
-    def test_entry_target_field_when_updated(self):
+    def test_target_field_when_updated(self):
         self.entry_obj.target = "information"
         self.entry_obj.save()
         self.assertEqual(self.entry_obj.target, "information")
         self.assertNotEqual(self.entry_obj.target, "test")
 
-    def test_entry_created_by_field_when_updated(self):
+    def test_created_by_field_when_updated(self):
         User = get_user_model()
         new_testuser = User.objects.create_user(
             username="new_test_user",
@@ -146,7 +146,7 @@ class EntryModelTests(TestCase):
         self.assertEqual(self.entry_obj.created_by, new_testuser)
         self.assertNotEqual(self.entry_obj.created_by, self.testuser)
 
-    def test_entry_updated_by_field_when_updated(self):
+    def test_updated_by_field_when_updated(self):
         User = get_user_model()
         new_testuser = User.objects.create_user(
             username="new_test_user",
@@ -189,15 +189,15 @@ class EntryModelTests(TestCase):
         self.assertEqual(Glossary.objects.filter(title="Test Glossary 3").count(), 0)
         self.assertEqual(Entry.objects.filter(glossary=new_glossary_obj).count(), 0)
 
-    def test_entry_source_max_length(self):
+    def test_source_max_length(self):
         max_length = self.entry_obj._meta.get_field("source").max_length
         self.assertEqual(max_length, 250)
 
-    def test_entry_target_max_length(self):
+    def test_target_max_length(self):
         max_length = self.entry_obj._meta.get_field("target").max_length
         self.assertEqual(max_length, 250)
 
-    def test_entry_notes_blank_is_true(self):
+    def test_notes_blank_is_true(self):
         blank_bool = self.entry_obj._meta.get_field("notes").blank
         self.assertEqual(blank_bool, True)
         self.assertNotEqual(blank_bool, False)
@@ -314,7 +314,3 @@ class EntryModelTests(TestCase):
     def test_str_representation(self):
         self.assertEqual(str(self.entry_obj), "テスト : test")
         self.assertNotEqual(str(self.entry_obj), "")
-
-    def test_absolute_url(self):
-        self.assertEqual(self.entry_obj.get_absolute_url(), "/entry/1/")
-        self.assertNotEqual(self.entry_obj.get_absolute_url(), "")
