@@ -70,9 +70,6 @@ class Entry(models.Model):
     def __str__(self):
         return f"{self.source} : {self.target}"
 
-    def get_absolute_url(self):
-        return reverse("entry_detail", args=[str(self.id)])
-
 
 class Translation(models.Model):
     translation_file = models.FileField(
