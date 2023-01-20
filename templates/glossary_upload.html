@@ -18,9 +18,7 @@
 
                     {% csrf_token %}
 
-                    {{ form.glossary_file|as_crispy_field }}
-                    {{ form.title|as_crispy_field }}
-                    {{ form.notes|as_crispy_field }}
+                    {{ form|crispy }}
 
                     <!-- Help, cancel, and upload buttons -->
                     <div class="text-center mt-4">

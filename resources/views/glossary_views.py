@@ -28,25 +28,56 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            glossary_obj = Glossary(
-                glossary_file=form.cleaned_data["glossary_file"],
-                title=form.cleaned_data["title"],
-                notes=form.cleaned_data["notes"],
-                created_by=request.user,
-                updated_by=request.user,
-                type="glossary"
-            )
-            glossary_obj.save()
+            # Create new Glossary obj or append to existing Glossary obj
+            glossary_obj = create_or_append(request, form)
             build_entries(glossary_obj, request)
             return HttpResponseRedirect(glossary_obj.get_absolute_url())
 
         return render(request, self.template_name, {"form": form})
 
 
+def create_or_append(request, form):
+    """
+    Helper method for GlossaryUploadView. Either creates a new Glossary
+    object or gets the Glossary object with which the uploaded data is to be
+    associated.
+    """
+
+    existing_glossary_obj = form.cleaned_data["existing_glossary"]
+
+    if existing_glossary_obj:
+        glossary_obj = Glossary.objects.get(title__iexact=existing_glossary_obj.title)
+        glossary_obj.glossary_file = form.cleaned_data["glossary_file"]
+        new_notes = form.cleaned_data["notes"]
+        if new_notes:
+            if glossary_obj.notes:
+                glossary_obj.notes = glossary_obj.notes + "\n" + new_notes
+            else:
+                glossary_obj.notes = new_notes
+        glossary_obj.updated_by = request.user
+        glossary_obj.save()
+
+    else:
+        glossary_obj = Glossary(
+            glossary_file=form.cleaned_data["glossary_file"],
+            title=form.cleaned_data["new_glossary"],
+            notes=form.cleaned_data["notes"],
+            created_by=request.user,
+            updated_by=request.user,
+            type="glossary"
+        )
+        glossary_obj.save()
+
+    return glossary_obj
+
+
 def build_entries(glossary_obj, request):
-    """ Helper method for GlossaryUploadView.
-        Builds Entry objects from the content of an uploaded text file.
-        Receives new Glossary object. """
+    """
+    Helper method for GlossaryUploadView.
+    Builds Entry objects from the content of an uploaded text file.
+    Receives new Glossary object.
+    """
+
     new_entries = []
 
     # Regular open() used here to make it possible to set the encoding.
@@ -138,10 +169,13 @@ class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
-    """ Class to add a new Entry object to an existing Glossary Object.
-        Called from the Glossary detail page.
-        Receives pk of Glossary object in question and sets this for the
-        entry.glossary field. """
+    """
+    Class to add a new Entry object to an existing Glossary Object.
+    Called from the Glossary detail page.
+    Receives pk of Glossary object in question and sets this for the
+    entry.glossary field.
+    """
+
     model = Entry
     form_class = EntryAddToGlossaryForm
     template_name = "glossary_add_entry.html"
