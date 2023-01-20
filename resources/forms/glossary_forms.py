@@ -4,7 +4,7 @@ from django.core.validators import FileExtensionValidator
 from ..models import Glossary
 
 
-class GlossaryCreateForm(forms.ModelForm):
+class GlossaryForm(forms.ModelForm):
     title = forms.CharField(
         label='用語集のタイトル',
         error_messages={
@@ -15,24 +15,6 @@ class GlossaryCreateForm(forms.ModelForm):
         label='備考（任意）',
         required=False,
         widget=forms.Textarea(attrs={'rows': 6}),
-    )
-
-    class Meta:
-        model = Glossary
-        fields = ('title', 'notes')
-
-
-class GlossaryUpdateForm(forms.ModelForm):
-    title = forms.CharField(
-        label='用語集のタイトル',
-        error_messages={
-            "required": "このフィールドは入力必須です。",
-        },
-    )
-    notes = forms.CharField(
-        label='備考（任意）',
-        widget=forms.Textarea(attrs={'rows': 6}),
-        required=False
     )
 
     class Meta:

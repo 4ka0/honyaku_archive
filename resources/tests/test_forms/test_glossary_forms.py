@@ -12,7 +12,7 @@ from ...models import Glossary
 # Test form methods created yourself
 
 
-class TestGlossaryCreateForm(TestCase):
+class TestGlossaryForm(TestCase):
 
     @classmethod
     def setUpTestData(cls):

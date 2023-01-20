@@ -8,11 +8,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from ..forms.entry_forms import EntryAddToGlossaryForm
-from ..forms.glossary_forms import (
-    GlossaryUploadForm,
-    GlossaryCreateForm,
-    GlossaryUpdateForm,
-)
+from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm
 from ..models import Entry, Glossary
 
 
@@ -109,7 +105,7 @@ class GlossaryDetailView(LoginRequiredMixin, DetailView):
 
 class GlossaryCreateView(LoginRequiredMixin, CreateView):
     model = Glossary
-    form_class = GlossaryCreateForm
+    form_class = GlossaryForm
     template_name = "glossary_create.html"
 
     def form_valid(self, form):
@@ -175,7 +171,7 @@ class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
 class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
     model = Glossary
     template_name = "glossary_update.html"
-    form_class = GlossaryUpdateForm
+    form_class = GlossaryForm
 
     def form_valid(self, form):
         obj = form.save(commit=False)
