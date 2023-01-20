@@ -42,5 +42,5 @@ class TestGlossaryCreateForm(TestCase):
     def test_meta_model(self):
         self.assertEqual(self.form._meta.model, Glossary)
 
-    def test_meta_fields_model(self):
+    def test_meta_fields(self):
         self.assertEqual(self.form._meta.fields, ('title', 'notes'))
