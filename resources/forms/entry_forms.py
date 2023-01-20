@@ -52,7 +52,7 @@ class EntryCreateForm(forms.ModelForm):
             self.add_error('new_glossary', new_glossary_msg)
 
         # If neither of the fields have been entered, output error
-        if not (existing_glossary or new_glossary):
+        if not existing_glossary and not new_glossary:
             existing_glossary_msg = "既存の用語集を選択してください..."
             new_glossary_msg = "...または新しい用語集を作成してください。"
             self.add_error('glossary', existing_glossary_msg)
@@ -66,12 +66,12 @@ class EntryCreateForm(forms.ModelForm):
                 self.add_error('new_glossary', msg)
             else:
                 # Create new Glossary instance having title from new_glossary
-                create_glossary = Glossary(title=new_glossary)
-                create_glossary.save()
+                newly_created_glossary = Glossary(title=new_glossary)
+                newly_created_glossary.save()
                 # Add new glossary object to form data
                 # (immutable so have to use copy() here)
                 cleaned_data = self.data.copy()
-                cleaned_data['glossary'] = create_glossary
+                cleaned_data['glossary'] = newly_created_glossary
                 return cleaned_data
 
 
