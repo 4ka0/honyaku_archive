@@ -1,22 +1,22 @@
 from django.test import TestCase
 from django.forms.widgets import Textarea
 
-from ...forms.glossary_forms import GlossaryCreateForm
+from ...forms.glossary_forms import GlossaryForm
 from ...models import Glossary
 
 # from freezegun import freeze_time
 
 # Test fields
 # - Labels, help text, and other properties you have set
-# Test form methods created yourself
 # Test Meta fields
+# Test form methods created yourself
 
 
 class TestGlossaryCreateForm(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.form = GlossaryCreateForm()
+        cls.form = GlossaryForm()
 
     # Test fields
 
@@ -38,6 +38,8 @@ class TestGlossaryCreateForm(TestCase):
     def test_notes_field_widget(self):
         self.assertTrue(self.form.fields['notes'].widget, Textarea)
         self.assertEqual(self.form.fields['notes'].widget.attrs['rows'], 6)
+
+    # Test Meta fields
 
     def test_meta_model(self):
         self.assertEqual(self.form._meta.model, Glossary)
