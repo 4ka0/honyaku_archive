@@ -46,3 +46,7 @@ class TestGlossaryForm(TestCase):
 
     def test_meta_fields(self):
         self.assertEqual(self.form._meta.fields, ('title', 'notes'))
+
+
+class TestGlossaryUploadForm(TestCase):
+    pass

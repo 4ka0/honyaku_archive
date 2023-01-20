@@ -33,6 +33,11 @@ class GlossaryUploadForm(forms.ModelForm):
             )
         ],
     )
+    glossary = forms.ModelChoiceField(
+        label='既存の用語集に追加しますか？',
+        queryset=Glossary.objects.all().order_by('title'),
+        required=False
+    )
     title = forms.CharField(
         label='新しい用語集のタイトル',
         error_messages={"required": "このフィールドは入力必須です。"},
@@ -45,7 +50,7 @@ class GlossaryUploadForm(forms.ModelForm):
 
     class Meta:
         model = Glossary
-        fields = ("glossary_file", "title", "notes")
+        fields = ("glossary_file", "glossary", "title", "notes")
 
     def clean(self):
         """ Check to prevent using a glossary name that already exists. """
