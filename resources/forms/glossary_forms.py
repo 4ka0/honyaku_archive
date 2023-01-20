@@ -69,7 +69,6 @@ class GlossaryUploadForm(forms.ModelForm):
             self.add_error('new_glossary', new_glossary_msg)
 
         # If neither of the glossary fields have been entered, output error.
-        # if not (existing_glossary or new_glossary):
         if not existing_glossary and not new_glossary:
             existing_glossary_msg = "既存の用語集を選択してください..."
             new_glossary_msg = "...または新しい用語集を作成してください。"

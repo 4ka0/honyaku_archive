@@ -28,47 +28,44 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            # Create new Glossary obj or append to existing Glossary obj
-            glossary_obj = create_or_append(request, form)
+            glossary_obj = append_or_create(request, form)
             build_entries(glossary_obj, request)
             return HttpResponseRedirect(glossary_obj.get_absolute_url())
 
         return render(request, self.template_name, {"form": form})
 
 
-def create_or_append(request, form):
+def append_or_create(request, form):
     """
-    Helper method for GlossaryUploadView. Either creates a new Glossary
-    object or gets the Glossary object with which the uploaded data is to be
-    associated.
+    Helper method for GlossaryUploadView.
+    Either returns an existing Glossary object or creates and returns a new
+    Glossary object with which the uploaded data is to be associated.
     """
 
     existing_glossary_obj = form.cleaned_data["existing_glossary"]
 
     if existing_glossary_obj:
-        glossary_obj = Glossary.objects.get(title__iexact=existing_glossary_obj.title)
-        glossary_obj.glossary_file = form.cleaned_data["glossary_file"]
+        existing_glossary_obj.glossary_file = form.cleaned_data["glossary_file"]
         new_notes = form.cleaned_data["notes"]
         if new_notes:
-            if glossary_obj.notes:
-                glossary_obj.notes = glossary_obj.notes + "\n" + new_notes
+            if existing_glossary_obj.notes:
+                existing_glossary_obj.notes = existing_glossary_obj.notes + "\n" + new_notes
             else:
-                glossary_obj.notes = new_notes
-        glossary_obj.updated_by = request.user
-        glossary_obj.save()
+                existing_glossary_obj.notes = new_notes
+        existing_glossary_obj.updated_by = request.user
+        existing_glossary_obj.save()
+        return existing_glossary_obj
 
-    else:
-        glossary_obj = Glossary(
-            glossary_file=form.cleaned_data["glossary_file"],
-            title=form.cleaned_data["new_glossary"],
-            notes=form.cleaned_data["notes"],
-            created_by=request.user,
-            updated_by=request.user,
-            type="glossary"
-        )
-        glossary_obj.save()
-
-    return glossary_obj
+    new_glossary_obj = Glossary(
+        glossary_file=form.cleaned_data["glossary_file"],
+        title=form.cleaned_data["new_glossary"],
+        notes=form.cleaned_data["notes"],
+        created_by=request.user,
+        updated_by=request.user,
+        type="glossary"
+    )
+    new_glossary_obj.save()
+    return new_glossary_obj
 
 
 def build_entries(glossary_obj, request):
@@ -89,10 +86,10 @@ def build_entries(glossary_obj, request):
 
         reader = csv.reader(f, delimiter="\t")
 
-        # Loop for creating new Entry objects from content of uploaded file
+        # Loop for creating new Entry objects from content of uploaded file.
         for row in reader:
 
-            # Each row should contain 2 or 3 elements, otherwise ignored
+            # Each row should contain 2 or 3 elements, otherwise ignored.
             if (len(row) == 2) or (len(row) == 3):
 
                 # Handling for optional notes item
@@ -101,7 +98,7 @@ def build_entries(glossary_obj, request):
                 else:
                     notes = ""
 
-                # Create Entry object and append to new_entries list
+                # Create Entry object and append to new_entries list.
                 new_entry = Entry(
                     source=row[0],
                     target=row[1],
@@ -114,10 +111,10 @@ def build_entries(glossary_obj, request):
                 )
                 new_entries.append(new_entry)
 
-        # Add all new Entry objects to the database in one write
+        # Add all new Entry objects to the database in a single write.
         Entry.objects.bulk_create(new_entries)
 
-    # Delete the uploaded text file after new Entry objects have been saved to DB
+    # Delete the uploaded text file, no longer needed.
     glossary_obj.glossary_file.delete()
 
 
