@@ -54,8 +54,10 @@ class GlossaryUploadForm(forms.ModelForm):
         fields = ("glossary_file", "existing_glossary", "new_glossary", "notes")
 
     def clean(self):
-        """ Overriden to handle error checking for the new glossary and the
-            existing glossary fields. """
+        """
+        Overriden to handle error checking for the new glossary and the existing
+        glossary fields.
+        """
 
         cleaned_data = super().clean()
         existing_glossary = cleaned_data.get('existing_glossary')
