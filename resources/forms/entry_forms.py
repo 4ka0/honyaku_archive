@@ -89,8 +89,20 @@ class EntryCreateForm(forms.ModelForm):
 
 
 class EntryUpdateForm(forms.ModelForm):
-    source = forms.CharField(label='原文')
-    target = forms.CharField(label='訳文')
+    source = forms.CharField(
+        label='原文',
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        }
+    )
+    target = forms.CharField(
+        label='訳文',
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        }
+    )
     glossary = forms.ModelChoiceField(
         label='リソース',
         queryset=Glossary.objects.all().order_by('title'),
@@ -108,8 +120,20 @@ class EntryUpdateForm(forms.ModelForm):
 
 
 class EntryAddToGlossaryForm(forms.ModelForm):
-    source = forms.CharField(label='原文')
-    target = forms.CharField(label='訳文')
+    source = forms.CharField(
+        label='原文',
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        }
+    )
+    target = forms.CharField(
+        label='訳文',
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        }
+    )
     notes = forms.CharField(
         label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
