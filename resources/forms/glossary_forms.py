@@ -56,7 +56,7 @@ class GlossaryUploadForm(forms.ModelForm):
 
     def clean(self):
         """
-        Overriden to handle error checking for the new glossary and the existing
+        Overridden to handle error checking for the new glossary and the existing
         glossary fields.
         """
 
