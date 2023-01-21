@@ -17,7 +17,7 @@
         </p>
         <br>
 
-        <table class="table table-sm">
+        <table class="table table-sm wrap-content">
 
             <thead>
                 <tr>
@@ -35,7 +35,7 @@
 
                         {% if object.type == "glossary" %}
 
-                            <td class="align-middle wrap-content">
+                            <td class="align-middle">
                                 <a href="{% url 'glossary_detail' object.pk %}">{{ object }}</a>
                             </td>
 
