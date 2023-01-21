@@ -11,6 +11,7 @@ class Glossary(models.Model):
     title = models.CharField(max_length=100)
     notes = models.TextField(blank=True)
     type = models.CharField(max_length=10)
+
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -48,6 +49,7 @@ class Entry(models.Model):
     source = models.CharField(max_length=255)
     target = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
+
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -82,6 +84,7 @@ class Translation(models.Model):
     translator = models.CharField(max_length=100, blank=True)
     type = models.CharField(max_length=10)
     notes = models.TextField(blank=True)
+
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -102,8 +105,11 @@ class Translation(models.Model):
 
 
 class Segment(models.Model):
-    """ Model for a translation segment, i.e. a pair of source and target
-    strings. Used as a child model of the Translation model. """
+    """
+    Model for a translation segment, i.e. a pair of source and target
+    strings. Used as a child model of the Translation model.
+    """
+
     translation = models.ForeignKey(
         Translation,
         related_name="segments",
