@@ -9,6 +9,8 @@ class Glossary(models.Model):
         upload_to="glossary_files",
     )
     title = models.CharField(max_length=100)
+    notes = models.TextField(blank=True)
+    type = models.CharField(max_length=10)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -23,8 +25,6 @@ class Glossary(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    notes = models.TextField(blank=True)
-    type = models.CharField(max_length=10)
 
     class Meta:
         verbose_name = "glossary"
@@ -81,6 +81,7 @@ class Translation(models.Model):
     client = models.CharField(max_length=100, blank=True)
     translator = models.CharField(max_length=100, blank=True)
     notes = models.TextField(blank=True)
+    type = models.CharField(max_length=10)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -88,7 +89,6 @@ class Translation(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    type = models.CharField(max_length=10)
 
     class Meta:
         verbose_name = "translation"
