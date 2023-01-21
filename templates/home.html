@@ -21,9 +21,9 @@
 
             <thead>
                 <tr>
-                    <th scope="col" style="width: 50%">リソース名</th>
+                    <th scope="col" style="width: 60%">リソース名</th>
                     <th scope="col" style="width: 20%">種類</th>
-                    <th scope="col" style="width: 30%">作成日時</th>
+                    <th scope="col" style="width: 20%">作成日時</th>
                 </tr>
             </thead>
 
@@ -35,7 +35,7 @@
 
                         {% if object.type == "glossary" %}
 
-                            <td class="align-middle">
+                            <td class="align-middle wrap-content">
                                 <a href="{% url 'glossary_detail' object.pk %}">{{ object }}</a>
                             </td>
 
