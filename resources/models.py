@@ -80,8 +80,8 @@ class Translation(models.Model):
     field = models.CharField(max_length=100, blank=True)
     client = models.CharField(max_length=100, blank=True)
     translator = models.CharField(max_length=100, blank=True)
-    notes = models.TextField(blank=True)
     type = models.CharField(max_length=10)
+    notes = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
