@@ -84,6 +84,8 @@ class GlossaryUploadForm(forms.ModelForm):
                 msg = 'このタイトルの用語集はすでに存在しています。'
                 self.add_error('new_glossary', msg)
 
+        return cleaned_data
+
 
 """
 class GlossaryExportForm(forms.ModelForm):

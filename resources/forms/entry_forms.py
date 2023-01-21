@@ -75,7 +75,8 @@ class EntryCreateForm(forms.ModelForm):
                 # (immutable so have to use copy() here)
                 cleaned_data = self.data.copy()
                 cleaned_data['glossary'] = newly_created_glossary
-                return cleaned_data
+
+        return cleaned_data
 
 
 class EntryUpdateForm(forms.ModelForm):

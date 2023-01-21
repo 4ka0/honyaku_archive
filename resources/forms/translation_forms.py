@@ -71,3 +71,4 @@ class TranslationUploadForm(forms.ModelForm):
             if Translation.objects.filter(job_number__iexact=job_number).exists():
                 msg = 'その案件番号の翻訳はすでに存在しています。'
                 self.add_error('job_number', msg)
+        return cleaned_data
