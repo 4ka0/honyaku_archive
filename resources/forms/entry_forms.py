@@ -16,20 +16,20 @@ class EntryCreateForm(forms.ModelForm):
             "required": "このフィールドは入力必須です。",
         }
     )
-    glossary = forms.ModelChoiceField(
+    glossary = forms.ModelChoiceField(  # change to existing_glossary
         label='既存の用語集に追加しますか？',
         queryset=Glossary.objects.all().order_by('title'),
-        required=False
+        required=False,
     )
     new_glossary = forms.CharField(
         label='または、この用語のために新しい用語集を作成しますか？',
         widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください'}),
-        required=False
+        required=False,
     )
     notes = forms.CharField(
         label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
-        required=False
+        required=False,
     )
 
     class Meta:
@@ -37,9 +37,12 @@ class EntryCreateForm(forms.ModelForm):
         fields = ('source', 'target', 'glossary', 'new_glossary', 'notes')
 
     def clean(self):
-        """ Overwritten to handle validation for both glossary fields.
-            Only one of the glossary fields should be filled in.
-            Also handles case where new glossary is to be created for the new term. """
+        """
+        Overwritten to handle validation for both glossary fields.
+        Only one of the glossary fields should be filled in.
+        Also handles case where new glossary is to be created for the new term.
+        """
+
         cleaned_data = super().clean()
         existing_glossary = cleaned_data.get('glossary')
         new_glossary = cleaned_data.get('new_glossary')
@@ -86,7 +89,7 @@ class EntryUpdateForm(forms.ModelForm):
     notes = forms.CharField(
         label='備考',
         widget=forms.Textarea(attrs={'rows': 6}),
-        required=False
+        required=False,
     )
 
     class Meta:
@@ -100,7 +103,7 @@ class EntryAddToGlossaryForm(forms.ModelForm):
     notes = forms.CharField(
         label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
-        required=False
+        required=False,
     )
 
     class Meta:

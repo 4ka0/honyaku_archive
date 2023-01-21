@@ -18,7 +18,7 @@ class TranslationUpdateForm(forms.ModelForm):
     notes = forms.CharField(
         label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
-        required=False
+        required=False,
     )
 
     class Meta:
@@ -46,7 +46,7 @@ class TranslationUploadForm(forms.ModelForm):
     )
     job_number = forms.CharField(
         label='案件番号',
-        error_messages={"required": "このフィールドは入力必須です。"}
+        error_messages={"required": "このフィールドは入力必須です。"},
     )
     translator = forms.CharField(label='翻訳者（任意）', required=False)
     field = forms.CharField(label='分野（任意）', required=False)
@@ -54,7 +54,7 @@ class TranslationUploadForm(forms.ModelForm):
     notes = forms.CharField(
         label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
-        required=False
+        required=False,
     )
 
     class Meta:
@@ -62,7 +62,9 @@ class TranslationUploadForm(forms.ModelForm):
         fields = ('translation_file', 'job_number', 'translator', 'field', 'client', 'notes')
 
     def clean(self):
-        # Check to prevent assigning a job number that already exists.
+        """
+        Check to prevent assigning a job number that already exists.
+        """
         cleaned_data = super().clean()
         job_number = cleaned_data.get('job_number')
         if job_number:

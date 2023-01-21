@@ -36,7 +36,7 @@ class GlossaryUploadForm(forms.ModelForm):
     existing_glossary = forms.ModelChoiceField(
         label='既存の用語集に追加しますか？',
         queryset=Glossary.objects.all().order_by('title'),
-        required=False
+        required=False,
     )
     new_glossary = forms.CharField(
         label='または、新しい用語集を作成しますか？',
@@ -46,7 +46,7 @@ class GlossaryUploadForm(forms.ModelForm):
     notes = forms.CharField(
         label='備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
-        required=False
+        required=False,
     )
 
     class Meta:
