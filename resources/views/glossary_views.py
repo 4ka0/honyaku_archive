@@ -99,6 +99,14 @@ def build_entries(glossary_obj, request):
                     notes = ""
 
                 # Create Entry object and append to new_entries list.
+
+                # ADD SOME FORM OF VALIDATION HERE
+                # DONT JUST SAVE TO THE DB
+
+                # form = EntryForm(row)
+                # if form.is_valid():
+                #     new_entries.append(new_entry)
+
                 new_entry = Entry(
                     source=row[0],
                     target=row[1],
