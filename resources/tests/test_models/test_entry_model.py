@@ -191,11 +191,11 @@ class EntryModelTests(TestCase):
 
     def test_source_max_length(self):
         max_length = self.entry_obj._meta.get_field("source").max_length
-        self.assertEqual(max_length, 250)
+        self.assertEqual(max_length, 255)
 
     def test_target_max_length(self):
         max_length = self.entry_obj._meta.get_field("target").max_length
-        self.assertEqual(max_length, 250)
+        self.assertEqual(max_length, 255)
 
     def test_notes_blank_is_true(self):
         blank_bool = self.entry_obj._meta.get_field("notes").blank

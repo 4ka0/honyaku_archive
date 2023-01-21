@@ -24,7 +24,7 @@ class Glossary(models.Model):
         on_delete=models.SET_NULL,
     )
     notes = models.TextField(blank=True)
-    type = models.CharField(max_length=100)
+    type = models.CharField(max_length=10)
 
     class Meta:
         verbose_name = "glossary"
@@ -45,8 +45,8 @@ class Entry(models.Model):
         null=True,
         blank=True
     )
-    source = models.CharField(max_length=250)
-    target = models.CharField(max_length=250)
+    source = models.CharField(max_length=255)
+    target = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
@@ -76,10 +76,10 @@ class Translation(models.Model):
         null=True,
         upload_to="translation_files",
     )
-    job_number = models.CharField(max_length=255)
-    field = models.CharField(max_length=255, blank=True)
-    client = models.CharField(max_length=255, blank=True)
-    translator = models.CharField(max_length=255, blank=True)
+    job_number = models.CharField(max_length=100)
+    field = models.CharField(max_length=100, blank=True)
+    client = models.CharField(max_length=100, blank=True)
+    translator = models.CharField(max_length=100, blank=True)
     notes = models.TextField(blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
@@ -88,7 +88,7 @@ class Translation(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
-    type = models.CharField(max_length=100)
+    type = models.CharField(max_length=10)
 
     class Meta:
         verbose_name = "translation"

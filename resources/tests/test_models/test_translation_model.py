@@ -162,23 +162,23 @@ class TranslationModelTests(TestCase):
 
     def test_job_number_max_length(self):
         max_length = self.translation_obj._meta.get_field("job_number").max_length
-        self.assertEqual(max_length, 255)
+        self.assertEqual(max_length, 100)
 
     def test_field_max_length(self):
         max_length = self.translation_obj._meta.get_field("field").max_length
-        self.assertEqual(max_length, 255)
+        self.assertEqual(max_length, 100)
 
     def test_client_max_length(self):
         max_length = self.translation_obj._meta.get_field("client").max_length
-        self.assertEqual(max_length, 255)
+        self.assertEqual(max_length, 100)
 
     def test_translator_max_length(self):
         max_length = self.translation_obj._meta.get_field("translator").max_length
-        self.assertEqual(max_length, 255)
+        self.assertEqual(max_length, 100)
 
     def test_type_max_length(self):
         max_length = self.translation_obj._meta.get_field("type").max_length
-        self.assertEqual(max_length, 100)
+        self.assertEqual(max_length, 10)
 
     def test_notes_blank_is_true(self):
         blank_bool = self.translation_obj._meta.get_field("notes").blank

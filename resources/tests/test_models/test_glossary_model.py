@@ -148,8 +148,13 @@ class GlossaryModelTests(TestCase):
 
     def test_glossary_title_max_length(self):
         glossary_obj = Glossary.objects.get(id=1)
-        max_length = glossary_obj._meta.get_field("glossary_file").max_length
+        max_length = glossary_obj._meta.get_field("title").max_length
         self.assertEqual(max_length, 100)
+
+    def test_glossary_type_max_length(self):
+        glossary_obj = Glossary.objects.get(id=1)
+        max_length = glossary_obj._meta.get_field("type").max_length
+        self.assertEqual(max_length, 10)
 
     def test_created_on_auto_now_add_is_true(self):
         glossary_obj = Glossary.objects.get(id=1)
