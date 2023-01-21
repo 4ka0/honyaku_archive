@@ -8,12 +8,14 @@ class EntryCreateForm(forms.ModelForm):
         label='原文',
         error_messages={
             "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
         }
     )
     target = forms.CharField(
         label='訳文',
         error_messages={
             "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
         }
     )
     glossary = forms.ModelChoiceField(  # change to existing_glossary
@@ -47,34 +49,41 @@ class EntryCreateForm(forms.ModelForm):
         existing_glossary = cleaned_data.get('glossary')
         new_glossary = cleaned_data.get('new_glossary')
 
-        # If both fields have been entered, output error
-        if existing_glossary and new_glossary:
-            existing_glossary_msg = "既存の用語集を選択してください..."
-            new_glossary_msg = "...または新しい用語集を作成してください。"
-            self.add_error('glossary', existing_glossary_msg)
-            self.add_error('new_glossary', new_glossary_msg)
+        # First check the length of new_glossary, then check other aspects.
+        # This avoids numerous error messages being displayed for the same
+        # field at the same time, which is a bit nicer for the user.
+        if len(new_glossary) > 100:
+            self.add_error('new_glossary', '100文字以下になるように変更してください。')
+        else:
 
-        # If neither of the fields have been entered, output error
-        if not existing_glossary and not new_glossary:
-            existing_glossary_msg = "既存の用語集を選択してください..."
-            new_glossary_msg = "...または新しい用語集を作成してください。"
-            self.add_error('glossary', existing_glossary_msg)
-            self.add_error('new_glossary', new_glossary_msg)
+            # If both fields have been entered, output error
+            if existing_glossary and new_glossary:
+                existing_glossary_msg = "既存の用語集を選択してください..."
+                new_glossary_msg = "...または新しい用語集を作成してください。"
+                self.add_error('glossary', existing_glossary_msg)
+                self.add_error('new_glossary', new_glossary_msg)
 
-        # If new term is to be added to a new glossary
-        if not existing_glossary and new_glossary:
-            # If input title for new glossary already exists, output error
-            if Glossary.objects.filter(title__iexact=new_glossary).exists():
-                msg = 'このタイトルの用語集はすでに存在しています。'
-                self.add_error('new_glossary', msg)
-            else:
-                # Create new Glossary instance having title from new_glossary
-                newly_created_glossary = Glossary(title=new_glossary)
-                newly_created_glossary.save()
-                # Add new glossary object to form data
-                # (immutable so have to use copy() here)
-                cleaned_data = self.data.copy()
-                cleaned_data['glossary'] = newly_created_glossary
+            # If neither of the fields have been entered, output error
+            if not existing_glossary and not new_glossary:
+                existing_glossary_msg = "既存の用語集を選択してください..."
+                new_glossary_msg = "...または新しい用語集を作成してください。"
+                self.add_error('glossary', existing_glossary_msg)
+                self.add_error('new_glossary', new_glossary_msg)
+
+            # If new term is to be added to a new glossary
+            if not existing_glossary and new_glossary:
+                # If input title for new glossary already exists, output error
+                if Glossary.objects.filter(title__iexact=new_glossary).exists():
+                    msg = 'このタイトルの用語集はすでに存在しています。'
+                    self.add_error('new_glossary', msg)
+                else:
+                    # Create new Glossary instance having title from new_glossary
+                    newly_created_glossary = Glossary(title=new_glossary)
+                    newly_created_glossary.save()
+                    # Add new glossary object to form data
+                    # (immutable so have to use copy() here)
+                    cleaned_data = self.data.copy()
+                    cleaned_data['glossary'] = newly_created_glossary
 
         return cleaned_data
 
