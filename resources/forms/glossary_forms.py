@@ -6,14 +6,14 @@ from ..models import Glossary
 
 class GlossaryForm(forms.ModelForm):
     title = forms.CharField(
-        label='用語集のタイトル',
+        label='① 用語集のタイトル',
         error_messages={
             "required": "このフィールドは入力必須です。",
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     notes = forms.CharField(
-        label='備考（任意）',
+        label='② 備考（任意）',
         required=False,
         widget=forms.Textarea(attrs={'rows': 6}),
     )
@@ -25,7 +25,7 @@ class GlossaryForm(forms.ModelForm):
 
 class GlossaryUploadForm(forms.ModelForm):
     glossary_file = forms.FileField(
-        label="ファイルを選択してください。",
+        label="① ファイルを選択してください。",
         error_messages={"required": "このフィールドは入力必須です。"},
         validators=[
             FileExtensionValidator(
@@ -35,24 +35,34 @@ class GlossaryUploadForm(forms.ModelForm):
         ],
     )
     existing_glossary = forms.ModelChoiceField(
-        label='既存の用語集に追加しますか？',
+        label='② 既存の用語集に追加しますか？',
         queryset=Glossary.objects.all().order_by('title'),
         required=False,
     )
-    new_glossary = forms.CharField(
-        label='または、新しい用語集を作成しますか？',
+    title = forms.CharField(
+        label='③ または、新しい用語集を作成しますか？',
         widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください'}),
         required=False,
+        error_messages={"max_length": "100文字以下になるように変更してください。"},
     )
     notes = forms.CharField(
-        label='備考（任意）',
+        label='④ 備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
         required=False,
     )
 
     class Meta:
         model = Glossary
-        fields = ("glossary_file", "existing_glossary", "new_glossary", "notes")
+        fields = ("glossary_file", "existing_glossary", "title", "notes")
+
+    """
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if Glossary.objects.filter(title__iexact=title).exists():
+            msg = 'このタイトルの用語集はすでに存在しています。'
+            raise forms.ValidationError(msg)
+        return title
+    """
 
     def clean(self):
         """
@@ -62,35 +72,26 @@ class GlossaryUploadForm(forms.ModelForm):
 
         cleaned_data = super().clean()
         existing_glossary = cleaned_data.get('existing_glossary')
-        new_glossary = cleaned_data.get('new_glossary')
+        title = cleaned_data.get('title')
 
-        # First check the length of new_glossary, then check other aspects.
-        # This avoids numerous error messages being displayed for the same
-        # field at the same time, which is a bit nicer for the user.
-        if len(new_glossary) > 100:
-            self.add_error('new_glossary', '100文字以下になるように変更してください。')
-        else:
+        # If both fields have been entered, output error.
+        if existing_glossary and title:
+            msg = "②または③のいずれかを選択してください。"
+            self.add_error('existing_glossary', msg)
+            self.add_error('title', msg)
 
-            # If both fields have been entered, output error.
-            if existing_glossary and new_glossary:
-                existing_glossary_msg = "既存の用語集を選択してください..."
-                new_glossary_msg = "...または新しい用語集を作成してください。"
-                self.add_error('existing_glossary', existing_glossary_msg)
-                self.add_error('new_glossary', new_glossary_msg)
+        # If neither of the glossary fields have been entered, output error.
+        if not existing_glossary and not title:
+            msg = "②または③のいずれかを選択してください。"
+            self.add_error('existing_glossary', msg)
+            self.add_error('title', msg)
 
-            # If neither of the glossary fields have been entered, output error.
-            if not existing_glossary and not new_glossary:
-                existing_glossary_msg = "既存の用語集を選択してください..."
-                new_glossary_msg = "...または新しい用語集を作成してください。"
-                self.add_error('existing_glossary', existing_glossary_msg)
-                self.add_error('new_glossary', new_glossary_msg)
-
-            # If a new glossary is to be created, and the entered title for the new
-            # glossary already exists, output error.
-            if new_glossary and not existing_glossary:
-                if Glossary.objects.filter(title__iexact=new_glossary).exists():
-                    msg = 'このタイトルの用語集はすでに存在しています。'
-                    self.add_error('new_glossary', msg)
+        # If a new glossary is to be created, and the entered title for the new
+        # glossary already exists, output error.
+        if title and not existing_glossary:
+            if Glossary.objects.filter(title__iexact=title).exists():
+                msg = 'このタイトルの用語集はすでに存在しています。'
+                self.add_error('title', msg)
 
         return cleaned_data
 

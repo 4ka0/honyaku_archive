@@ -7,35 +7,35 @@ from ..models import Translation
 
 class TranslationUpdateForm(forms.ModelForm):
     job_number = forms.CharField(
-        label='案件番号',
+        label='① 案件番号',
         error_messages={
             "required": "このフィールドは入力必須です。",
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     field = forms.CharField(
-        label='分野（任意）',
+        label='② 分野（任意）',
         required=False,
         error_messages={
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     client = forms.CharField(
-        label='クライアント（任意）',
+        label='③ クライアント（任意）',
         required=False,
         error_messages={
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     translator = forms.CharField(
-        label='翻訳者（任意）',
+        label='④ 翻訳者（任意）',
         required=False,
         error_messages={
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     notes = forms.CharField(
-        label='備考（任意）',
+        label='⑤ 備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
         required=False,
     )
@@ -47,7 +47,7 @@ class TranslationUpdateForm(forms.ModelForm):
 
 class TranslationUploadForm(forms.ModelForm):
     translation_file = forms.FileField(
-        label="ファイルを選択してください。",
+        label="① ファイルを選択してください。",
         # mark_safe() used to include br tag in the label.
         help_text=mark_safe(
             ("DOCX又はTMXファイルのみ読み込み可能です。<br>"
@@ -64,35 +64,35 @@ class TranslationUploadForm(forms.ModelForm):
         ],
     )
     job_number = forms.CharField(
-        label='案件番号',
+        label='② 案件番号',
         error_messages={
             "required": "このフィールドは入力必須です。",
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     translator = forms.CharField(
-        label='翻訳者（任意）',
+        label='③ 翻訳者（任意）',
         required=False,
         error_messages={
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     field = forms.CharField(
-        label='分野（任意）',
+        label='④ 分野（任意）',
         required=False,
         error_messages={
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     client = forms.CharField(
-        label='クライアント（任意）',
+        label='⑤ クライアント（任意）',
         required=False,
         error_messages={
             "max_length": "100文字以下になるように変更してください。",
         },
     )
     notes = forms.CharField(
-        label='備考（任意）',
+        label='⑥ 備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
         required=False,
     )

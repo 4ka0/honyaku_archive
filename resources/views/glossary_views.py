@@ -58,7 +58,7 @@ def append_or_create(request, form):
 
     new_glossary_obj = Glossary(
         glossary_file=form.cleaned_data["glossary_file"],
-        title=form.cleaned_data["new_glossary"],
+        title=form.cleaned_data["title"],
         notes=form.cleaned_data["notes"],
         created_by=request.user,
         updated_by=request.user,

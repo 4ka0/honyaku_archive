@@ -1,5 +1,5 @@
 from django.views.generic import View, DetailView, UpdateView, DeleteView
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -32,10 +32,10 @@ class TranslationUpdateView(LoginRequiredMixin, UpdateView):
     form_class = TranslationUpdateForm
 
     def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.updated_by = self.request.user
-        obj.save()
-        return HttpResponseRedirect(obj.get_absolute_url())
+        updated_translation = form.save(commit=False)
+        updated_translation.updated_by = self.request.user
+        updated_translation.save()
+        return HttpResponseRedirect(updated_translation.get_absolute_url())
 
 
 class TranslationDeleteView(LoginRequiredMixin, DeleteView):
@@ -73,15 +73,17 @@ class TranslationUploadView(LoginRequiredMixin, View):
             successful = build_segments(request, translation_obj)
             if successful:
                 return HttpResponseRedirect(translation_obj.get_absolute_url())
-            return HttpResponseRedirect(reverse("home"))
+            return HttpResponseRedirect(reverse_lazy("home"))
 
         return render(request, self.template_name, {"form": form})
 
 
 def build_segments(request, translation_obj):
-    """ Helper method for TranslationUploadView.
-        Chooses appropriate parser to parse the uploaded translation file, and
-        builds Segment objects from the parsed content. """
+    """
+    Helper method for TranslationUploadView.
+    Chooses appropriate parser to parse the uploaded translation file, and
+    builds Segment objects from the parsed content.
+    """
 
     # Select appropriate parser
     if translation_obj.translation_file.path.endswith(".tmx"):
@@ -143,9 +145,11 @@ def tmx_parser(translation_obj):
 
 
 def docx_parser(request, translation_obj):
-    """ Presumes that there is one table in the uploaded file, the table
-        contains two columns, the first column is the source text, and the
-        second column is the target text. """
+    """
+    Presumes that there is one table in the uploaded file, the table contains
+    two columns, the first column is the source text, and the second column is
+    the target text.
+    """
 
     document = Document(translation_obj.translation_file)
     new_segments = []

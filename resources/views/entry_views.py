@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
-from ..models import Entry
+from ..models import Entry, Glossary
 from ..forms.entry_forms import EntryCreateForm, EntryUpdateForm
 
 
@@ -18,23 +18,29 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
     template_name = "entry_create.html"
 
     def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.created_by = self.request.user
-        obj.updated_by = self.request.user
-        obj.save()
+        new_entry = form.save(commit=False)
+        new_entry.created_by = self.request.user
+        new_entry.updated_by = self.request.user
 
-        # Sets user data on Glossary object if new Glossary is being created with the new Entry
-        if obj.glossary.created_by is None and obj.glossary.updated_by is None:
-            obj.glossary.created_by = self.request.user
-            obj.glossary.updated_by = self.request.user
-            obj.glossary.type = "glossary"
-            obj.glossary.save()
+        # If a new glossary is to be created for this entry.
+        new_glossary_title = form.cleaned_data.get("new_glossary")
+        if new_glossary_title:
+            new_glossary = Glossary(
+                title=new_glossary_title,
+                type="glossary",
+                created_by=self.request.user,
+                updated_by=self.request.user,
+            )
+            new_glossary.save()
+            new_entry.glossary = new_glossary
+
+        new_entry.save()
 
         if self.request.GET.get("previous_url"):
             previous_url = self.request.GET.get("previous_url")
             return HttpResponseRedirect(previous_url)
 
-        return HttpResponseRedirect(obj.get_absolute_url())
+        return HttpResponseRedirect(reverse_lazy("home"))
 
     def post(self, request, *args, **kwargs):
         if "cancel" in request.POST:
@@ -51,17 +57,20 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "entry_update.html"
 
     def form_valid(self, form):
-        """ Sets the updated_by field to the current user, and sets the
-            previous url as the success url if previous_url is present."""
-        obj = form.save(commit=False)
-        obj.updated_by = self.request.user
-        obj.save()
+        """
+        Sets the updated_by field to the current user, and sets the previous url
+        as the success url if previous_url is present.
+        """
+
+        updated_entry = form.save(commit=False)
+        updated_entry.updated_by = self.request.user
+        updated_entry.save()
 
         if self.request.GET.get("previous_url"):
             previous_url = self.request.GET.get("previous_url")
             return HttpResponseRedirect(previous_url)
 
-        return HttpResponseRedirect(obj.get_absolute_url())
+        return HttpResponseRedirect(reverse_lazy("home"))
 
     def post(self, request, *args, **kwargs):
         if "cancel" in request.POST:
