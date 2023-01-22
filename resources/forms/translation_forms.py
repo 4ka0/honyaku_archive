@@ -101,14 +101,10 @@ class TranslationUploadForm(forms.ModelForm):
         model = Translation
         fields = ('translation_file', 'job_number', 'translator', 'field', 'client', 'notes')
 
-    def clean(self):
-        """
-        Check to prevent assigning a job number that already exists.
-        """
-        cleaned_data = super().clean()
-        job_number = cleaned_data.get('job_number')
+    def clean_job_number(self):
+        job_number = self.cleaned_data['job_number']
         if job_number:
             if Translation.objects.filter(job_number__iexact=job_number).exists():
                 msg = 'その案件番号の翻訳はすでに存在しています。'
                 self.add_error('job_number', msg)
-        return cleaned_data
+        return job_number
