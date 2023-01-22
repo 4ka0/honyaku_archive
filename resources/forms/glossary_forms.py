@@ -41,7 +41,7 @@ class GlossaryUploadForm(forms.ModelForm):
     )
     title = forms.CharField(
         label='③ または、新しい用語集を作成しますか？',
-        widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください'}),
+        widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください。'}),
         required=False,
         error_messages={"max_length": "100文字以下になるように変更してください。"},
     )

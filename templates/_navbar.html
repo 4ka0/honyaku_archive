@@ -11,7 +11,7 @@
         <ul class="dropdown-menu">
 
             <li><a class="dropdown-item" href="{% url 'glossary_create' %}?previous_url={{ request.get_full_path|urlencode }}">用語集を作成する</a></li>
-            <li><a class="dropdown-item" href="{% url 'entry_create' %}?previous_url={{ request.get_full_path|urlencode }}">用語集エントリーを作成する</a></li>
+            <li><a class="dropdown-item" href="{% url 'entry_create' %}?previous_url={{ request.get_full_path|urlencode }}">用語集エントリーを追加する</a></li>
             <li><a class="dropdown-item" href="{% url 'glossary_upload' %}?previous_url={{ request.get_full_path|urlencode }}">用語集をアップロードする</a></li>
             <li><a class="dropdown-item" href="{% url 'translation_upload' %}?previous_url={{ request.get_full_path|urlencode }}">翻訳をアップロードする</a></li>
             <!--

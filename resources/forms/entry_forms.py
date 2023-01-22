@@ -25,7 +25,7 @@ class EntryCreateForm(forms.ModelForm):
     )
     new_glossary = forms.CharField(
         label='④ または、この用語のために新しい用語集を作成しますか？',
-        widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください'}),
+        widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください。'}),
         required=False,
     )
     notes = forms.CharField(
