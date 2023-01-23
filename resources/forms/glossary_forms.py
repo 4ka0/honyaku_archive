@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import FileExtensionValidator
+from django.utils.safestring import mark_safe
 
 from ..models import Glossary
 
@@ -49,6 +50,10 @@ class GlossaryUploadForm(forms.ModelForm):
         label='④ 備考（任意）',
         widget=forms.Textarea(attrs={'rows': 6}),
         required=False,
+        help_text=mark_safe(
+            ("アップロードされる用語集は既存の用語集に追加する場合、<br>"
+             "上記の備考は既存の用語集の備考に追加されます。")
+        ),
     )
 
     class Meta:
