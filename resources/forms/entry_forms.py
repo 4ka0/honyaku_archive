@@ -19,7 +19,7 @@ class EntryForm(forms.ModelForm):
         }
     )
     glossary = forms.ModelChoiceField(
-        label='③ 既存の用語集に関連付けすか？',
+        label='③ 既存の用語集に関連付けますか？',
         queryset=Glossary.objects.all().order_by('title'),
         required=False,
     )
