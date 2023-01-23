@@ -1,15 +1,17 @@
 import os
-
 from pathlib import Path
 
-import dj_database_url
-
 from environs import Env
+
+
+# Environment variables
+
 env = Env()
 env.read_env()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -103,14 +105,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
+LANGUAGE_CODE = 'ja'
 TIME_ZONE = 'Asia/Tokyo'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -128,15 +126,21 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# User settings
+
 AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
+
+# Media settings
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+# Crispy template settings
+
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
-
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
