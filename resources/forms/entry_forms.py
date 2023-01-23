@@ -3,7 +3,7 @@ from django import forms
 from ..models import Entry, Glossary
 
 
-class EntryCreateForm(forms.ModelForm):
+class EntryForm(forms.ModelForm):
     source = forms.CharField(
         label='① 原文',
         error_messages={
@@ -19,7 +19,7 @@ class EntryCreateForm(forms.ModelForm):
         }
     )
     glossary = forms.ModelChoiceField(
-        label='③ 既存の用語集に追加しますか？',
+        label='③ 既存の用語集に関連付けすか？',
         queryset=Glossary.objects.all().order_by('title'),
         required=False,
     )
@@ -37,15 +37,6 @@ class EntryCreateForm(forms.ModelForm):
     class Meta:
         model = Entry
         fields = ('source', 'target', 'glossary', 'new_glossary', 'notes')
-
-    """
-    def clean_new_glossary(self):
-        new_glossary = self.cleaned_data['new_glossary']
-        if len(new_glossary) > 100:
-            msg = '100文字以下になるように変更してください。'
-            raise forms.ValidationError(msg)
-        return new_glossary
-    """
 
     def clean(self):
         """
@@ -84,20 +75,11 @@ class EntryCreateForm(forms.ModelForm):
                 if Glossary.objects.filter(title__iexact=new_glossary).exists():
                     msg = 'このタイトルの用語集はすでに存在しています。'
                     self.add_error('new_glossary', msg)
-                """
-                else:
-                    # Create new Glossary instance having title from new_glossary
-                    newly_created_glossary = Glossary(title=new_glossary)
-                    newly_created_glossary.save()
-                    # Add new glossary object to form data
-                    # (immutable so have to use copy() here)
-                    cleaned_data = self.data.copy()
-                    cleaned_data['glossary'] = newly_created_glossary
-                """
 
         return cleaned_data
 
 
+"""
 class EntryUpdateForm(forms.ModelForm):
     source = forms.CharField(
         label='① 原文',
@@ -114,19 +96,25 @@ class EntryUpdateForm(forms.ModelForm):
         }
     )
     glossary = forms.ModelChoiceField(
-        label='③ 用語集',
+        label='③ 既存の用語集と関連付けますか？',
         queryset=Glossary.objects.all().order_by('title'),
         empty_label=None,  # Removes the empty option "-----"
     )
+    new_glossary = forms.CharField(
+        label='④ または、この用語のために新しい用語集を作成しますか？',
+        widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください。'}),
+        required=False,
+    )
     notes = forms.CharField(
-        label='④ 備考',
+        label='⑤ 備考',
         widget=forms.Textarea(attrs={'rows': 6}),
         required=False,
     )
 
     class Meta:
         model = Entry
-        fields = ('source', 'target', 'glossary', 'notes')
+        fields = ('source', 'target', 'glossary', 'new_glossary', 'notes')
+"""
 
 
 class EntryAddToGlossaryForm(forms.ModelForm):

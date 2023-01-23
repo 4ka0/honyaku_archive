@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
 from ..models import Entry, Glossary
-from ..forms.entry_forms import EntryCreateForm, EntryUpdateForm
+from ..forms.entry_forms import EntryForm
 
 
 class EntryDetailView(LoginRequiredMixin, DetailView):
@@ -14,7 +14,7 @@ class EntryDetailView(LoginRequiredMixin, DetailView):
 
 class EntryCreateView(LoginRequiredMixin, CreateView):
     model = Entry
-    form_class = EntryCreateForm
+    form_class = EntryForm
     template_name = "entry_create.html"
 
     def form_valid(self, form):
@@ -53,17 +53,25 @@ class EntryCreateView(LoginRequiredMixin, CreateView):
 
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
     model = Entry
-    form_class = EntryUpdateForm
+    form_class = EntryForm
     template_name = "entry_update.html"
 
     def form_valid(self, form):
-        """
-        Sets the updated_by field to the current user, and sets the previous url
-        as the success url if previous_url is present.
-        """
-
         updated_entry = form.save(commit=False)
         updated_entry.updated_by = self.request.user
+
+        # If a new glossary is to be created for the updated entry.
+        new_glossary_title = form.cleaned_data.get("new_glossary")
+        if new_glossary_title:
+            new_glossary = Glossary(
+                title=new_glossary_title,
+                type="glossary",
+                created_by=self.request.user,
+                updated_by=self.request.user,
+            )
+            new_glossary.save()
+            updated_entry.glossary = new_glossary
+
         updated_entry.save()
 
         if self.request.GET.get("previous_url"):
