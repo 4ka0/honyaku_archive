@@ -60,15 +60,6 @@ class GlossaryUploadForm(forms.ModelForm):
         model = Glossary
         fields = ("glossary_file", "existing_glossary", "title", "notes")
 
-    """
-    def clean_title(self):
-        title = self.cleaned_data['title']
-        if Glossary.objects.filter(title__iexact=title).exists():
-            msg = 'このタイトルの用語集はすでに存在しています。'
-            raise forms.ValidationError(msg)
-        return title
-    """
-
     def clean(self):
         """
         Overridden to handle error checking for the new glossary and the
