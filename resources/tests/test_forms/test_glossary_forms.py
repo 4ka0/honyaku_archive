@@ -214,4 +214,6 @@ class TestGlossaryUploadForm(TestCase):
     def test_meta_fields(self):
         self.assertEqual(self.empty_form._meta.fields, ("glossary_file", "existing_glossary", "title", "notes"))
 
-    # Test form with input
+    # Test complete form
+    # Test empty form
+    # Test validation edge cases
