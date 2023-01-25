@@ -69,7 +69,7 @@
                         <tr>
                             <td>備考:</td>
                             {% if object.notes %}
-                                <td>{{object.notes|linebreaksbr}}</td>
+                                <td>{{ object.notes|linebreaksbr|urlize }}</td>
                             {% else %}
                                 <td>なし</td>
                             {% endif %}
