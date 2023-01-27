@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.forms.widgets import Textarea, TextInput
 from django.core.validators import FileExtensionValidator
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 from ...models import Glossary
 from ...forms.glossary_forms import GlossaryForm, GlossaryUploadForm
@@ -124,6 +126,19 @@ class TestGlossaryUploadForm(TestCase):
             updated_by=cls.testuser,
         )
         cls.empty_form = GlossaryUploadForm()
+        cls.glossary_file = SimpleUploadedFile(
+            name='test_glossary_file.txt',
+            content=b'',
+            content_type="text/plain"
+        )
+        cls.valid_form_1 = GlossaryUploadForm(
+            {
+                "glossary_file": cls.glossary_file,
+                "existing_glossary": cls.glossary_obj,
+                "title": "",
+                "notes": "Some test notes.",
+            }
+        )
 
     # Test fields
 
@@ -215,5 +230,37 @@ class TestGlossaryUploadForm(TestCase):
         self.assertEqual(self.empty_form._meta.fields, ("glossary_file", "existing_glossary", "title", "notes"))
 
     # Test complete form
+
+    def test_form_with_valid_input_add_to_existing_glossary(self):
+        self.assertTrue(self.valid_form_1.is_bound)
+        # self.assertTrue(self.valid_form_1.is_valid())
+        self.assertEqual(self.valid_form_1.errors, {})
+        self.assertEqual(self.valid_form_1.errors.as_text(), "")
+        self.assertEqual(self.valid_form_1.cleaned_data["glossary_file"], self.glossary_file)
+        self.assertEqual(self.valid_form_1.cleaned_data["existing_glossary"], self.glossary_obj)
+        self.assertEqual(self.valid_form_1.cleaned_data["title"], "")
+        self.assertEqual(self.valid_form_1.cleaned_data["notes"], "Some test notes.")
+
+    def test_form_with_valid_input_create_new_glossary(self):
+        pass
+
     # Test empty form
+    """
+    def test_form_with_no_input(self):
+        self.assertFalse(self.empty_form.is_bound)
+        self.assertFalse(self.empty_form.is_valid())
+        with self.assertRaises(AttributeError):
+            self.empty_form.cleaned_data
+    """
     # Test validation edge cases
+    """
+    def test_form_with_invalid_input_blank_title(self):
+        self.assertFalse(self.invalid_form_1.is_valid())
+        self.assertNotEqual(self.invalid_form_1.errors, {})
+        self.assertEqual(self.invalid_form_1.errors["title"], ["このフィールドは入力必須です。"])
+
+    def test_form_with_invalid_input_title_too_long(self):
+        self.assertFalse(self.invalid_form_2.is_valid())
+        self.assertNotEqual(self.invalid_form_2.errors, {})
+        self.assertEqual(self.invalid_form_2.errors["title"], ["100文字以下になるように変更してください。"])
+    """
