@@ -112,12 +112,16 @@ class TestGlossaryUploadForm(TestCase):
 
     @classmethod
     def setUpTestData(cls):
+
+        # Test user
         User = get_user_model()
         cls.testuser = User.objects.create_user(
             username="testuser",
             email="testuser@email.com",
             password="testuser123",
         )
+
+        # Glossary object
         cls.glossary_obj = Glossary.objects.create(
             title="test glossary",
             notes="Test note.",
@@ -125,20 +129,22 @@ class TestGlossaryUploadForm(TestCase):
             created_by=cls.testuser,
             updated_by=cls.testuser,
         )
+
+        # Form with no input
         cls.empty_form = GlossaryUploadForm()
-        cls.glossary_file = SimpleUploadedFile(
-            name='test_glossary_file.txt',
-            content=b'',
-            content_type="text/plain"
-        )
-        cls.valid_form_1 = GlossaryUploadForm(
-            {
-                "glossary_file": cls.glossary_file,
-                "existing_glossary": cls.glossary_obj,
-                "title": "",
-                "notes": "Some test notes.",
-            }
-        )
+
+        # Form with input (to add uploaded file content to existing glossary)
+        form_data = {
+            "existing_glossary": cls.glossary_obj,
+            "title": "",
+            "notes": "Some test notes.",
+        }
+        file_data = {
+            "glossary_file": SimpleUploadedFile(name='test_glossary_file.txt',
+                                                content=b'file_content',
+                                                content_type="text/plain"),
+        }
+        cls.valid_form_with_existing_glossary = GlossaryUploadForm(form_data, file_data)
 
     # Test fields
 
@@ -232,14 +238,14 @@ class TestGlossaryUploadForm(TestCase):
     # Test complete form
 
     def test_form_with_valid_input_add_to_existing_glossary(self):
-        self.assertTrue(self.valid_form_1.is_bound)
-        # self.assertTrue(self.valid_form_1.is_valid())
-        self.assertEqual(self.valid_form_1.errors, {})
-        self.assertEqual(self.valid_form_1.errors.as_text(), "")
-        self.assertEqual(self.valid_form_1.cleaned_data["glossary_file"], self.glossary_file)
-        self.assertEqual(self.valid_form_1.cleaned_data["existing_glossary"], self.glossary_obj)
-        self.assertEqual(self.valid_form_1.cleaned_data["title"], "")
-        self.assertEqual(self.valid_form_1.cleaned_data["notes"], "Some test notes.")
+        self.assertTrue(self.valid_form_with_existing_glossary.is_bound)
+        self.assertTrue(self.valid_form_with_existing_glossary.is_valid())
+        self.assertEqual(self.valid_form_with_existing_glossary.errors, {})
+        self.assertEqual(self.valid_form_with_existing_glossary.errors.as_text(), "")
+        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["existing_glossary"], self.glossary_obj)
+        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["title"], "")
+        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["notes"], "Some test notes.")
+        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["glossary_file"].name, "test_glossary_file.txt")
 
     def test_form_with_valid_input_create_new_glossary(self):
         pass
