@@ -13,11 +13,11 @@
 
                 {% if target_resource == "すべてのリソースを検索する" %}
 
-                    <p>「{{ query }}」に該当するエントリーは、すべてのリソースで「{{ hits }}」件見つかりました。</p>
+                    <p>「<strong>{{ query }}</strong>」に該当するエントリーは、すべてのリソースで「<strong>{{ hits }}</strong>」件見つかりました。</p>
 
                 {% else %}
 
-                    <p>「{{ query }}」に該当するエントリーは、{{ target_resource }}で「{{ hits }}」件見つかりました。</p>
+                    <p>「<strong>{{ query }}</strong>」に該当するエントリーは、{{ target_resource }}で「<strong>{{ hits }}</strong>」件見つかりました。</p>
 
                 {% endif %}
 
@@ -110,11 +110,11 @@
 
                 {% if target_resource == "すべてのリソースを検索する" %}
 
-                    <p>すべてのリソースで「{{ query }}」に該当する件は見つかりませんでした。</p>
+                    <p>すべてのリソースで「<strong>{{ query }}</strong>」に該当する件は見つかりませんでした。</p>
 
                 {% else %}
 
-                    <p>{{ target_resource }}で「{{ query }}」に該当する件は見つかりませんでした。</p>
+                    <p>{{ target_resource }}で「<strong>{{ query }}</strong>」に該当する件は見つかりませんでした。</p>
 
                 {% endif %}
 
