@@ -8,15 +8,16 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from ...models import Glossary
 from ...forms.glossary_forms import GlossaryForm, GlossaryUploadForm
 
-# from freezegun import freeze_time
-
-# Test fields
-# - Labels, help text, and other properties you have set
-# Test Meta fields
-# Test form methods created yourself
-# Test empty submission
-# Test complete submission
-# Test validation edge cases
+"""
+Form testing approach:
+- Test fields
+  - Labels, help text, and other properties you have set
+- Test Meta fields
+- Test form methods created yourself
+- Test valid submission of complete form
+- Test invalid submission of empty form
+- Test invalid submissions with regard to each field
+"""
 
 
 class TestGlossaryForm(TestCase):
@@ -38,7 +39,8 @@ class TestGlossaryForm(TestCase):
         )
         cls.invalid_form_2 = GlossaryForm(
             {
-                "title": "Title exceeding 100 chars Title exceeding 100 chars Title exceeding 100 chars Title exceeding 100 chars",
+                "title": ("Title exceeding 100 chars Title exceeding 100 chars"
+                          "Title exceeding 100 chars Title exceeding 100 chars"),
                 "notes": "This is a glossary for testing.",
             }
         )
@@ -105,7 +107,10 @@ class TestGlossaryForm(TestCase):
     def test_form_with_invalid_input_title_too_long(self):
         self.assertFalse(self.invalid_form_2.is_valid())
         self.assertNotEqual(self.invalid_form_2.errors, {})
-        self.assertEqual(self.invalid_form_2.errors["title"], ["100文字以下になるように変更してください。"])
+        self.assertEqual(
+            self.invalid_form_2.errors["title"],
+            ["100文字以下になるように変更してください。"]
+        )
 
 
 class TestGlossaryUploadForm(TestCase):
@@ -123,7 +128,7 @@ class TestGlossaryUploadForm(TestCase):
 
         # Glossary object
         cls.glossary_obj = Glossary.objects.create(
-            title="test glossary",
+            title="Test Glossary",
             notes="Test note.",
             type="用語集",
             created_by=cls.testuser,
@@ -159,10 +164,91 @@ class TestGlossaryUploadForm(TestCase):
         }
         cls.valid_form_with_new_glossary = GlossaryUploadForm(form_data, file_data)
 
+        # Form with invalid input (no glossary file and title too long)
+        cls.invalid_form_1 = GlossaryUploadForm(
+            {
+                "glossary_file": None,
+                "existing_glossary": None,
+                "title": ("Title exceeding 100 chars Title exceeding 100 chars"
+                          "Title exceeding 100 chars Title exceeding 100 chars"),
+                "notes": "Some notes.",
+            }
+        )
+
+        # Form with invalid input (invalid file extension, docx)
+        form_data = {
+            "existing_glossary": None,
+            "title": "New Glossary",
+            "notes": "Some test notes.",
+        }
+        file_data = {
+            "glossary_file": SimpleUploadedFile(name='test_glossary_file.docx',
+                                                content=b'file_content',
+                                                content_type="text/plain"),
+        }
+        cls.invalid_form_2 = GlossaryUploadForm(form_data, file_data)
+
+        # Form with invalid input (invalid file extension, xlsx)
+        form_data = {
+            "existing_glossary": None,
+            "title": "New Glossary",
+            "notes": "Some test notes.",
+        }
+        file_data = {
+            "glossary_file": SimpleUploadedFile(name='test_glossary_file.xlsx',
+                                                content=b'file_content',
+                                                content_type="text/plain"),
+        }
+        cls.invalid_form_3 = GlossaryUploadForm(form_data, file_data)
+
+        # Form with invalid input (new glossary already exists)
+        form_data = {
+            "existing_glossary": None,
+            "title": "Test Glossary",
+            "notes": "Some test notes.",
+        }
+        file_data = {
+            "glossary_file": SimpleUploadedFile(name='test_glossary_file.txt',
+                                                content=b'file_content',
+                                                content_type="text/plain"),
+        }
+        cls.invalid_form_4 = GlossaryUploadForm(form_data, file_data)
+
+        # Form with invalid input
+        # No input for new glossary title field or existing glossary field
+        form_data = {
+            "existing_glossary": None,
+            "title": "",
+            "notes": "Some test notes.",
+        }
+        file_data = {
+            "glossary_file": SimpleUploadedFile(name='test_glossary_file.txt',
+                                                content=b'file_content',
+                                                content_type="text/plain"),
+        }
+        cls.invalid_form_5 = GlossaryUploadForm(form_data, file_data)
+
+        # Form with invalid input
+        # Input for both new glossary title field and existing glossary field
+        form_data = {
+            "existing_glossary": cls.glossary_obj,
+            "title": "Another New GLossary",
+            "notes": "Some test notes.",
+        }
+        file_data = {
+            "glossary_file": SimpleUploadedFile(name='test_glossary_file.txt',
+                                                content=b'file_content',
+                                                content_type="text/plain"),
+        }
+        cls.invalid_form_6 = GlossaryUploadForm(form_data, file_data)
+
     # Test fields
 
     def test_glossary_file_field_label(self):
-        self.assertEqual(self.empty_form.fields['glossary_file'].label, '① ファイルを選択してください。')
+        self.assertEqual(
+            self.empty_form.fields['glossary_file'].label,
+            '① ファイルを選択してください。'
+        )
 
     def test_glossary_file_field_required(self):
         self.assertTrue(self.empty_form.fields["glossary_file"].required)
@@ -179,7 +265,7 @@ class TestGlossaryUploadForm(TestCase):
     def test_glossary_file_field_validator_type(self):
         self.assertEqual(
             type(self.empty_form.fields['glossary_file'].validators[0]),
-            FileExtensionValidator
+            FileExtensionValidator,
         )
 
     def test_glossary_file_field_validator_allowed_extensions(self):
@@ -195,7 +281,10 @@ class TestGlossaryUploadForm(TestCase):
         )
 
     def test_existing_glossary_field_label(self):
-        self.assertEqual(self.empty_form.fields['existing_glossary'].label, '② 既存の用語集に追加しますか？')
+        self.assertEqual(
+            self.empty_form.fields['existing_glossary'].label,
+            '② 既存の用語集に追加しますか？'
+        )
 
     def test_existing_glossary_field_queryset(self):
         expected = list(Glossary.objects.all().order_by('title'))
@@ -206,13 +295,16 @@ class TestGlossaryUploadForm(TestCase):
         self.assertEqual(self.empty_form.fields['existing_glossary'].required, False)
 
     def test_title_field_label(self):
-        self.assertEqual(self.empty_form.fields['title'].label, '③ または、新しい用語集を作成しますか？')
+        self.assertEqual(
+            self.empty_form.fields['title'].label,
+            '③ または、新しい用語集を作成しますか？',
+        )
 
     def test_title_field_widget(self):
         self.assertTrue(self.empty_form.fields['title'].widget, TextInput)
         self.assertEqual(
             self.empty_form.fields['title'].widget.attrs['placeholder'],
-            '新しい用語集のタイトルを入力してください。'
+            '新しい用語集のタイトルを入力してください。',
         )
 
     def test_title_field_required(self):
@@ -221,7 +313,7 @@ class TestGlossaryUploadForm(TestCase):
     def test_title_field_required_error_message(self):
         self.assertEqual(
             self.empty_form.fields['title'].error_messages['max_length'],
-            '100文字以下になるように変更してください。'
+            '100文字以下になるように変更してください。',
         )
 
     def test_notes_field_label(self):
@@ -237,7 +329,8 @@ class TestGlossaryUploadForm(TestCase):
     def test_notes_field_help_text(self):
         self.assertEqual(
             self.empty_form.fields['notes'].help_text,
-            "アップロードされる用語集は既存の用語集に追加する場合、<br>上記の備考は既存の用語集の備考に追加されます。"
+            ("アップロードされる用語集は既存の用語集に追加する場合、"
+             "<br>上記の備考は既存の用語集の備考に追加されます。"),
         )
 
     # Test Meta fields
@@ -246,7 +339,56 @@ class TestGlossaryUploadForm(TestCase):
         self.assertEqual(self.empty_form._meta.model, Glossary)
 
     def test_meta_fields(self):
-        self.assertEqual(self.empty_form._meta.fields, ("glossary_file", "existing_glossary", "title", "notes"))
+        self.assertEqual(
+            self.empty_form._meta.fields,
+            ("glossary_file", "existing_glossary", "title", "notes"),
+        )
+
+    # Test complete form
+
+    def test_form_with_valid_input_add_to_existing_glossary(self):
+        self.assertTrue(self.valid_form_with_existing_glossary.is_bound)
+        self.assertTrue(self.valid_form_with_existing_glossary.is_valid())
+        self.assertEqual(self.valid_form_with_existing_glossary.errors, {})
+        self.assertEqual(self.valid_form_with_existing_glossary.errors.as_text(), "")
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["existing_glossary"],
+            self.glossary_obj
+        )
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["title"],
+            "",
+        )
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["notes"],
+            "Some test notes.",
+        )
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["glossary_file"].name,
+            "test_glossary_file.txt",
+        )
+
+    def test_form_with_valid_input_create_new_glossary(self):
+        self.assertTrue(self.valid_form_with_new_glossary.is_bound)
+        self.assertTrue(self.valid_form_with_new_glossary.is_valid())
+        self.assertEqual(self.valid_form_with_new_glossary.errors, {})
+        self.assertEqual(self.valid_form_with_new_glossary.errors.as_text(), "")
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["existing_glossary"],
+            None,
+        )
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["title"],
+            "New Test Glossary",
+        )
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["notes"],
+            "Some test notes.",
+        )
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["glossary_file"].name,
+            "test_glossary_file.txt",
+        )
 
     # Test empty form
 
@@ -256,37 +398,68 @@ class TestGlossaryUploadForm(TestCase):
         with self.assertRaises(AttributeError):
             self.empty_form.cleaned_data
 
-    # Test complete form
+    # Test invalid fields/entry
 
-    def test_form_with_valid_input_add_to_existing_glossary(self):
-        self.assertTrue(self.valid_form_with_existing_glossary.is_bound)
-        self.assertTrue(self.valid_form_with_existing_glossary.is_valid())
-        self.assertEqual(self.valid_form_with_existing_glossary.errors, {})
-        self.assertEqual(self.valid_form_with_existing_glossary.errors.as_text(), "")
-        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["existing_glossary"], self.glossary_obj)
-        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["title"], "")
-        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["notes"], "Some test notes.")
-        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["glossary_file"].name, "test_glossary_file.txt")
-
-    def test_form_with_valid_input_create_new_glossary(self):
-        self.assertTrue(self.valid_form_with_new_glossary.is_bound)
-        self.assertTrue(self.valid_form_with_new_glossary.is_valid())
-        self.assertEqual(self.valid_form_with_new_glossary.errors, {})
-        self.assertEqual(self.valid_form_with_new_glossary.errors.as_text(), "")
-        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["existing_glossary"], None)
-        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["title"], "New Test Glossary")
-        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["notes"], "Some test notes.")
-        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["glossary_file"].name, "test_glossary_file.txt")
-
-    # Test validation edge cases
-    """
-    def test_form_with_invalid_input_blank_title(self):
+    def test_form_with_invalid_input_no_glossary_file(self):
         self.assertFalse(self.invalid_form_1.is_valid())
         self.assertNotEqual(self.invalid_form_1.errors, {})
-        self.assertEqual(self.invalid_form_1.errors["title"], ["このフィールドは入力必須です。"])
+        self.assertEqual(
+            self.invalid_form_1.errors["glossary_file"],
+            ["このフィールドは入力必須です。"],
+        )
 
     def test_form_with_invalid_input_title_too_long(self):
+        self.assertFalse(self.invalid_form_1.is_valid())
+        self.assertNotEqual(self.invalid_form_1.errors, {})
+        self.assertEqual(
+            self.invalid_form_1.errors["title"],
+            ["100文字以下になるように変更してください。"],
+        )
+
+    def test_form_with_invalid_input_glossary_file_wrong_file_extension_docx(self):
         self.assertFalse(self.invalid_form_2.is_valid())
         self.assertNotEqual(self.invalid_form_2.errors, {})
-        self.assertEqual(self.invalid_form_2.errors["title"], ["100文字以下になるように変更してください。"])
-    """
+        self.assertEqual(
+            self.invalid_form_2.errors["glossary_file"],
+            ['拡張子が".txt "のファイルを選択してください。'],
+        )
+
+    def test_form_with_invalid_input_glossary_file_wrong_file_extension_xlsx(self):
+        self.assertFalse(self.invalid_form_3.is_valid())
+        self.assertNotEqual(self.invalid_form_3.errors, {})
+        self.assertEqual(
+            self.invalid_form_3.errors["glossary_file"],
+            ['拡張子が".txt "のファイルを選択してください。'],
+        )
+
+    def test_form_with_invalid_input_new_glossary_already_exists(self):
+        self.assertFalse(self.invalid_form_4.is_valid())
+        self.assertNotEqual(self.invalid_form_4.errors, {})
+        self.assertEqual(
+            self.invalid_form_4.errors["title"],
+            ["このタイトルの用語集はすでに存在しています。"],
+        )
+
+    def test_form_with_invalid_input_neither_new_glossary_nor_existing_glossary_entered(self):
+        self.assertFalse(self.invalid_form_5.is_valid())
+        self.assertNotEqual(self.invalid_form_5.errors, {})
+        self.assertEqual(
+            self.invalid_form_5.errors["existing_glossary"],
+            ["②または③のいずれかを選択してください。"],
+        )
+        self.assertEqual(
+            self.invalid_form_5.errors["title"],
+            ["②または③のいずれかを選択してください。"],
+        )
+
+    def test_form_with_invalid_input_both_new_glossary_and_existing_glossary_entered(self):
+        self.assertFalse(self.invalid_form_6.is_valid())
+        self.assertNotEqual(self.invalid_form_6.errors, {})
+        self.assertEqual(
+            self.invalid_form_6.errors["existing_glossary"],
+            ["②または③のいずれかを選択してください。"],
+        )
+        self.assertEqual(
+            self.invalid_form_6.errors["title"],
+            ["②または③のいずれかを選択してください。"],
+        )
