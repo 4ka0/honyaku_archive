@@ -146,6 +146,19 @@ class TestGlossaryUploadForm(TestCase):
         }
         cls.valid_form_with_existing_glossary = GlossaryUploadForm(form_data, file_data)
 
+        # Form with input (to add uploaded file content to new glossary)
+        form_data = {
+            "existing_glossary": None,
+            "title": "New Test Glossary",
+            "notes": "Some test notes.",
+        }
+        file_data = {
+            "glossary_file": SimpleUploadedFile(name='test_glossary_file.txt',
+                                                content=b'file_content',
+                                                content_type="text/plain"),
+        }
+        cls.valid_form_with_new_glossary = GlossaryUploadForm(form_data, file_data)
+
     # Test fields
 
     def test_glossary_file_field_label(self):
@@ -235,6 +248,14 @@ class TestGlossaryUploadForm(TestCase):
     def test_meta_fields(self):
         self.assertEqual(self.empty_form._meta.fields, ("glossary_file", "existing_glossary", "title", "notes"))
 
+    # Test empty form
+
+    def test_form_with_no_input(self):
+        self.assertFalse(self.empty_form.is_bound)
+        self.assertFalse(self.empty_form.is_valid())
+        with self.assertRaises(AttributeError):
+            self.empty_form.cleaned_data
+
     # Test complete form
 
     def test_form_with_valid_input_add_to_existing_glossary(self):
@@ -248,16 +269,15 @@ class TestGlossaryUploadForm(TestCase):
         self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["glossary_file"].name, "test_glossary_file.txt")
 
     def test_form_with_valid_input_create_new_glossary(self):
-        pass
+        self.assertTrue(self.valid_form_with_new_glossary.is_bound)
+        self.assertTrue(self.valid_form_with_new_glossary.is_valid())
+        self.assertEqual(self.valid_form_with_new_glossary.errors, {})
+        self.assertEqual(self.valid_form_with_new_glossary.errors.as_text(), "")
+        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["existing_glossary"], None)
+        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["title"], "New Test Glossary")
+        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["notes"], "Some test notes.")
+        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["glossary_file"].name, "test_glossary_file.txt")
 
-    # Test empty form
-    """
-    def test_form_with_no_input(self):
-        self.assertFalse(self.empty_form.is_bound)
-        self.assertFalse(self.empty_form.is_valid())
-        with self.assertRaises(AttributeError):
-            self.empty_form.cleaned_data
-    """
     # Test validation edge cases
     """
     def test_form_with_invalid_input_blank_title(self):
