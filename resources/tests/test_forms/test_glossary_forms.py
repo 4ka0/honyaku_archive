@@ -310,7 +310,7 @@ class TestGlossaryUploadForm(TestCase):
     def test_title_field_required(self):
         self.assertEqual(self.empty_form.fields['title'].required, False)
 
-    def test_title_field_required_error_message(self):
+    def test_title_field_max_length_error_message(self):
         self.assertEqual(
             self.empty_form.fields['title'].error_messages['max_length'],
             '100文字以下になるように変更してください。',
