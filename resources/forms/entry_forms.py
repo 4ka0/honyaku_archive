@@ -56,7 +56,6 @@ class EntryForm(forms.ModelForm):
         if len(new_glossary) > 100:
             self.add_error('new_glossary', '100文字以下になるように変更してください。')
         else:
-
             # If both fields have been entered, output error
             if existing_glossary and new_glossary:
                 msg = "③または④のいずれかを選択してください。"
