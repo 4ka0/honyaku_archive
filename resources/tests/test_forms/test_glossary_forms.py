@@ -344,7 +344,7 @@ class TestGlossaryUploadForm(TestCase):
             ("glossary_file", "existing_glossary", "title", "notes"),
         )
 
-    # Test complete form
+    # Test valid forms
 
     def test_form_with_valid_input_add_to_existing_glossary(self):
         self.assertTrue(self.valid_form_with_existing_glossary.is_bound)
@@ -398,7 +398,7 @@ class TestGlossaryUploadForm(TestCase):
         with self.assertRaises(AttributeError):
             self.empty_form.cleaned_data
 
-    # Test invalid fields/entry
+    # Test invalid fields
 
     def test_form_with_invalid_input_no_glossary_file(self):
         self.assertFalse(self.invalid_form_1.is_valid())

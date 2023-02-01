@@ -50,6 +50,28 @@ class TestEntryForm(TestCase):
         # Form with no input
         cls.empty_form = EntryForm()
 
+        # Complete form with valid input (to add uploaded file content to existing glossary)
+        cls.valid_form_with_existing_glossary = EntryForm(
+            {
+                "source": "テスト",
+                "target": "test",
+                "glossary": cls.glossary_obj_1,
+                "new_glossary": "",
+                "notes": "Some test notes.",
+            }
+        )
+
+        # Complete form with valid input (to add uploaded file content to new glossary)
+        cls.valid_form_with_new_glossary = EntryForm(
+            {
+                "source": "テスト",
+                "target": "test",
+                "glossary": None,
+                "new_glossary": "Test Glossary",
+                "notes": "Some test notes.",
+            }
+        )
+
     # Test fields
 
     def test_entry_source_field_label(self):
@@ -145,4 +167,48 @@ class TestEntryForm(TestCase):
             ('source', 'target', 'glossary', 'new_glossary', 'notes'),
         )
 
-    # Test complete form
+    # Test valid forms
+
+    def test_form_with_valid_input_add_to_existing_glossary(self):
+        self.assertTrue(self.valid_form_with_existing_glossary.is_bound)
+        self.assertTrue(self.valid_form_with_existing_glossary.is_valid())
+        self.assertEqual(self.valid_form_with_existing_glossary.errors, {})
+        self.assertEqual(self.valid_form_with_existing_glossary.errors.as_text(), "")
+        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["source"], "テスト")
+        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["target"], "test")
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["glossary"],
+            self.glossary_obj_1
+        )
+        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["new_glossary"], "")
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["notes"],
+            "Some test notes.",
+        )
+
+    def test_form_with_valid_input_add_to_new_glossary(self):
+        self.assertTrue(self.valid_form_with_new_glossary.is_bound)
+        self.assertTrue(self.valid_form_with_new_glossary.is_valid())
+        self.assertEqual(self.valid_form_with_new_glossary.errors, {})
+        self.assertEqual(self.valid_form_with_new_glossary.errors.as_text(), "")
+        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["source"], "テスト")
+        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["target"], "test")
+        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["glossary"], None)
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["new_glossary"],
+            "Test Glossary",
+        )
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["notes"],
+            "Some test notes.",
+        )
+
+    # Test empty form
+
+    def test_form_with_no_input(self):
+        self.assertFalse(self.empty_form.is_bound)
+        self.assertFalse(self.empty_form.is_valid())
+        with self.assertRaises(AttributeError):
+            self.empty_form.cleaned_data
+
+    # Test invalid fields
