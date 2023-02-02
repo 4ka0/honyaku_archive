@@ -72,6 +72,71 @@ class TestEntryForm(TestCase):
             }
         )
 
+        # Invalid forms
+
+        cls.invalid_form_no_source_or_target = EntryForm(
+            {
+                "source": "",
+                "target": "",
+                "glossary": None,
+                "new_glossary": "Test Glossary",
+                "notes": "Some test notes.",
+            }
+        )
+
+        cls.invalid_form_entries_too_long = EntryForm(
+            {
+                "source": (
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                ),
+                "target": (
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                ),
+                "glossary": None,
+                "new_glossary": (
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                ),
+                "notes": "Some test notes.",
+            }
+        )
+
+        cls.invalid_form_glossary_and_new_glossary_both_given = EntryForm(
+            {
+                "source": "テスト",
+                "target": "test",
+                "glossary": cls.glossary_obj_1,
+                "new_glossary": "Test Glossary",
+                "notes": "Some test notes.",
+            }
+        )
+
+        cls.invalid_form_glossary_and_new_glossary_none_given = EntryForm(
+            {
+                "source": "テスト",
+                "target": "test",
+                "glossary": None,
+                "new_glossary": "",
+                "notes": "Some test notes.",
+            }
+        )
+
+        cls.invalid_form_glossary_new_glossary_title_already_exists = EntryForm(
+            {
+                "source": "テスト",
+                "target": "test",
+                "glossary": None,
+                "new_glossary": "Test Glossary 1",
+                "notes": "Some test notes.",
+            }
+        )
+
     # Test fields
 
     def test_entry_source_field_label(self):
@@ -212,3 +277,79 @@ class TestEntryForm(TestCase):
             self.empty_form.cleaned_data
 
     # Test invalid fields
+
+    def test_form_with_invalid_input_no_source(self):
+        self.assertFalse(self.invalid_form_no_source_or_target.is_valid())
+        self.assertNotEqual(self.invalid_form_no_source_or_target.errors, {})
+        self.assertEqual(
+            self.invalid_form_no_source_or_target.errors["source"],
+            ["このフィールドは入力必須です。"],
+        )
+
+    def test_form_with_invalid_input_no_target(self):
+        self.assertFalse(self.invalid_form_no_source_or_target.is_valid())
+        self.assertNotEqual(self.invalid_form_no_source_or_target.errors, {})
+        self.assertEqual(
+            self.invalid_form_no_source_or_target.errors["target"],
+            ["このフィールドは入力必須です。"],
+        )
+
+    def test_form_with_invalid_input_source_too_long(self):
+        self.assertFalse(self.invalid_form_entries_too_long.is_valid())
+        self.assertNotEqual(self.invalid_form_entries_too_long.errors, {})
+        self.assertEqual(
+            self.invalid_form_entries_too_long.errors["source"],
+            ["255文字以下になるように変更してください。"],
+        )
+
+    def test_form_with_invalid_input_target_too_long(self):
+        self.assertFalse(self.invalid_form_entries_too_long.is_valid())
+        self.assertNotEqual(self.invalid_form_entries_too_long.errors, {})
+        self.assertEqual(
+            self.invalid_form_entries_too_long.errors["target"],
+            ["255文字以下になるように変更してください。"],
+        )
+
+    def test_form_with_invalid_input_new_glossary_title_too_long(self):
+        self.assertFalse(self.invalid_form_entries_too_long.is_valid())
+        self.assertNotEqual(self.invalid_form_entries_too_long.errors, {})
+        self.assertEqual(
+            self.invalid_form_entries_too_long.errors["new_glossary"],
+            ["100文字以下になるように変更してください。"],
+        )
+
+    def test_form_with_invalid_input_glossary_and_new_glossary_both_given(self):
+        self.assertFalse(self.invalid_form_glossary_and_new_glossary_both_given.is_valid())
+        self.assertNotEqual(self.invalid_form_glossary_and_new_glossary_both_given.errors, {})
+        self.assertEqual(
+            self.invalid_form_glossary_and_new_glossary_both_given.errors["glossary"],
+            ["③または④のいずれかを選択してください。"],
+        )
+        self.assertEqual(
+            self.invalid_form_glossary_and_new_glossary_both_given.errors["new_glossary"],
+            ["③または④のいずれかを選択してください。"],
+        )
+
+    def test_form_with_invalid_input_glossary_and_new_glossary_none_given(self):
+        self.assertFalse(self.invalid_form_glossary_and_new_glossary_none_given.is_valid())
+        self.assertNotEqual(self.invalid_form_glossary_and_new_glossary_none_given.errors, {})
+        self.assertEqual(
+            self.invalid_form_glossary_and_new_glossary_none_given.errors["glossary"],
+            ["③または④のいずれかを選択してください。"],
+        )
+        self.assertEqual(
+            self.invalid_form_glossary_and_new_glossary_none_given.errors["new_glossary"],
+            ["③または④のいずれかを選択してください。"],
+        )
+
+    def test_form_with_invalid_input_new_glossary_title_already_exists(self):
+        self.assertFalse(self.invalid_form_glossary_new_glossary_title_already_exists.is_valid())
+        self.assertNotEqual(self.invalid_form_glossary_new_glossary_title_already_exists.errors, {})
+        self.assertEqual(
+            self.invalid_form_glossary_new_glossary_title_already_exists.errors["new_glossary"],
+            ["このタイトルの用語集はすでに存在しています。"],
+        )
+
+
+class TestEntryAddToGlossaryForm(TestCase):
+    pass
