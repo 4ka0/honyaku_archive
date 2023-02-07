@@ -78,44 +78,6 @@ class EntryForm(forms.ModelForm):
         return cleaned_data
 
 
-"""
-class EntryUpdateForm(forms.ModelForm):
-    source = forms.CharField(
-        label='① 原文',
-        error_messages={
-            "required": "このフィールドは入力必須です。",
-            "max_length": "255文字以下になるように変更してください。",
-        }
-    )
-    target = forms.CharField(
-        label='② 訳文',
-        error_messages={
-            "required": "このフィールドは入力必須です。",
-            "max_length": "255文字以下になるように変更してください。",
-        }
-    )
-    glossary = forms.ModelChoiceField(
-        label='③ 既存の用語集と関連付けますか？',
-        queryset=Glossary.objects.all().order_by('title'),
-        empty_label=None,  # Removes the empty option "-----"
-    )
-    new_glossary = forms.CharField(
-        label='④ または、この用語のために新しい用語集を作成しますか？',
-        widget=forms.TextInput(attrs={'placeholder': '新しい用語集のタイトルを入力してください。'}),
-        required=False,
-    )
-    notes = forms.CharField(
-        label='⑤ 備考',
-        widget=forms.Textarea(attrs={'rows': 6}),
-        required=False,
-    )
-
-    class Meta:
-        model = Entry
-        fields = ('source', 'target', 'glossary', 'new_glossary', 'notes')
-"""
-
-
 class EntryAddToGlossaryForm(forms.ModelForm):
     source = forms.CharField(
         label='① 原文',
