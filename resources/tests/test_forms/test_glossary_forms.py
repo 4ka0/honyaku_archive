@@ -72,7 +72,7 @@ class TestGlossaryForm(TestCase):
         self.assertFalse(self.empty_form.fields['notes'].required)
 
     def test_notes_field_widget(self):
-        self.assertTrue(self.empty_form.fields['notes'].widget, Textarea)
+        self.assertIsInstance(self.empty_form.fields['notes'].widget, Textarea)
         self.assertEqual(self.empty_form.fields['notes'].widget.attrs['rows'], 6)
 
     # Test Meta fields
@@ -301,7 +301,7 @@ class TestGlossaryUploadForm(TestCase):
         )
 
     def test_title_field_widget(self):
-        self.assertTrue(self.empty_form.fields['title'].widget, TextInput)
+        self.assertIsInstance(self.empty_form.fields['title'].widget, TextInput)
         self.assertEqual(
             self.empty_form.fields['title'].widget.attrs['placeholder'],
             '新しい用語集のタイトルを入力してください。',
@@ -320,7 +320,7 @@ class TestGlossaryUploadForm(TestCase):
         self.assertEqual(self.empty_form.fields['notes'].label, '④ 備考（任意）')
 
     def test_notes_field_widget(self):
-        self.assertTrue(self.empty_form.fields['notes'].widget, Textarea)
+        self.assertIsInstance(self.empty_form.fields['notes'].widget, Textarea)
         self.assertEqual(self.empty_form.fields['notes'].widget.attrs['rows'], 6)
 
     def test_notes_field_required(self):
