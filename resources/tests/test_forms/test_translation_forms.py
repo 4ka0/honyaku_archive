@@ -4,7 +4,6 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-
 from ...models import Translation
 from ...forms.translation_forms import TranslationUpdateForm, TranslationUploadForm
 
@@ -26,6 +25,36 @@ class TestTranslationUpdateForm(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.empty_form = TranslationUpdateForm()
+        cls.valid_form = TranslationUpdateForm(
+            {
+                "job_number": "ABC-0123456",
+                "field": "化学",
+                "client": "ABC社",
+                "translator": "Test Translator",
+                "notes": "This is a translation for testing.",
+            }
+        )
+        cls.invalid_form_1 = TranslationUpdateForm(
+            {
+                "job_number": "",
+                "field": "化学",
+                "client": "ABC社",
+                "translator": "Test Translator",
+                "notes": "This is a translation for testing.",
+            }
+        )
+        long_text = ("Text exceeding 100 chars Text exceeding 100 chars"
+                     "Text exceeding 100 chars Text exceeding 100 chars"
+                     "Text exceeding 100 chars Text exceeding 100 chars")
+        cls.invalid_form_2 = TranslationUpdateForm(
+            {
+                "job_number": long_text,
+                "field": long_text,
+                "client": long_text,
+                "translator": long_text,
+                "notes": "This is a translation for testing.",
+            }
+        )
 
     # Test fields
 
@@ -105,3 +134,61 @@ class TestTranslationUpdateForm(TestCase):
         )
 
     # Test form with input
+
+    def test_form_with_valid_input(self):
+        self.assertTrue(self.valid_form.is_bound)
+        self.assertTrue(self.valid_form.is_valid())
+        self.assertEqual(self.valid_form.errors, {})
+        self.assertEqual(self.valid_form.errors.as_text(), "")
+        self.assertEqual(self.valid_form.cleaned_data["job_number"], "ABC-0123456")
+        self.assertEqual(self.valid_form.cleaned_data["field"], "化学")
+        self.assertEqual(self.valid_form.cleaned_data["client"], "ABC社")
+        self.assertEqual(self.valid_form.cleaned_data["translator"], "Test Translator")
+        self.assertEqual(self.valid_form.cleaned_data["notes"], "This is a translation for testing.")
+
+    def test_form_with_no_input(self):
+        self.assertFalse(self.empty_form.is_bound)
+        self.assertFalse(self.empty_form.is_valid())
+        with self.assertRaises(AttributeError):
+            self.empty_form.cleaned_data
+
+    def test_form_with_invalid_input_blank_job_number(self):
+        self.assertFalse(self.invalid_form_1.is_valid())
+        self.assertNotEqual(self.invalid_form_1.errors, {})
+        self.assertEqual(self.invalid_form_1.errors["job_number"], ["このフィールドは入力必須です。"])
+
+    def test_form_with_invalid_input_job_number_too_long(self):
+        self.assertFalse(self.invalid_form_2.is_valid())
+        self.assertNotEqual(self.invalid_form_2.errors, {})
+        self.assertEqual(
+            self.invalid_form_2.errors["job_number"],
+            ["100文字以下になるように変更してください。"]
+        )
+
+    def test_form_with_invalid_input_field_too_long(self):
+        self.assertFalse(self.invalid_form_2.is_valid())
+        self.assertNotEqual(self.invalid_form_2.errors, {})
+        self.assertEqual(
+            self.invalid_form_2.errors["field"],
+            ["100文字以下になるように変更してください。"]
+        )
+
+    def test_form_with_invalid_input_client_too_long(self):
+        self.assertFalse(self.invalid_form_2.is_valid())
+        self.assertNotEqual(self.invalid_form_2.errors, {})
+        self.assertEqual(
+            self.invalid_form_2.errors["client"],
+            ["100文字以下になるように変更してください。"]
+        )
+
+    def test_form_with_invalid_input_translator_too_long(self):
+        self.assertFalse(self.invalid_form_2.is_valid())
+        self.assertNotEqual(self.invalid_form_2.errors, {})
+        self.assertEqual(
+            self.invalid_form_2.errors["translator"],
+            ["100文字以下になるように変更してください。"]
+        )
+
+
+class TestTranslationUploadForm(TestCase):
+    pass
