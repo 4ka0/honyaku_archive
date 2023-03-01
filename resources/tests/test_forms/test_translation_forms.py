@@ -191,4 +191,48 @@ class TestTranslationUpdateForm(TestCase):
 
 
 class TestTranslationUploadForm(TestCase):
-    pass
+
+    @classmethod
+    def setUpTestData(cls):
+
+        # Test user
+        User = get_user_model()
+        cls.testuser = User.objects.create_user(
+            username="testuser",
+            email="testuser@email.com",
+            password="testuser123",
+        )
+
+        # Translation object
+        cls.translation_obj = Translation.objects.create(
+            job_number="ABC123",
+            field="化学",
+            client="ABC社",
+            translator="田中",
+            type="翻訳",
+            notes="Reference translation.",
+            created_by=cls.testuser,
+        )
+
+        # Form with no input
+        cls.empty_form = TranslationUploadForm()
+
+        # Valid form with data
+        form_data = {
+            "job_number": "DEF456",
+            "field": "電気",
+            "client": "DEF社",
+            "translator": "Smith",
+            "type": "翻訳",
+            "notes": "Client translation.",
+        }
+        file_data = {
+            "translation_file": SimpleUploadedFile(name='test_translation_file.tmx',
+                                                   content=b'file_content',
+                                                   content_type="text/plain"),
+        }
+        cls.valid_form = TranslationUploadForm(form_data, file_data)
+
+        # Forms with invalid input
+
+        # Test fields
