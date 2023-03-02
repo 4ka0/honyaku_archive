@@ -85,11 +85,20 @@ def build_segments(request, translation_obj):
     builds Segment objects from the parsed content.
     """
 
+    import time
+    st = time.time()
+
     # Select appropriate parser
     if translation_obj.translation_file.path.endswith(".tmx"):
         new_segments = tmx_parser(translation_obj)
     else:
         new_segments = docx_parser(request, translation_obj)
+
+    et = time.time()
+    elapsed_time = et - st
+    print("**********")
+    print(elapsed_time)
+    print("**********")
 
     # Save content to database
     if new_segments:
@@ -165,6 +174,10 @@ def docx_parser(request, translation_obj):
 
         table = document.tables[0]
 
+        """
+        # Previous method for building segments from the table content.
+        # (Too slow)
+
         for row in table.rows:
             if len(row.cells) >= 2:
                 new_segment = Segment(
@@ -173,6 +186,18 @@ def docx_parser(request, translation_obj):
                     target=row.cells[1].text,
                 )
                 new_segments.append(new_segment)
+        """
+
+        # Extract text data from table.
+        # Creates one large list of 2-string lists.
+        table_data = [[cell.text for cell in row.cells] for row in table.rows]
+
+        # Create list of Segment objects from text data.
+        new_segments = [
+            Segment(translation=translation_obj, source=row[0], target=row[1])
+            for row
+            in table_data
+        ]
 
     else:
         messages.error(
