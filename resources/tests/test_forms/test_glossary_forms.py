@@ -292,7 +292,7 @@ class TestGlossaryUploadForm(TestCase):
         self.assertEqual(existing_glossary_queryset, expected)
 
     def test_existing_glossary_field_required(self):
-        self.assertEqual(self.empty_form.fields['existing_glossary'].required, False)
+        self.assertFalse(self.empty_form.fields['existing_glossary'].required)
 
     def test_title_field_label(self):
         self.assertEqual(
@@ -308,7 +308,7 @@ class TestGlossaryUploadForm(TestCase):
         )
 
     def test_title_field_required(self):
-        self.assertEqual(self.empty_form.fields['title'].required, False)
+        self.assertFalse(self.empty_form.fields['title'].required)
 
     def test_title_field_max_length_error_message(self):
         self.assertEqual(

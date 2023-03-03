@@ -234,5 +234,141 @@ class TestTranslationUploadForm(TestCase):
         cls.valid_form = TranslationUploadForm(form_data, file_data)
 
         # Forms with invalid input
+        # (To be added later)
 
-        # Test fields
+    # Test fields
+
+    # translation_file field
+
+    def test_translation_file_field_label(self):
+        self.assertEqual(
+            self.empty_form.fields['translation_file'].label,
+            '① ファイルを選択してください。'
+        )
+
+    def test_translation_file_field_required(self):
+        self.assertTrue(self.empty_form.fields["translation_file"].required)
+
+    def test_translation_file_field_required_error_message(self):
+        self.assertEqual(
+            self.empty_form.fields['translation_file'].error_messages['required'],
+            'このフィールドは入力必須です。'
+        )
+
+    def test_translation_file_field_validators_len(self):
+        self.assertEqual(len(self.empty_form.fields['translation_file'].validators), 1)
+
+    def test_translation_file_field_validator_type(self):
+        self.assertEqual(
+            type(self.empty_form.fields['translation_file'].validators[0]),
+            FileExtensionValidator,
+        )
+
+    def test_translation_file_field_validator_allowed_extensions(self):
+        self.assertEqual(
+            self.empty_form.fields['translation_file'].validators[0].allowed_extensions,
+            ["docx", "tmx"]
+        )
+
+    def test_translation_file_field_validators_allowed_extensions_error_message(self):
+        self.assertEqual(
+            self.empty_form.fields['translation_file'].validators[0].message,
+            ['拡張子が 「.docx」又は「.tmx」のファイルをお選びください。']
+        )
+
+    # job_number field
+
+    def test_job_number_field_label(self):
+        self.assertEqual(self.empty_form.fields['job_number'].label, '② 案件番号')
+
+    def test_job_number_field_widget(self):
+        self.assertIsInstance(self.empty_form.fields['job_number'].widget, TextInput)
+
+    def test_job_number_field_required(self):
+        self.assertTrue(self.empty_form.fields['job_number'].required)
+
+    def test_job_number_field_max_length_error_message(self):
+        self.assertEqual(
+            self.empty_form.fields['job_number'].error_messages['max_length'],
+            '100文字以下になるように変更してください。',
+        )
+
+    # translator field
+
+    def test_translator_field_label(self):
+        self.assertEqual(self.empty_form.fields['translator'].label, '③ 翻訳者（任意）')
+
+    def test_translator_field_widget(self):
+        self.assertIsInstance(self.empty_form.fields['translator'].widget, TextInput)
+
+    def test_translator_field_required(self):
+        self.assertFalse(self.empty_form.fields['translator'].required)
+
+    def test_translator_field_max_length_error_message(self):
+        self.assertEqual(
+            self.empty_form.fields['translator'].error_messages['max_length'],
+            '100文字以下になるように変更してください。',
+        )
+
+    # field field
+
+    def test_field_field_label(self):
+        self.assertEqual(self.empty_form.fields['field'].label, '④ 分野（任意）')
+
+    def test_field_field_widget(self):
+        self.assertIsInstance(self.empty_form.fields['field'].widget, TextInput)
+
+    def test_field_field_required(self):
+        self.assertFalse(self.empty_form.fields['field'].required)
+
+    def test_field_field_max_length_error_message(self):
+        self.assertEqual(
+            self.empty_form.fields['field'].error_messages['max_length'],
+            '100文字以下になるように変更してください。',
+        )
+
+    # client field
+
+    def test_client_field_label(self):
+        self.assertEqual(self.empty_form.fields['client'].label, '⑤ クライアント（任意）')
+
+    def test_client_field_widget(self):
+        self.assertIsInstance(self.empty_form.fields['client'].widget, TextInput)
+
+    def test_client_field_required(self):
+        self.assertFalse(self.empty_form.fields['client'].required)
+
+    def test_client_field_max_length_error_message(self):
+        self.assertEqual(
+            self.empty_form.fields['client'].error_messages['max_length'],
+            '100文字以下になるように変更してください。',
+        )
+
+    # notes field
+
+    def test_notes_field_label(self):
+        self.assertEqual(self.empty_form.fields['notes'].label, '⑥ 備考（任意）')
+
+    def test_notes_field_widget(self):
+        self.assertIsInstance(self.empty_form.fields['notes'].widget, Textarea)
+        self.assertEqual(self.empty_form.fields['notes'].widget.attrs['rows'], 6)
+
+    def test_notes_field_required(self):
+        self.assertEqual(self.empty_form.fields['notes'].required, False)
+
+    # Test Meta fields
+
+    def test_meta_model(self):
+        self.assertEqual(self.empty_form._meta.model, Translation)
+
+    def test_meta_fields(self):
+        self.assertEqual(
+            self.empty_form._meta.fields,
+            ('translation_file', 'job_number', 'translator', 'field', 'client', 'notes'),
+        )
+
+    # Test valid form
+
+    # From here ...
+
+    # Tests with different possible upload files
