@@ -105,12 +105,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'ja'
-TIME_ZONE = 'Asia/Tokyo'
+# Changing the language code to 'ja' prevents the humanize intcomma filter from
+# adding commas every three digits as is normal in English. This filter is used
+# with the basic stats at the top of the homepage.
+LANGUAGE_CODE = 'en'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
 
+TIME_ZONE = 'Asia/Tokyo'
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
