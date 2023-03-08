@@ -59,7 +59,7 @@
                                         <br>
                                         <div class="table-muted-text">
                                             ＜備考＞<br>
-                                            {{ item.notes|linebreaksbr|urlize }}
+                                            {{ item.notes|linebreaksbr|urlizetrunc:50 }}
                                         </div>
                                     {% endif %}
                                 {% else %}

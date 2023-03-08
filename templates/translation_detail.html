@@ -71,7 +71,7 @@
                         <tr>
                             <td>備考:</td>
                             {% if object.notes %}
-                                <td>{{ object.notes|linebreaksbr|urlize }}</td>
+                                <td>{{ object.notes|linebreaksbr|urlizetrunc:50 }}</td>
                             {% else %}
                                 <td>なし</td>
                             {% endif %}
