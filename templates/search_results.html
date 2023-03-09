@@ -1,4 +1,4 @@
-{% extends '_base.html' %}
+{% extends 'base.html' %}
 
 {% load static %}
 {% load resources_tags %}
@@ -84,7 +84,7 @@
                                 <small>
                                     {% if item.glossary %}  <!-- If the current item belongs to a glossary, can edit etc. -->
 
-                                        {% include "table_action_buttons.html" %}
+                                        {% include "_table_action_buttons.html" %}
 
                                     {% else %}  <!-- If the current item belongs to a translation, cannot edit etc. -->
 
