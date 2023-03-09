@@ -1,0 +1,43 @@
+<table class="table table-bordered font-14">
+
+    <thead class="table-primary">
+        <tr>
+        <th scope="col" style="width: 5%">No.</th>
+        <th scope="col" style="width: 30%">原文</th>
+        <th scope="col" style="width: 35%">訳文</th>
+        <th scope="col" class="col-center-align" style="width: 10%">アクション</th>
+        </tr>
+    </thead>
+
+    <tbody class="table-body-bg">
+
+        {% for item in object.entries.all %}
+
+            <tr>
+
+                <td>{{ forloop.counter }}</td>
+
+                <td>{{ item.source }}</td>
+
+                <td>
+                    {{ item.target }}
+                        {% if item.notes %}
+                            <br>
+                            <div class="table-muted-text">
+                                ＜備考＞<br>
+                                {{ item.notes|linebreaksbr|urlizetrunc:50 }}
+                            </div>
+                        {% endif %}
+                </td>
+
+                <td class="col-center-align">
+                    {% include "table_action_buttons.html" %}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
