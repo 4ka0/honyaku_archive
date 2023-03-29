@@ -31,8 +31,8 @@
                     <tr>
                         <th scope="col" style="width: 38%">原文</th>
                         <th scope="col" style="width: 38%">訳文</th>
-                        <th scope="col" style="width: 14%">リソース</th>
-                        <th scope="col" class="col-center-align" style="width: 10%">アクション</th>
+                        <th scope="col" style="width: 16%">リソース</th>
+                        <th scope="col" class="col-center-align" style="width: 8%">アクション</th>
                     </tr>
                 </thead>
 
@@ -69,28 +69,23 @@
 
                             <!-- Resource name -->
                             <td>
-
-                                    {% if item.glossary %}
-                                        <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
-                                    {% endif %}
-                                    {% if item.translation %}
-                                        <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.job_number }}</a>
-                                    {% endif %}
-
+                                {% if item.glossary %}
+                                    <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
+                                {% elif item.translation %}
+                                    <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.job_number }}</a>
+                                {% endif %}
                             </td>
 
                             <!-- Actions -->
                             <td class="col-center-align">
                                 <small>
-                                    {% if item.glossary %}  <!-- If the current item belongs to a glossary, can edit etc. -->
+                                    {% if item.glossary %}
 
-                                        {% include "_table_action_buttons.html" %}
+                                        {% include "_entry_action_buttons.html" %}
 
-                                    {% else %}  <!-- If the current item belongs to a translation, cannot edit etc. -->
+                                    {% elif item.translation %}
 
-                                        <div class="table-muted-text">
-                                            編集不可
-                                        </div>
+                                        {% include "_segment_action_buttons.html" %}
 
                                     {% endif %}
                                 </small>

@@ -91,46 +91,13 @@
         </div>
 
 
-        <!-- Glossary content table -->
+        <!-- Translation content table -->
 
         <br><br>
         <h5 class="mb-4">翻訳の内容</h5>
 
+        {% include "_translation_content_table.html" %}
 
-        <table class="table table-bordered table-hover font-14">
-
-            <thead class="table-primary">
-                <tr>
-                    <th scope="col" style="width: 48%">原文</th>
-                    <th scope="col" style="width: 52%">訳文</th>
-                </tr>
-            </thead>
-
-            <tbody class="table-body-bg">
-
-                {% for item in object.segments.all %}
-
-                    <tr>
-                        <td>
-                            {% if item.source %}
-                                {{ item.source }}
-                            {% else %}
-                                <span class="table-muted-text">（原文なし）</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if item.target %}
-                                {{ item.target }}
-                            {% else %}
-                                <span class="table-muted-text">（訳文なし）</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-
-                {% endfor %}
-
-            </tbody>
-        </table>
     </div>
 
 {% endblock %}

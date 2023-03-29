@@ -1,0 +1,48 @@
+<table class="table table-bordered table-hover font-14">
+
+    <thead class="table-primary">
+        <tr>
+        <th scope="col" style="width: 5%">No.</th>
+        <th scope="col" style="width: 44%">原文</th>
+        <th scope="col" style="width: 44%">訳文</th>
+        <th scope="col" class="col-center-align" style="width: 7%">アクション</th>
+        </tr>
+    </thead>
+
+    <tbody class="table-body-bg">
+
+        {% for item in object.segments.all %}
+
+            <tr>
+
+                <td class="col-center-align">{{ forloop.counter }}</td>
+
+                <td>
+                    {% if item.source %}
+                        {{ item.source }}
+                    {% else %}
+                        <span class="table-muted-text">（原文なし）</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if item.target %}
+                        {{ item.target }}
+                    {% else %}
+                        <span class="table-muted-text">（訳文なし）</span>
+                    {% endif %}
+                </td>
+
+                <td class="col-center-align">
+
+                    {% include "_segment_action_buttons.html" %}
+
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
