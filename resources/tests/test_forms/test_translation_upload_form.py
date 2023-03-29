@@ -52,12 +52,11 @@ class TestTranslationUploadForm(TestCase):
         cls.valid_form = TranslationUploadForm(form_data, file_data)
 
         # Forms with invalid input
-        # Invalid form 1 (no file)
 
+        # Invalid form 1 (no file)
         cls.invalid_form_1 = TranslationUploadForm(form_data)
 
         # Invalid form 2 (no job number)
-
         form_data = {
             "job_number": "",
             "field": "電気",
@@ -69,7 +68,6 @@ class TestTranslationUploadForm(TestCase):
         cls.invalid_form_2 = TranslationUploadForm(form_data, file_data)
 
         # Invalid form 3 (optional fields with input that is too long)
-
         long_text = ("Text exceeding 100 chars Text exceeding 100 chars"
                      "Text exceeding 100 chars Text exceeding 100 chars"
                      "Text exceeding 100 chars Text exceeding 100 chars")
@@ -251,5 +249,3 @@ class TestTranslationUploadForm(TestCase):
                 'translator': ['100文字以下になるように変更してください。'],
             }
         )
-
-    # Tests with different possible upload files
