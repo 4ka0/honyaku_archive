@@ -9,6 +9,8 @@ from .views.glossary_views import (
     GlossaryAddEntryView, GlossaryAllEntryView, GlossaryUpdateView
 )
 
+from .views.segment_views import SegmentUpdateView, SegmentDeleteView
+
 from .views.translation_views import (
     TranslationDetailView, TranslationUpdateView, TranslationDeleteView, TranslationUploadView
 )
@@ -30,6 +32,9 @@ urlpatterns = [
     path('glossary/<int:glossary>/add/', GlossaryAddEntryView.as_view(), name='glossary_add_entry'),
     path('glossary/<int:pk>/all/', GlossaryAllEntryView.as_view(), name='glossary_all_entries'),
     path('glossary/<int:pk>/edit/', GlossaryUpdateView.as_view(), name='glossary_update'),
+
+    path('segment/<int:pk>/edit/', SegmentUpdateView.as_view(), name='segment_update'),
+    path('segment/<int:pk>/delete/', SegmentDeleteView.as_view(), name='segment_delete'),
 
     path('translation/upload/', TranslationUploadView.as_view(), name='translation_upload'),
     path('translation/<int:pk>/', TranslationDetailView.as_view(), name='translation_detail'),
