@@ -10,15 +10,16 @@
 
         <h4 class="my-4">{{ object.title }}</h4>
 
-            <p>
-                <a href="{% url 'glossary_update' object.pk %}">用語集の詳細を編集する</a> |
-                <a href="{% url 'glossary_delete' object.pk %}">用語集を削除する</a>
-            </p>
-
-
         <!-- Glossary details table -->
 
-        <h5 class="mt-5 mb-4">詳細</h5>
+        <div class="mt-5 mb-4">
+            <h5 class="d-inline">用語集の詳細</h5>
+            &nbsp;
+            <small>
+                <a href="{% url 'glossary_update' object.pk %}">詳細を編集する</a> |
+                <a href="{% url 'glossary_delete' object.pk %}">用語集を削除する</a>
+            </small>
+        </div>
 
         <div class="row justify-content-start">
             <div class="col-8">
@@ -80,35 +81,20 @@
             </div>
         </div>
 
+        <!-- Glossary content table -->
 
-        <!-- Glossary content -->
-
-        {% if num_of_entries > 0 %}
-
-            <!-- Display table straight away -->
-
-            <br><br>
-            <h5>すべてのエントリー</h5>
-
-            <p>
+        <br>
+        <div class="mb-4 ">
+            <h5 class="d-inline">用語集の内容</h5>
+            &nbsp;
+            <small>
                 <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                     エントリーを追加する
                 </a>
-            </p>
-            <br>
+            </small>
+        </div>
 
-            {% include "_glossary_content_table.html" %}
-
-        {% else %}  <!-- If no entries -->
-
-            <br>
-            <p>
-                <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
-                    エントリーを追加する
-                </a>
-            </p>
-
-        {% endif %}
+        {% include "_glossary_content_table.html" %}
 
     </div>
 
