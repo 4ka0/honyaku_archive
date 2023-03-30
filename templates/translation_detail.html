@@ -29,7 +29,7 @@
                             {% if object.translator %}
                                 <td>{{ object.translator }}</td>
                             {% else %}
-                                <td>不明</td>
+                                <td>（不明）</td>
                             {% endif %}
                         </tr>
 
@@ -38,7 +38,7 @@
                             {% if object.client %}
                                 <td>{{ object.client }}</td>
                             {% else %}
-                                <td>不明</td>
+                                <td>（不明）</td>
                             {% endif %}
                         </tr>
 
@@ -47,7 +47,7 @@
                             {% if object.field %}
                                 <td>{{ object.field }}</td>
                             {% else %}
-                                <td>不明</td>
+                                <td>（不明）</td>
                             {% endif %}
                         </tr>
 
@@ -56,7 +56,7 @@
                             {% if object.created_by %}
                                 <td>{{ object.created_by|title }}</td>
                             {% else %}
-                                <td>不明</td>
+                                <td>（不明）</td>
                             {% endif %}
                         </tr>
 
@@ -65,7 +65,7 @@
                             {% if object.created_on %}
                                 <td>{{ object.created_on }}</td>
                             {% else %}
-                                <td>不明</td>
+                                <td>（不明）</td>
                             {% endif %}
                         </tr>
 
@@ -74,7 +74,7 @@
                             {% if object.notes %}
                                 <td>{{ object.notes|linebreaksbr|urlizetrunc:50 }}</td>
                             {% else %}
-                                <td>なし</td>
+                                <td>（なし）</td>
                             {% endif %}
                         </tr>
 
