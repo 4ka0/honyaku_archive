@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     # Local
     'accounts',
-    'resources',
+    'archive',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'resources.context_processors.resources_processor',
+                'archive.context_processors.resources_processor',
             ],
         },
     },
