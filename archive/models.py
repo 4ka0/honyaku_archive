@@ -117,8 +117,8 @@ class Segment(models.Model):
         null=True,
         blank=True
     )
-    source = models.TextField()
-    target = models.TextField()
+    source = models.TextField(blank=True)
+    target = models.TextField(blank=True)
 
     class Meta:
         verbose_name = "segment"

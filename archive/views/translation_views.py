@@ -127,25 +127,30 @@ def tmx_parser(translation_obj):
 
     for node in tmx_file.unit_iter():
 
-        # translate-toolkit is used to parse the TMX file.
-        # http://docs.translatehouse.org/projects/translate-toolkit/en/latest/api/storage.html#module-translate.storage.tmx
-        #
-        # translate-toolkit assigns a control character (substitute character,
-        # code point 32) when there is an empty translation segment.
-        # One approach is to handle only this character, and another approach is
-        # to handle all 32 control characters included at the start of the
-        # Unicode chart. The latter approach has been used as it should be more
-        # robust in theory. Control characters are replaced with "", which can
-        # be handled easily/cleanly in the template.
+        # Prevent None from being entered in DB for source (TextField)
+        if node.source is None:
+            source_text = ""
+        else:
+            source_text = node.source
 
-        if (node.target and len(node.target) == 1 and ord(node.target) in range(0, 33)):
+        # Prevent None from being entered in DB for target (TextField)
+        if node.target is None:
             target_text = ""
         else:
-            target_text = node.target
+            # translate-toolkit is used to parse the TMX file. translate-toolkit assigns a control
+            # character (substitute character, code point 32) when there is an empty translation
+            # segment. One approach is to handle only this character, and another approach is to
+            # handle all 32 control characters included at the start of the Unicode chart. The
+            # latter approach has been used as it should be more robust in theory. Control
+            # characters are replaced with "", which can be handled easily/cleanly in the template.
+            if (node.target and len(node.target) == 1 and ord(node.target) in range(0, 33)):
+                target_text = ""
+            else:
+                target_text = node.target
 
         new_segment = Segment(
             translation=translation_obj,
-            source=node.source,
+            source=source_text,
             target=target_text,
         )
         new_segments.append(new_segment)
