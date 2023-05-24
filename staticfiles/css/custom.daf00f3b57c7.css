@@ -237,8 +237,9 @@ tr {
 }
 
 /* Button spinner */
-/* See
-https://stackoverflow.com/questions/58466453/how-can-i-show-hide-a-bootstrap-spinner-with-jquery
-*/
-#spinner { display: none; }
-body.busy .spinner { display: block !important; }
+#spinner-border {
+    visibility:hidden;
+}
+body.busy .spinner-border {
+    visibility:visible !important;
+}

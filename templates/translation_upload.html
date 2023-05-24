@@ -25,10 +25,17 @@
                     {{ form.client|as_crispy_field }}
                     {{ form.notes|as_crispy_field }}
 
-                    <!-- Cancel and upload buttons -->
                     <div class="text-center mt-4">
+
+                        <!-- Cancel button -->
                         <button type="submit" name="cancel" class="btn btn-secondary btn-sm mx-2">キャンセル</button>
-                        <button type="submit" class="btn btn-primary btn-sm">アップロード</button>
+
+                        <!-- Upload button -->
+                        <button type="submit" class="btn btn-primary btn-sm" id="uploadButton">
+                            <span class="spinner spinner-border spinner-border-sm" id="spinner" role="status" aria-hidden="true"></span>
+                            アップロード
+                        </button>
+
                     </div>
 
                 </form>
@@ -38,5 +45,17 @@
         </div>
 
     </div>
+
+    <script>
+        $(document).ready( function()
+        {
+            $('#spinner').on('click', function()
+            {
+                $('body').addClass('busy');
+            });
+
+            // $('body').removeClass('busy');
+        });
+    </script>
 
 {% endblock %}
