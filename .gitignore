@@ -172,3 +172,6 @@ db.sqlite3
 media/
 htmlcov/
 misc/
+.dockerignore
+Dockerfile
+fly.toml
