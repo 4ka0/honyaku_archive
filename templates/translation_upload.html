@@ -31,8 +31,7 @@
                         <button type="submit" name="cancel" class="btn btn-secondary btn-sm mx-2">キャンセル</button>
 
                         <!-- Upload button -->
-                        <button type="submit" class="btn btn-primary btn-sm" id="uploadButton">
-                            <span class="spinner spinner-border spinner-border-sm" id="spinner" role="status" aria-hidden="true"></span>
+                        <button type="submit" class="btn btn-primary btn-sm" id="spinner" onclick='update();'>
                             アップロード
                         </button>
 
@@ -47,15 +46,12 @@
     </div>
 
     <script>
-        $(document).ready( function()
-        {
-            $('#spinner').on('click', function()
-            {
-                $('body').addClass('busy');
-            });
-
-            // $('body').removeClass('busy');
-        });
+        function update() {
+            var btn = document.getElementById('spinner');
+            btn.innerHTML =
+                '<span class="spinner-border spinner-border-sm"></span>&nbspアップロード中...';
+                set
+        }
     </script>
 
 {% endblock %}
