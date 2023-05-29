@@ -7,3 +7,10 @@ function showSpinner() {
         '<span class="spinner-border spinner-border-sm"></span>&nbspアップロード中';
     btn.classList.add('disabled');
 }
+
+function showSearchSpinner() {
+    var btn = document.getElementById('search-button');
+    btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm"></span>&nbsp検索中';
+    btn.classList.add('disabled');
+}
