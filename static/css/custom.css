@@ -235,3 +235,9 @@ tr {
 .wrap-content {
     word-break: break-word;
 }
+
+/* To fix the width of the search button and prevent a change in size
+occurring when the spinner is displayed instead of text. */
+.search-button {
+    width: 66px;
+}

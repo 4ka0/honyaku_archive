@@ -12,6 +12,6 @@ function showSpinner() {
 function showSearchSpinner() {
     var btn = document.getElementById('search-button');
     btn.innerHTML =
-        '<span class="spinner-border spinner-border-sm"></span>&nbsp検索中';
+        '&nbsp<span class="spinner-border spinner-border-sm"></span>&nbsp';
     btn.classList.add('disabled');
 }
