@@ -1,5 +1,6 @@
-// Function to show a spinner in an upload button when the upload button is
-// clicked. Used on the glossary and translation upload forms.
+// Functions to show spinners in the search and upload buttons upon being
+// clicked. Used in the navbar search form and the glossary and translation
+// upload forms.
 
 function showSpinner() {
     var btn = document.getElementById('upload-button');
