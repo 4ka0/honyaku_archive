@@ -15,3 +15,9 @@ function showSearchSpinner() {
         '&nbsp<span class="spinner-border spinner-border-sm"></span>&nbsp';
     btn.classList.add('disabled');
 }
+
+// Function to copy text to the clipboard.
+function copyText(text) {
+    navigator.clipboard.writeText(text);
+    window.alert(`Copied: "${text}"`);
+}

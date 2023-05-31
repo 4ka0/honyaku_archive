@@ -45,6 +45,12 @@
                             <td>
                                 {% if item.source %}
                                     {{ item.source|highlight_query:query }}
+
+                                    <!-- Link to copy source text to clipboard -->
+                                    <small>
+                                        <a href="" id="copy-link" onclick="copyText('{{ item.source }}');">(Copy)</a>
+                                    </small>
+
                                 {% else %}
                                     <span class="table-muted-text">（原文なし）</span>
                                 {% endif %}
@@ -54,6 +60,12 @@
                             <td>
                                 {% if item.target %}
                                     {{ item.target|highlight_query:query }}
+
+                                    <!-- Link to copy target text to clipboard -->
+                                    <small>
+                                        <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">(Copy)</a>
+                                    </small>
+
                                     <!-- Include notes if present -->
                                     {% if item.notes %}
                                         <br><br>
@@ -61,6 +73,7 @@
                                             {{ item.notes|linebreaksbr|urlizetrunc:50 }}
                                         </div>
                                     {% endif %}
+
                                 {% else %}
                                     <span class="table-muted-text">（訳文なし）</span>
                                 {% endif %}
