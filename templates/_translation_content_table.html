@@ -19,7 +19,15 @@
 
                 <td>
                     {% if item.source %}
+
+                        <!-- Source text -->
                         {{ item.source }}
+
+                        <!-- Link to copy source text to clipboard -->
+                        <small>
+                            <a href="" id="copy-link" onclick="copyText('{{ item.source }}');">(Copy)</a>
+                        </small>
+
                     {% else %}
                         <span class="table-muted-text">（原文なし）</span>
                     {% endif %}
@@ -27,7 +35,15 @@
 
                 <td>
                     {% if item.target %}
+
+                        <!-- Target text -->
                         {{ item.target }}
+
+                        <!-- Link to copy target text to clipboard -->
+                        <small>
+                            <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">(Copy)</a>
+                        </small>
+
                     {% else %}
                         <span class="table-muted-text">（訳文なし）</span>
                     {% endif %}

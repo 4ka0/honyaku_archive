@@ -17,10 +17,26 @@
 
                 <td class="col-center-align">{{ forloop.counter }}</td>
 
-                <td>{{ item.source }}</td>
+                <td>
+                    <!-- Source text -->
+                    {{ item.source }}
+
+                    <!-- Link to copy source text to clipboard -->
+                    <small>
+                        <a href="" id="copy-link" onclick="copyText('{{ item.source }}');">(Copy)</a>
+                    </small>
+                </td>
 
                 <td>
+                    <!-- Target text -->
                     {{ item.target }}
+
+                    <!-- Link to copy target text to clipboard -->
+                    <small>
+                        <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">(Copy)</a>
+                    </small>
+
+                        <!-- Include notes if present -->
                         {% if item.notes %}
                             <br><br>
                             <div class="table-muted-text">
