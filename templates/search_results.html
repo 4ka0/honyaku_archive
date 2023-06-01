@@ -44,6 +44,8 @@
                             <!-- Source terms -->
                             <td>
                                 {% if item.source %}
+
+                                    <!-- Source term -->
                                     {{ item.source|highlight_query:query }}
 
                                     <!-- Link to copy source text to clipboard -->
@@ -59,6 +61,8 @@
                             <!-- Target terms -->
                             <td>
                                 {% if item.target %}
+
+                                    <!-- Target term -->
                                     {{ item.target|highlight_query:query }}
 
                                     <!-- Link to copy target text to clipboard -->

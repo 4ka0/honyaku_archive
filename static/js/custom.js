@@ -17,6 +17,7 @@ function showSearchSpinner() {
 }
 
 // Function to copy text to the clipboard.
+
 function copyText(text) {
     navigator.clipboard.writeText(text);
 }
