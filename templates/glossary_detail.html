@@ -50,24 +50,6 @@
                         </tr>
 
                         <tr>
-                            <td>最終更新日時:</td>
-                            {% if object.updated_on %}
-                                <td>{{ object.updated_on }}</td>
-                            {% else %}
-                                <td>（不明）</td>
-                            {% endif %}
-                        </tr>
-
-                        <tr>
-                            <td>最終更新者:</td>
-                            {% if object.updated_by %}
-                                <td>{{ object.updated_by|title }}</td>
-                            {% else %}
-                                <td>（不明）</td>
-                            {% endif %}
-                        </tr>
-
-                        <tr>
                             <td>備考:</td>
                             {% if object.notes %}
                                 <td>{{ object.notes|linebreaksbr|urlizetrunc:50 }}</td>
