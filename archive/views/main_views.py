@@ -62,28 +62,39 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         query = self.request.GET.get("query").strip()
         resource = self.request.GET.get("resource")
 
-        if resource == "すべてのリソースを検索する":
-
+        # Search all resources
+        if resource == "すべてのリソース":
             entry_queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
             ).order_by(Length('source'))
-
             segment_queryset = Segment.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
             ).order_by(Length('source'))
+            queryset = list(chain(entry_queryset, segment_queryset))
 
+        # Search all glossaries
+        elif resource == "すべての用語集":
+            queryset = Entry.objects.filter(
+                Q(source__icontains=query) | Q(target__icontains=query)
+            ).order_by(Length('source'))
+
+        # Search all glossaries
+        elif resource == "すべての翻訳":
+            queryset = Segment.objects.filter(
+                Q(source__icontains=query) | Q(target__icontains=query)
+            ).order_by(Length('source'))
+
+        # Search specific resource
         else:
             entry_queryset = Entry.objects.filter(
                 Q(glossary__title=resource),
                 Q(source__icontains=query) | Q(target__icontains=query)
             ).order_by(Length('source'))
-
             segment_queryset = Segment.objects.filter(
                 Q(translation__job_number=resource),
                 Q(source__icontains=query) | Q(target__icontains=query)
             ).order_by(Length('source'))
-
-        queryset = list(chain(entry_queryset, segment_queryset))
+            queryset = list(chain(entry_queryset, segment_queryset))
 
         return queryset
 

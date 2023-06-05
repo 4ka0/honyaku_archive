@@ -44,11 +44,32 @@
                    />
 
             <!-- Resources dropdown list -->
+
+            <!-- Old version without dividers -->
+            <!--
             <div class="input-group glossary-dropdown me-3">
                 <select name="resource" id="inputGroupSelect" class="form-select">
                     <option selected>すべてのリソースを検索する</option>
                     {% for resource in resources %}
                         <option value="{{ resource }}">{{ resource }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            -->
+
+            <!-- New version without dividers -->
+            <div class="input-group glossary-dropdown me-3">
+                <select name="resource" id="inputGroupSelect" class="form-select">
+                    <option selected>すべてのリソース</option>
+                    <option disabled>───────────</option>
+                    <option>すべての用語集</option>
+                    {% for glossary in glossaries %}
+                        <option value="{{ glossary }}">- {{ glossary }}</option>
+                    {% endfor %}
+                    <option disabled>───────────</option>
+                    <option>すべての翻訳</option>
+                    {% for translation in translations %}
+                        <option value="{{ translation }}">- {{ translation }}</option>
                     {% endfor %}
                 </select>
             </div>
