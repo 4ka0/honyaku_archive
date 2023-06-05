@@ -49,6 +49,7 @@
                                     {{ item.source|highlight_query:query }}
 
                                     <!-- Link to copy source text to clipboard -->
+                                    &nbsp
                                     <small>
                                         <a href="" id="copy-link" onclick="copyText('{{ item.source }}');">(Copy)</a>
                                     </small>
@@ -66,6 +67,7 @@
                                     {{ item.target|highlight_query:query }}
 
                                     <!-- Link to copy target text to clipboard -->
+                                    &nbsp
                                     <small>
                                         <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">(Copy)</a>
                                     </small>
