@@ -17,6 +17,8 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         """ Create list of all resources ordered by creation date.
             Also get the quantity of each type of resource. """
 
+        # Could remove the following and just use the list of resources
+        # provided by the context processor. However, the order is different.
         glossaries = Glossary.objects.all()
         translations = Translation.objects.all()
         resources_table_list = sorted(
