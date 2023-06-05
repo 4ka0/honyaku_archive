@@ -62,7 +62,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         query = self.request.GET.get("query").strip()
         resource = self.request.GET.get("resource")
 
-        # Search all resources
+        # Search all resources (glossary entries and translation segments)
         if resource == "すべてのリソース":
             entry_queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
@@ -72,13 +72,13 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             ).order_by(Length('source'))
             queryset = list(chain(entry_queryset, segment_queryset))
 
-        # Search all glossaries
+        # Search all glossary entries
         elif resource == "すべての用語集":
             queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
             ).order_by(Length('source'))
 
-        # Search all glossaries
+        # Search all translation segments
         elif resource == "すべての翻訳":
             queryset = Segment.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
