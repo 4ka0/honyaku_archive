@@ -112,6 +112,16 @@ tr {
     color: #909090;
 }
 
+.clipboard-icon {
+    text-decoration: none;
+    color: #909090;
+}
+
+.clipboard-icon:hover {
+    color: #e76f51;
+    text-decoration: none;
+}
+
 /* Hover color for search results table */
 /*
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {

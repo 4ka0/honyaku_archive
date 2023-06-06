@@ -20,4 +20,5 @@ function showSearchSpinner() {
 
 function copyText(text) {
     navigator.clipboard.writeText(text);
+    document.getElementById("search-input-field").focus();
 }
