@@ -50,9 +50,9 @@
 
                                     <!-- Link to copy source text to clipboard -->
                                     &nbsp
-                                    <small>
-                                        <a href="" id="copy-link" onclick="copyText('{{ item.source }}');">(Copy)</a>
-                                    </small>
+                                    <a href="#" class="table-icons" id="copy-link" onclick="copyText('{{ item.source }}');">
+                                        {% include "_table_copy_icon.html" %}
+                                    </a>
 
                                 {% else %}
                                     <span class="table-muted-text">（原文なし）</span>
@@ -68,9 +68,9 @@
 
                                     <!-- Link to copy target text to clipboard -->
                                     &nbsp
-                                    <small>
-                                        <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">(Copy)</a>
-                                    </small>
+                                    <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">
+                                        {% include "_table_copy_icon.html" %}
+                                    </a>
 
                                     <!-- Include notes if present -->
                                     {% if item.notes %}
