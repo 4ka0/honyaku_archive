@@ -24,9 +24,10 @@
                         {{ item.source }}
 
                         <!-- Link to copy source text to clipboard -->
-                        <small>
-                            <a href="" id="copy-link" onclick="copyText('{{ item.source }}');">&nbsp;(Copy)</a>
-                        </small>
+                        &nbsp
+                        <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.source }}');">
+                            {% include "_table_copy_icon.html" %}
+                        </a>
 
                     {% else %}
                         <span class="table-muted-text">（原文なし）</span>
@@ -40,9 +41,10 @@
                         {{ item.target }}
 
                         <!-- Link to copy target text to clipboard -->
-                        <small>
-                            <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">&nbsp;(Copy)</a>
-                        </small>
+                        &nbsp
+                        <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.target }}');">
+                            {% include "_table_copy_icon.html" %}
+                        </a>
 
                     {% else %}
                         <span class="table-muted-text">（訳文なし）</span>

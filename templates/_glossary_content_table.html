@@ -22,9 +22,11 @@
                     {{ item.source }}
 
                     <!-- Link to copy source text to clipboard -->
-                    <small>
-                        <a href="" id="copy-link" onclick="copyText('{{ item.source }}');">&nbsp;(Copy)</a>
-                    </small>
+                    &nbsp
+                    <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.source }}');">
+                        {% include "_table_copy_icon.html" %}
+                    </a>
+
                 </td>
 
                 <td>
@@ -32,9 +34,10 @@
                     {{ item.target }}
 
                     <!-- Link to copy target text to clipboard -->
-                    <small>
-                        <a href="" id="copy-link" onclick="copyText('{{ item.target }}');">&nbsp;(Copy)</a>
-                    </small>
+                    &nbsp
+                    <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.target }}');">
+                        {% include "_table_copy_icon.html" %}
+                    </a>
 
                         <!-- Include notes if present -->
                         {% if item.notes %}
