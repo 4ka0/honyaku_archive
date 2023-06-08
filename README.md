@@ -42,26 +42,26 @@ You can do the following:
 
 ### Screenshots:
 
-Home page:</br>
+Home page:</br></br>
 <img src="screenshots/home.png"></br>
 
-Glossary detail page:</br>
+Glossary detail page:</br></br>
 <img src="screenshots/glossary-detail.png"></br>
 
-Translation detail page:</br>
+Translation detail page:</br></br>
 <img src="screenshots/translation-detail.png"></br>
 
-Search results:</br>
+Search results:</br></br>
 <img src="screenshots/search-results.png"></br>
 
-Search options:</br>
+Search options:</br></br>
 <img src="screenshots/dropdown.png"></br>
 
-Add glossary entry:</br>
+Add glossary entry form:</br></br>
 <img src="screenshots/add-entry.png"></br>
 
-Upload glossary:</br>
+Upload glossary form:</br></br>
 <img src="screenshots/glossary-upload.png"></br>
 
-Upload translation:</br>
+Upload translation form:</br></br>
 <img src="screenshots/translation-upload.png"></br>
