@@ -25,14 +25,15 @@ You can do the following:
 * Install the dependencies.<br>
 `pip install -r requirements.txt`
 
+* Create a user.<br>
+`python manage.py createsuperuser`
+
 * Run the local server.<br>
 `python manage.py runserver`
 
 * Access "localhost:8000" in your browser.<br>
 
-* Go to the home page and log in.<br>
-
-* The project directory contains a file called "sales_data.csv" that can be used to try out the bulk uploading of test sales information.
+* Log in and start adding glossaries and translations.<br>
 
 ### Built using:
 
