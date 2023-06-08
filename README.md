@@ -40,7 +40,7 @@ You can do the following:
 * Django 4.1.3
 * Bootstrap 5
 
-### Screenshots:
+### Screenshots
 
 Home page:</br></br>
 <img src="screenshots/home.png"></br>
