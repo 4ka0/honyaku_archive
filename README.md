@@ -7,7 +7,7 @@ You can do the following:
 * Upload glossaries from text files.
 * Create, edit, and delete glossaries.
 * Upload translations from tmx and docx files.
-* Edit and delete glossaries.
+* Edit and delete translations.
 
 ## To download and run
 
