@@ -4,36 +4,55 @@ A webapp for archiving and searching translations and glossaries.
 
 You can do the following:
 * Search the content of glossaries and translations.
-* Upload glossaries from text files.
-* Create, edit, and delete glossaries.
-* Upload translations from tmx and docx files.
-* Edit and delete translations.
+* Upload, create, edit, and delete glossaries (upload format: .txt files).
+* Upload, edit, and delete translations (upload format: .tmx and .docx files).
 
 ## To download and run
 
-* Clone this repo into a location of your choosing.<br>
+1. Clone this repo into a location of your choosing.<br>
 `git clone https://github.com/4ka0/honyaku_archive.git`
 
-* Move into the project folder.<br>
+2. Move into the project folder.<br>
 `cd honyaku_archive`
 
-* Activate a virtual environment<br>
+3. Create and activate a virtual environment.<br>
 (Example using venv:)<br>
 `python3 -m venv venv`<br>
 `source venv/bin/activate`
 
-* Install the dependencies.<br>
-`pip install -r requirements.txt`
+4. Update pip (package manager).<br>
+`python -m pip install --upgrade pip`
 
-* Create a user.<br>
+5. Install the dependencies.<br>
+`python -m pip install -r requirements.txt`
+
+Environment variables are intentionally separated from the codebase.<br>
+Therefore, in the root directory of the project, create a file called `.env`.<br>
+In the `.env` file, write the following lines (defining the necessary environment variables).<br>
+```
+export DEBUG=True
+export ALLOWED_HOSTS=127.0.0.1
+export DATABASE_URL=sqlite:///db.sqlite3
+export SECRET_KEY=
+```
+For the SECRET_KEY value, after the equals sign and without a space, add a sequence of characters that is:
+- a minimum of 50 characters in length, and
+- contains a minimum of 5 unique characters.
+
+(Or simply use this site to generate one => https://djecrety.ir)
+
+6. Set up the database.<br>
+`python manage.py migrate`
+
+7. Create a user.<br>
 `python manage.py createsuperuser`
 
-* Run the local server.<br>
+8. Run the local server.<br>
 `python manage.py runserver`
 
-* Access "localhost:8000" in your browser.<br>
+9. Access `127.0.0.1:8000` in your browser.<br>
 
-* Log in and start adding glossaries and translations.<br>
+10. Log in using the same user credentials that you just created in step 7, and start adding glossaries and translations.<br>
 
 ### Built using:
 
