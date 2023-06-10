@@ -7,6 +7,38 @@ You can do the following:
 * Upload, create, edit, and delete glossaries (upload format: .txt files).
 * Upload, edit, and delete translations (upload format: .tmx and .docx files).
 
+### Built using:
+
+* Python 3.10
+* Django 4.1.3
+* Bootstrap 5
+
+### Screenshots
+
+Home page:</br></br>
+<img src="screenshots/home.png"></br></br>
+
+Glossary detail page:</br></br>
+<img src="screenshots/glossary-detail.png"></br></br>
+
+Translation detail page:</br></br>
+<img src="screenshots/translation-detail.png"></br></br>
+
+Search results:</br></br>
+<img src="screenshots/search-results.png"></br></br>
+
+Search options:</br></br>
+<img src="screenshots/dropdown.png"></br></br>
+
+Add glossary entry form:</br></br>
+<img src="screenshots/add-entry.png"></br></br>
+
+Upload glossary form:</br></br>
+<img src="screenshots/glossary-upload.png"></br></br>
+
+Upload translation form:</br></br>
+<img src="screenshots/translation-upload.png"></br></br>
+
 ## To download and run
 
 1. Clone this repo into a location of your choosing.<br>
@@ -53,35 +85,3 @@ For the SECRET_KEY value, after the equals sign and without a space, add a seque
 9. Access `127.0.0.1:8000` in your browser.<br>
 
 10. Log in using the same user credentials that you just created in step 7, and start adding glossaries and translations.<br>
-
-### Built using:
-
-* Python 3.10
-* Django 4.1.3
-* Bootstrap 5
-
-### Screenshots
-
-Home page:</br></br>
-<img src="screenshots/home.png"></br>
-
-Glossary detail page:</br></br>
-<img src="screenshots/glossary-detail.png"></br>
-
-Translation detail page:</br></br>
-<img src="screenshots/translation-detail.png"></br>
-
-Search results:</br></br>
-<img src="screenshots/search-results.png"></br>
-
-Search options:</br></br>
-<img src="screenshots/dropdown.png"></br>
-
-Add glossary entry form:</br></br>
-<img src="screenshots/add-entry.png"></br>
-
-Upload glossary form:</br></br>
-<img src="screenshots/glossary-upload.png"></br>
-
-Upload translation form:</br></br>
-<img src="screenshots/translation-upload.png"></br>
