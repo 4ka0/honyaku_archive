@@ -8,17 +8,15 @@
             メニュー
         </a>
 
+        <!-- Navbar dropdown menu -->
+
         <ul class="dropdown-menu">
 
             <li><a class="dropdown-item" href="{% url 'entry_create' %}?previous_url={{ request.get_full_path|urlencode }}">用語集エントリーを追加する</a></li>
             <li><a class="dropdown-item" href="{% url 'glossary_create' %}?previous_url={{ request.get_full_path|urlencode }}">用語集を作成する</a></li>
             <li><a class="dropdown-item" href="{% url 'glossary_upload' %}?previous_url={{ request.get_full_path|urlencode }}">用語集をアップロードする</a></li>
             <li><a class="dropdown-item" href="{% url 'translation_upload' %}?previous_url={{ request.get_full_path|urlencode }}">翻訳をアップロードする</a></li>
-            <!--
-            {% comment %}
-            <li><a class="dropdown-item" href="{% url 'glossary_export' %}?previous_url={{ request.get_full_path|urlencode }}">用語集をエクスポートする</a></li>
-            {% endcomment %}
-            -->
+
             <li><hr class="dropdown-divider"></li>
 
             <li>
@@ -35,6 +33,7 @@
         <form action="{% url 'search_results' %}" method="get" class="d-flex search-form" >
 
             <!-- Search bar -->
+
             <input name="query"
                    type="search"
                    id="search-input-field"
@@ -44,16 +43,19 @@
                    {% if autofocus_searchbar %}autofocus{% endif %}
                    />
 
-            <!-- Resources dropdown list -->
+            <!-- Resources dropdown select list -->
+
             <div class="input-group glossary-dropdown me-3">
                 <select name="resource" id="inputGroupSelect" class="form-select">
 
                     <!-- Main selections -->
+
                     <option selected>すべてのリソース</option>
                     <option>すべての用語集</option>
                     <option>すべての翻訳</option>
 
                     <!-- Individual glossaries -->
+
                     <optgroup label="用語集">
                         {% for glossary in glossaries %}
                             <option value="{{ glossary }}">{{ glossary }}</option>
@@ -61,6 +63,7 @@
                     </optgroup>
 
                     <!-- Individual translations -->
+
                     <optgroup label="翻訳">
                         {% for translation in translations %}
                             <option value="{{ translation }}">{{ translation }}</option>
@@ -71,6 +74,7 @@
             </div>
 
             <!-- Search button -->
+            
             <button type="submit" class="btn btn-primary btn-sm search-button me-3 px-3" id="search-button" onclick="showSearchSpinner();">
                 検索
             </button>
