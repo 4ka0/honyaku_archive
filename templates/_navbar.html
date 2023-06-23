@@ -32,16 +32,28 @@
 
         <form action="{% url 'search_results' %}" method="get" class="d-flex search-form" >
 
-            <!-- Search bar -->
+            <!-- Search bar
+                 The previous query is entered in search field if available.
+                 Autofocus is set to the search bar if applicable.
+            -->
 
             <input name="query"
                    type="search"
                    id="search-input-field"
                    placeholder="検索クエリーを入力してください"
                    class="form-control search-bar me-3"
+                   {% if query %} value="{{ query }}" {% endif %}
+                   {% if autofocus_searchbar %} autofocus {% endif %}
                    required
-                   {% if autofocus_searchbar %}autofocus{% endif %}
-                   />
+            />
+
+            <!-- Select previous query text in the search input field if available. -->
+
+            {% if query %}
+                <script>
+                    selectSearchInputText();
+                </script>
+            {% endif %}
 
             <!-- Resources dropdown select list -->
 
@@ -74,7 +86,7 @@
             </div>
 
             <!-- Search button -->
-            
+
             <button type="submit" class="btn btn-primary btn-sm search-button me-3 px-3" id="search-button" onclick="showSearchSpinner();">
                 検索
             </button>

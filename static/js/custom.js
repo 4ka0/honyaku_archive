@@ -21,3 +21,9 @@ function copyText(text) {
     navigator.clipboard.writeText(text);
     document.getElementById("search-input-field").focus();
 }
+
+// Function to select text in the navbar search field.
+
+function selectSearchInputText() {
+    document.getElementById("search-input-field").select();
+  }
