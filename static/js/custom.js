@@ -26,4 +26,4 @@ function copyText(text) {
 
 function selectSearchInputText() {
     document.getElementById("search-input-field").select();
-  }
+}
