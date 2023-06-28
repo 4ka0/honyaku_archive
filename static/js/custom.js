@@ -3,14 +3,14 @@
 // upload forms.
 
 function showUploadSpinner() {
-    const btn = document.getElementById('upload-button');
+    var btn = document.getElementById('upload-button');
     btn.innerHTML =
         '<span class="spinner-border spinner-border-sm"></span>&nbspアップロード中';
     btn.classList.add('disabled');
 }
 
 function showSearchSpinner() {
-    const btn = document.getElementById('search-button');
+    var btn = document.getElementById('search-button');
     btn.innerHTML =
         '&nbsp<span class="spinner-border spinner-border-sm"></span>&nbsp';
 }
