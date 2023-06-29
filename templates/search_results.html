@@ -10,17 +10,7 @@
         {% if object_list %}  <!-- Results found -->
 
             <div class="search-hits">
-
-                {% if target_resource == "すべてのリソースを検索する" %}
-
-                    <p>「<strong>{{ query }}</strong>」に該当するエントリーは、すべてのリソースで「<strong>{{ hits }}</strong>」件見つかりました。</p>
-
-                {% else %}
-
-                    <p>「<strong>{{ query }}</strong>」に該当するエントリーは、{{ target_resource }}で「<strong>{{ hits }}</strong>」件見つかりました。</p>
-
-                {% endif %}
-
+                <p>「<strong>{{ query }}</strong>」に該当するエントリーは、{{ target_resource }}で「<strong>{{ hits }}</strong>」件見つかりました。</p>
             </div>
 
             <!-- Results table -->
@@ -120,17 +110,7 @@
         {% else %}  <!-- No results found -->
 
             <div class="search-hits">
-
-                {% if target_resource == "すべてのリソースを検索する" %}
-
-                    <p>すべてのリソースで「<strong>{{ query }}</strong>」に該当する件は見つかりませんでした。</p>
-
-                {% else %}
-
-                    <p>{{ target_resource }}で「<strong>{{ query }}</strong>」に該当する件は見つかりませんでした。</p>
-
-                {% endif %}
-
+                <p>「<strong>{{ query }}</strong>」に該当するエントリーは、{{ target_resource }}で見つかりませんでした。</p>
             </div>
 
         {% endif %}
