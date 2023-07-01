@@ -39,9 +39,13 @@
                                     {{ item.source|highlight_query:query }}
 
                                     <!-- Link to copy source text to clipboard -->
-                                    &nbsp
-                                    <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.source }}');">
+                                    <a href="#" class="table-cell-icon ps-2" id="copy-link" onclick="copyText('{{ item.source }}');">
                                         {% include "_table_copy_icon.html" %}
+                                    </a>
+
+                                    <!-- Link to perform search for this item -->
+                                    <a href="#" class="table-cell-icon ps-1">
+                                        {% include "_table_search_icon.html" %}
                                     </a>
 
                                 {% else %}
@@ -57,9 +61,13 @@
                                     {{ item.target|highlight_query:query }}
 
                                     <!-- Link to copy target text to clipboard -->
-                                    &nbsp
-                                    <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.target }}');">
+                                    <a href="#" class="table-cell-icon ps-2" id="copy-link" onclick="copyText('{{ item.target }}');">
                                         {% include "_table_copy_icon.html" %}
+                                    </a>
+
+                                    <!-- Link to perform search for this item -->
+                                    <a href="#" class="table-cell-icon ps-1">
+                                        {% include "_table_search_icon.html" %}
                                     </a>
 
                                     <!-- Include notes if present -->
