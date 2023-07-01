@@ -1,7 +1,6 @@
 // Functions to show spinners in the search and upload buttons upon being
 // clicked. Used in the navbar search form and the glossary and translation
 // upload forms.
-
 function showUploadSpinner() {
     var btn = document.getElementById('upload-button');
     btn.innerHTML =
@@ -16,14 +15,18 @@ function showSearchSpinner() {
 }
 
 // Function to copy text to the clipboard.
-
 function copyText(text) {
     navigator.clipboard.writeText(text);
-    // document.getElementById("search-input-field").focus();
 }
 
-// Function to select text in the navbar search field.
+// Function to insert table cell text into the search field in the navbar.
+function searchText(text) {
+    var searchField = document.getElementById("search-input-field");
+    searchField.value = text
+    searchField.select()
+}
 
+// Function to select text in the search field in the navbar.
 function selectSearchInputText() {
     document.getElementById("search-input-field").select();
 }

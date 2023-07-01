@@ -44,7 +44,7 @@
                                     </a>
 
                                     <!-- Link to perform search for this item -->
-                                    <a href="#" class="table-cell-icon ps-1">
+                                    <a href="#" class="table-cell-icon ps-1" id="search-link" onclick="searchText('{{ item.source }}');">
                                         {% include "_table_search_icon.html" %}
                                     </a>
 
@@ -66,7 +66,7 @@
                                     </a>
 
                                     <!-- Link to perform search for this item -->
-                                    <a href="#" class="table-cell-icon ps-1">
+                                    <a href="#" class="table-cell-icon ps-1" id="search-link" onclick="searchText('{{ item.target }}');">
                                         {% include "_table_search_icon.html" %}
                                     </a>
 
