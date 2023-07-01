@@ -11,11 +11,14 @@ from ..models import (
 
 
 class HomePageView(LoginRequiredMixin, TemplateView):
+
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
-        """ Create list of all resources ordered by creation date.
-            Also get the quantity of each type of resource. """
+        """
+        Create list of all resources ordered by creation date.
+        Also get the quantity of each type of resource.
+        """
 
         # Could remove the following and just use the list of resources
         # provided by the context processor. However, the order is different.
@@ -51,13 +54,18 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class SearchResultsView(LoginRequiredMixin, ListView):
+class SearchView(LoginRequiredMixin, ListView):
+    """
+    View to search glossary and translation resources for entries containing
+    a query string.
+    """
+
     template_name = "search_results.html"
 
     def get_queryset(self):
-        """ Overridden to find Entry and Segment objects containing query.
-            Entry and Segment objects Querysets are ordered by length of the
-            source string and then joined together as a single list. """
+        """
+        Overridden to find Entry and Segment objects containing the query.
+        """
 
         query = self.request.GET.get("query").strip()
         resource = self.request.GET.get("resource")
@@ -99,18 +107,20 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        """ Overridden mainly to provide data used for the results message.
-            Also returns an autofocus variable to set focus on the search bar
-            to be ready for the next query. """
+        """
+        Overridden to provide data used for the results message.
+        """
 
-        context = super(SearchResultsView, self).get_context_data(**kwargs)
+        context = super(SearchView, self).get_context_data(**kwargs)
+
         query = self.request.GET.get("query").strip()
         target_resource = self.request.GET.get("resource")
+
         hits = len(self.get_queryset())
         context.update({
+            "query": query,
             "target_resource": target_resource,
             "hits": hits,
-            "query": query,
         })
 
         return context
