@@ -60,25 +60,57 @@
             <div class="input-group glossary-dropdown me-3">
                 <select name="resource" id="inputGroupSelect" class="form-select">
 
-                    <!-- Main selections -->
+                    <!-- Main options -->
 
-                    <option>すべてのリソース</option>
-                    <option>すべての用語集</option>
-                    <option>すべての翻訳</option>
+                    <!-- The previously searched resource is preselected.
+                         To do this, options are compared with target_resource variable.
+                         target_resource is the target resource of the previous query.
+                         If these match, the option is marked as selected.  -->
 
-                    <!-- Individual glossaries -->
+                    {% if target_resource == "すべてのリソース" %}
+                        <option selected>すべてのリソース</option>
+                    {% else %}
+                        <option>すべてのリソース</option>
+                    {% endif %}
+
+                    {% if target_resource == "すべての用語集" %}
+                        <option selected>すべての用語集</option>
+                    {% else %}
+                        <option>すべての用語集</option>
+                    {% endif %}
+
+                    {% if target_resource == "すべての翻訳" %}
+                        <option selected>すべての翻訳</option>
+                    {% else %}
+                        <option>すべての翻訳</option>
+                    {% endif %}
+
+                    <!-- Individual glossaries as options -->
+
+                    <!-- Similar to the above, if an individual glossary matches target_resource,
+                         it is marked as selected. To do this, have to compare the string representation
+                         of both variables. For this, stringformat:'s' is used. This formats the
+                         variable according to the argument 's', which specifies conversion using str(). -->
 
                     <optgroup label="用語集">
                         {% for glossary in glossaries %}
-                            <option value="{{ glossary }}">{{ glossary }}</option>
+                            {% if glossary|stringformat:'s' == target_resource|stringformat:'s' %}
+                                <option value="{{ glossary }}" selected>{{ glossary }}</option>
+                            {% else %}
+                                <option value="{{ glossary }}">{{ glossary }}</option>
+                            {% endif %}
                         {% endfor %}
                     </optgroup>
 
-                    <!-- Individual translations -->
+                    <!-- Individual translations as options -->
 
                     <optgroup label="翻訳">
                         {% for translation in translations %}
-                            <option value="{{ translation }}">{{ translation }}</option>
+                            {% if translation|stringformat:'s' == target_resource|stringformat:'s' %}
+                                <option value="{{ translation }}" selected>{{ translation }}</option>
+                            {% else %}
+                                <option value="{{ translation }}">{{ translation }}</option>
+                            {% endif %}
                         {% endfor %}
                     </optgroup>
 
