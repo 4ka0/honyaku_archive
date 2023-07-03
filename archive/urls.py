@@ -33,22 +33,19 @@ urlpatterns = [
 
     path("search/", SearchView.as_view(), name="search"),
 
+    path("glossary/new/", GlossaryCreateView.as_view(), name="glossary_create"),
+    path("glossary/upload/", GlossaryUploadView.as_view(), name="glossary_upload"),
+    path("glossary/<int:pk>/", GlossaryDetailView.as_view(), name="glossary_detail"),
+    path("glossary/<int:pk>/edit/", GlossaryUpdateView.as_view(), name="glossary_update"),
+    path("glossary/<int:pk>/delete/", GlossaryDeleteView.as_view(), name="glossary_delete"),
+    path("glossary/<int:pk>/all/", GlossaryAllEntryView.as_view(), name="glossary_all_entries"),
+    path("glossary/<int:glossary>/add/", GlossaryAddEntryView.as_view(), name="glossary_add_entry"),
+    # path("glossary/export/", GlossaryExportView.as_view(), name="glossary_export"),
+
     path("entry/new/", EntryCreateView.as_view(), name="entry_create"),
     path("entry/<int:pk>/", EntryDetailView.as_view(), name="entry_detail"),
     path("entry/<int:pk>/edit/", EntryUpdateView.as_view(), name="entry_update"),
     path("entry/<int:pk>/delete/", EntryDeleteView.as_view(), name="entry_delete"),
-
-    path("glossary/new/", GlossaryCreateView.as_view(), name="glossary_create"),
-    path("glossary/upload/", GlossaryUploadView.as_view(), name="glossary_upload"),
-    path("glossary/<int:pk>/", GlossaryDetailView.as_view(), name="glossary_detail"),
-    path("glossary/<int:pk>/delete/", GlossaryDeleteView.as_view(), name="glossary_delete"),
-    path("glossary/<int:glossary>/add/", GlossaryAddEntryView.as_view(), name="glossary_add_entry"),
-    path("glossary/<int:pk>/all/", GlossaryAllEntryView.as_view(), name="glossary_all_entries"),
-    path("glossary/<int:pk>/edit/", GlossaryUpdateView.as_view(), name="glossary_update"),
-    # path("glossary/export/", GlossaryExportView.as_view(), name="glossary_export"),
-
-    path("segment/<int:pk>/edit/", SegmentUpdateView.as_view(), name="segment_update"),
-    path("segment/<int:pk>/delete/", SegmentDeleteView.as_view(), name="segment_delete"),
 
     path("translation/upload/", TranslationUploadView.as_view(), name="translation_upload"),
     path("translation/<int:pk>/", TranslationDetailView.as_view(), name="translation_detail"),
@@ -58,4 +55,7 @@ urlpatterns = [
         TranslationDeleteView.as_view(),
         name="translation_delete"
     ),
+
+    path("segment/<int:pk>/edit/", SegmentUpdateView.as_view(), name="segment_update"),
+    path("segment/<int:pk>/delete/", SegmentDeleteView.as_view(), name="segment_delete"),
 ]
