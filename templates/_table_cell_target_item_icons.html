@@ -1,0 +1,9 @@
+<!-- Link to copy target text to clipboard -->
+<a href="#" class="table-cell-icon ps-2" id="copy-link" onclick="copyText('{{ item.target }}');">
+    {% include "_table_copy_icon.html" %}
+</a>
+
+<!-- Link to perform search for this item -->
+<a href="#" class="table-cell-icon ps-1" id="search-link" onclick="searchText('{{ item.target }}');">
+    {% include "_table_search_icon.html" %}
+</a>

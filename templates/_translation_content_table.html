@@ -23,14 +23,13 @@
                         <!-- Source text -->
                         {{ item.source }}
 
-                        <!-- Link to copy source text to clipboard -->
-                        &nbsp
-                        <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.source }}');">
-                            {% include "_table_copy_icon.html" %}
-                        </a>
+                        <!-- Copy to clipboard and search icon links -->
+                        {% include "_table_cell_source_item_icons.html" %}
 
                     {% else %}
+
                         <span class="table-muted-text">（原文なし）</span>
+
                     {% endif %}
                 </td>
 
@@ -40,14 +39,13 @@
                         <!-- Target text -->
                         {{ item.target }}
 
-                        <!-- Link to copy target text to clipboard -->
-                        &nbsp
-                        <a href="#" class="clipboard-icon" id="copy-link" onclick="copyText('{{ item.target }}');">
-                            {% include "_table_copy_icon.html" %}
-                        </a>
+                        <!-- Copy to clipboard and search icon links -->
+                        {% include "_table_cell_target_item_icons.html" %}
 
                     {% else %}
+
                         <span class="table-muted-text">（訳文なし）</span>
+                        
                     {% endif %}
                 </td>
 
