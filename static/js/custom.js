@@ -9,9 +9,20 @@ function showUploadSpinner() {
 }
 
 function showSearchSpinner() {
+
+    // Show the spinner within the button when clicked.
     var btn = document.getElementById('search-button');
     btn.innerHTML =
         '&nbsp<span class="spinner-border spinner-border-sm"></span>&nbsp';
+
+    // Reset the content of the button when leaving the page.
+    // Prevents the spinner still being shown when returning to a previous page
+    // by using the browser back button.
+    document.onvisibilitychange = () => {
+        if (document.visibilityState === "hidden") {
+            btn.innerHTML = "検索";
+        }
+    };
 }
 
 // Function to copy text to the clipboard.
