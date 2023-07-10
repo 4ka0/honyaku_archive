@@ -1,6 +1,7 @@
 from itertools import chain
 
 from django.db.models import Q
+from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Length
@@ -54,6 +55,55 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         return context
 
 
+def home_table_sort(request, filter, direction):
+    glossaries = Glossary.objects.all()
+    translations = Translation.objects.all()
+
+    if filter == "title":
+        if direction == "ascend":
+            resources_table_list = sorted(
+                chain(glossaries, translations),
+                key=lambda item: item.title,
+                reverse=False
+            )
+        else:
+            resources_table_list = sorted(
+                chain(glossaries, translations),
+                key=lambda item: item.title,
+                reverse=True
+            )
+
+    elif filter == "type":
+        if direction == "ascend":
+            resources_table_list = sorted(
+                chain(glossaries, translations),
+                key=lambda item: item.type,
+                reverse=False
+            )
+        else:
+            resources_table_list = sorted(
+                chain(glossaries, translations),
+                key=lambda item: item.type,
+                reverse=True
+            )
+
+    else:
+        if direction == "ascend":
+            resources_table_list = sorted(
+                chain(glossaries, translations),
+                key=lambda item: item.created_on,
+                reverse=False
+            )
+        else:
+            resources_table_list = sorted(
+                chain(glossaries, translations),
+                key=lambda item: item.created_on,
+                reverse=True
+            )
+
+    return render(request, '_home_table_list.html', {'resources_table_list': resources_table_list})
+
+
 class SearchView(LoginRequiredMixin, ListView):
     """
     View to search glossary and translation resources for entries containing
@@ -99,7 +149,7 @@ class SearchView(LoginRequiredMixin, ListView):
                 Q(source__icontains=query) | Q(target__icontains=query)
             ).order_by(Length('source'))
             segment_queryset = Segment.objects.filter(
-                Q(translation__job_number=resource),
+                Q(translation__title=resource),
                 Q(source__icontains=query) | Q(target__icontains=query)
             ).order_by(Length('source'))
             queryset = list(chain(entry_queryset, segment_queryset))

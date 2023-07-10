@@ -30,7 +30,7 @@ class SegmentModelTests(TestCase):
         )
         cls.translation_obj = Translation.objects.create(
             translation_file=None,
-            job_number="ABC123",
+            title="ABC123",
             field="Chemical",
             client="ABC Co., Ltd.",
             translator="Lee",
@@ -80,7 +80,7 @@ class SegmentModelTests(TestCase):
     def test_translation_field_when_updated(self):
         new_translation_obj = Translation.objects.create(
             translation_file=None,
-            job_number="DEF123",
+            title="DEF123",
             field="Chemical",
             client="DEF Co., Ltd.",
             translator="Lee",
@@ -91,7 +91,7 @@ class SegmentModelTests(TestCase):
         self.segment_obj.translation = new_translation_obj
         self.segment_obj.save()
         self.assertEqual(self.segment_obj.translation, new_translation_obj)
-        self.assertEqual(self.segment_obj.translation.job_number, "DEF123")
+        self.assertEqual(self.segment_obj.translation.title, "DEF123")
         self.assertNotEqual(self.segment_obj.translation, self.translation_obj)
 
     def test_source_field_when_updated(self):
@@ -111,7 +111,7 @@ class SegmentModelTests(TestCase):
     def test_segment_deleted_when_translation_deleted(self):
         new_translation_obj = Translation.objects.create(
             translation_file=None,
-            job_number="XYZ123",
+            title="XYZ123",
             field="Chemical",
             client="XYZ Co., Ltd.",
             translator="Lee",
@@ -124,10 +124,10 @@ class SegmentModelTests(TestCase):
             source=SOURCE,
             target=TARGET,
         )
-        self.assertEqual(Translation.objects.filter(job_number="XYZ123").count(), 1)
+        self.assertEqual(Translation.objects.filter(title="XYZ123").count(), 1)
         self.assertEqual(Segment.objects.filter(translation=new_translation_obj).count(), 1)
         new_translation_obj.delete()
-        self.assertEqual(Translation.objects.filter(job_number="XYZ123").count(), 0)
+        self.assertEqual(Translation.objects.filter(title="XYZ123").count(), 0)
         self.assertEqual(Segment.objects.filter(translation=new_translation_obj).count(), 0)
 
     def test_translation_field_can_be_null(self):

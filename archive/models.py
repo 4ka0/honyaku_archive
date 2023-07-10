@@ -78,7 +78,7 @@ class Translation(models.Model):
         null=True,
         upload_to="translation_files",
     )
-    job_number = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
     field = models.CharField(max_length=100, blank=True)
     client = models.CharField(max_length=100, blank=True)
     translator = models.CharField(max_length=100, blank=True)
@@ -98,7 +98,7 @@ class Translation(models.Model):
         verbose_name_plural = "translations"
 
     def __str__(self):
-        return self.job_number
+        return self.title
 
     def get_absolute_url(self):
         return reverse("translation_detail", args=[str(self.id)])

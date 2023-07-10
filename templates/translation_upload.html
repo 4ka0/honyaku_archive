@@ -19,7 +19,7 @@
                     {% csrf_token %}
 
                     {{ form.translation_file|as_crispy_field }}
-                    {{ form.job_number|as_crispy_field }}
+                    {{ form.title|as_crispy_field }}
                     {{ form.translator|as_crispy_field }}
                     {{ form.field|as_crispy_field }}
                     {{ form.client|as_crispy_field }}

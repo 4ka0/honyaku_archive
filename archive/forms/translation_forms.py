@@ -6,7 +6,7 @@ from ..models import Translation
 
 
 class TranslationUpdateForm(forms.ModelForm):
-    job_number = forms.CharField(
+    title = forms.CharField(
         label='① 案件番号',
         error_messages={
             "required": "このフィールドは入力必須です。",
@@ -42,7 +42,7 @@ class TranslationUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Translation
-        fields = ("job_number", "translator", "field", "client", "notes")
+        fields = ("title", "translator", "field", "client", "notes")
 
 
 class TranslationUploadForm(forms.ModelForm):
@@ -63,7 +63,7 @@ class TranslationUploadForm(forms.ModelForm):
             )
         ],
     )
-    job_number = forms.CharField(
+    title = forms.CharField(
         label='② 案件番号',
         error_messages={
             "required": "このフィールドは入力必須です。",
@@ -99,12 +99,12 @@ class TranslationUploadForm(forms.ModelForm):
 
     class Meta:
         model = Translation
-        fields = ('translation_file', 'job_number', 'translator', 'field', 'client', 'notes')
+        fields = ('translation_file', 'title', 'translator', 'field', 'client', 'notes')
 
-    def clean_job_number(self):
-        job_number = self.cleaned_data['job_number']
-        if job_number:
-            if Translation.objects.filter(job_number__iexact=job_number).exists():
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if title:
+            if Translation.objects.filter(title__iexact=title).exists():
                 msg = 'その案件番号の翻訳はすでに存在しています。'
-                self.add_error('job_number', msg)
-        return job_number
+                self.add_error('title', msg)
+        return title

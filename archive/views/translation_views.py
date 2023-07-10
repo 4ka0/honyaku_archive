@@ -62,7 +62,7 @@ class TranslationUploadView(LoginRequiredMixin, View):
         if form.is_valid():
             translation_obj = Translation(
                 translation_file=form.cleaned_data["translation_file"],
-                job_number=form.cleaned_data["job_number"],
+                title=form.cleaned_data["title"],
                 translator=form.cleaned_data["translator"],
                 field=form.cleaned_data["field"],
                 client=form.cleaned_data["client"],

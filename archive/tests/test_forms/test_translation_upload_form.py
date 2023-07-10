@@ -23,7 +23,7 @@ class TestTranslationUploadForm(TestCase):
 
         # Translation object
         cls.translation_obj = Translation.objects.create(
-            job_number="ABC123",
+            title="ABC123",
             field="化学",
             client="ABC社",
             translator="田中",
@@ -37,7 +37,7 @@ class TestTranslationUploadForm(TestCase):
 
         # Valid form with data
         form_data = {
-            "job_number": "DEF456",
+            "title": "DEF456",
             "field": "電気",
             "client": "DEF社",
             "translator": "Smith",
@@ -58,7 +58,7 @@ class TestTranslationUploadForm(TestCase):
 
         # Invalid form 2 (no job number)
         form_data = {
-            "job_number": "",
+            "title": "",
             "field": "電気",
             "client": "DEF社",
             "translator": "Smith",
@@ -72,7 +72,7 @@ class TestTranslationUploadForm(TestCase):
                      "Text exceeding 100 chars Text exceeding 100 chars"
                      "Text exceeding 100 chars Text exceeding 100 chars")
         form_data = {
-            "job_number": "123456",
+            "title": "123456",
             "field": long_text,
             "client": long_text,
             "translator": long_text,
@@ -121,20 +121,20 @@ class TestTranslationUploadForm(TestCase):
             ['拡張子が 「.docx」又は「.tmx」のファイルをお選びください。']
         )
 
-    # job_number field
+    # title field
 
-    def test_job_number_field_label(self):
-        self.assertEqual(self.empty_form.fields['job_number'].label, '② 案件番号')
+    def test_title_field_label(self):
+        self.assertEqual(self.empty_form.fields['title'].label, '② 案件番号')
 
-    def test_job_number_field_widget(self):
-        self.assertIsInstance(self.empty_form.fields['job_number'].widget, TextInput)
+    def test_title_field_widget(self):
+        self.assertIsInstance(self.empty_form.fields['title'].widget, TextInput)
 
-    def test_job_number_field_required(self):
-        self.assertTrue(self.empty_form.fields['job_number'].required)
+    def test_title_field_required(self):
+        self.assertTrue(self.empty_form.fields['title'].required)
 
-    def test_job_number_field_max_length_error_message(self):
+    def test_title_field_max_length_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['job_number'].error_messages['max_length'],
+            self.empty_form.fields['title'].error_messages['max_length'],
             '100文字以下になるように変更してください。',
         )
 
@@ -209,7 +209,7 @@ class TestTranslationUploadForm(TestCase):
     def test_meta_fields(self):
         self.assertEqual(
             self.empty_form._meta.fields,
-            ('translation_file', 'job_number', 'translator', 'field', 'client', 'notes'),
+            ('translation_file', 'title', 'translator', 'field', 'client', 'notes'),
         )
 
     # Test valid form
@@ -219,7 +219,7 @@ class TestTranslationUploadForm(TestCase):
         self.assertTrue(self.valid_form.is_valid())
         self.assertEqual(self.valid_form.errors, {})
         self.assertEqual(self.valid_form.errors.as_text(), "")
-        self.assertEqual(self.valid_form.cleaned_data["job_number"], "DEF456")
+        self.assertEqual(self.valid_form.cleaned_data["title"], "DEF456")
         self.assertEqual(self.valid_form.cleaned_data["field"], "電気")
         self.assertEqual(self.valid_form.cleaned_data["client"], "DEF社")
         self.assertEqual(self.valid_form.cleaned_data["translator"], "Smith")
@@ -233,9 +233,9 @@ class TestTranslationUploadForm(TestCase):
 
     # Test invalid form 2 (no job number)
 
-    def test_form_with_invalid_input_no_job_number(self):
+    def test_form_with_invalid_input_no_title(self):
         self.assertFalse(self.invalid_form_2.is_valid())
-        self.assertEqual(self.invalid_form_2.errors, {'job_number': ['このフィールドは入力必須です。']})
+        self.assertEqual(self.invalid_form_2.errors, {'title': ['このフィールドは入力必須です。']})
 
     # Test invalid form 3 (input too long)
 

@@ -1,6 +1,10 @@
 from django.urls import path
 
-from .views.main_views import HomePageView, SearchView
+from .views.main_views import (
+    HomePageView,
+    home_table_sort,
+    SearchView,
+)
 
 from .views.entry_views import (
     EntryCreateView,
@@ -30,6 +34,7 @@ from .views.translation_views import (
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
+    path("home_table_sort/<filter>/<direction>/", home_table_sort, name="home_table_sort"),
 
     path("search/", SearchView.as_view(), name="search"),
 

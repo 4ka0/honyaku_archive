@@ -37,7 +37,7 @@ class GlossaryAdmin(admin.ModelAdmin):
 
 class TranslationAdmin(admin.ModelAdmin):
     fields = (
-        "job_number",
+        "title",
         "field",
         "client",
         "translator",
@@ -45,7 +45,7 @@ class TranslationAdmin(admin.ModelAdmin):
         "type",
     )
     list_display = (
-        'job_number',
+        'title',
         'field',
         'client',
         "translator",

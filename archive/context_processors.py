@@ -10,7 +10,7 @@ def resources_processor(request):
     in the search form included in the navigation bar on each page.
     """
     glossaries = Glossary.objects.all().order_by(Lower("title"))
-    translations = Translation.objects.all().order_by(Lower("job_number"))
+    translations = Translation.objects.all().order_by(Lower("title"))
     resources = list(chain(glossaries, translations))
     data = {
         "glossaries": glossaries,

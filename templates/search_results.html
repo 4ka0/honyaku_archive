@@ -74,7 +74,7 @@
                                 {% if item.glossary %}
                                     <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
                                 {% elif item.translation %}
-                                    <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.job_number }}</a>
+                                    <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.title }}</a>
                                 {% endif %}
                             </td>
 

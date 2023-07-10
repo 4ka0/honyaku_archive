@@ -12,7 +12,7 @@ class TestTranslationUpdateForm(TestCase):
         cls.empty_form = TranslationUpdateForm()
         cls.valid_form = TranslationUpdateForm(
             {
-                "job_number": "ABC-0123456",
+                "title": "ABC-0123456",
                 "field": "化学",
                 "client": "ABC社",
                 "translator": "Test Translator",
@@ -21,7 +21,7 @@ class TestTranslationUpdateForm(TestCase):
         )
         cls.invalid_form_1 = TranslationUpdateForm(
             {
-                "job_number": "",
+                "title": "",
                 "field": "化学",
                 "client": "ABC社",
                 "translator": "Test Translator",
@@ -33,7 +33,7 @@ class TestTranslationUpdateForm(TestCase):
                      "Text exceeding 100 chars Text exceeding 100 chars")
         cls.invalid_form_2 = TranslationUpdateForm(
             {
-                "job_number": long_text,
+                "title": long_text,
                 "field": long_text,
                 "client": long_text,
                 "translator": long_text,
@@ -43,21 +43,21 @@ class TestTranslationUpdateForm(TestCase):
 
     # Test fields
 
-    def test_job_number_label(self):
-        self.assertEqual(self.empty_form.fields['job_number'].label, '① 案件番号')
+    def test_title_label(self):
+        self.assertEqual(self.empty_form.fields['title'].label, '① 案件番号')
 
-    def test_job_number_required(self):
-        self.assertTrue(self.empty_form.fields["job_number"].required)
+    def test_title_required(self):
+        self.assertTrue(self.empty_form.fields["title"].required)
 
-    def test_job_number_required_error_message(self):
+    def test_title_required_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['job_number'].error_messages['required'],
+            self.empty_form.fields['title'].error_messages['required'],
             'このフィールドは入力必須です。'
         )
 
-    def test_job_number_max_length_error_message(self):
+    def test_title_max_length_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['job_number'].error_messages['max_length'],
+            self.empty_form.fields['title'].error_messages['max_length'],
             '100文字以下になるように変更してください。'
         )
 
@@ -115,7 +115,7 @@ class TestTranslationUpdateForm(TestCase):
     def test_meta_fields(self):
         self.assertEqual(
             self.empty_form._meta.fields,
-            ("job_number", "translator", "field", "client", "notes"),
+            ("title", "translator", "field", "client", "notes"),
         )
 
     # Test form with input
@@ -125,7 +125,7 @@ class TestTranslationUpdateForm(TestCase):
         self.assertTrue(self.valid_form.is_valid())
         self.assertEqual(self.valid_form.errors, {})
         self.assertEqual(self.valid_form.errors.as_text(), "")
-        self.assertEqual(self.valid_form.cleaned_data["job_number"], "ABC-0123456")
+        self.assertEqual(self.valid_form.cleaned_data["title"], "ABC-0123456")
         self.assertEqual(self.valid_form.cleaned_data["field"], "化学")
         self.assertEqual(self.valid_form.cleaned_data["client"], "ABC社")
         self.assertEqual(self.valid_form.cleaned_data["translator"], "Test Translator")
@@ -137,16 +137,16 @@ class TestTranslationUpdateForm(TestCase):
         with self.assertRaises(AttributeError):
             self.empty_form.cleaned_data
 
-    def test_form_with_invalid_input_blank_job_number(self):
+    def test_form_with_invalid_input_blank_title(self):
         self.assertFalse(self.invalid_form_1.is_valid())
         self.assertNotEqual(self.invalid_form_1.errors, {})
-        self.assertEqual(self.invalid_form_1.errors["job_number"], ["このフィールドは入力必須です。"])
+        self.assertEqual(self.invalid_form_1.errors["title"], ["このフィールドは入力必須です。"])
 
-    def test_form_with_invalid_input_job_number_too_long(self):
+    def test_form_with_invalid_input_title_too_long(self):
         self.assertFalse(self.invalid_form_2.is_valid())
         self.assertNotEqual(self.invalid_form_2.errors, {})
         self.assertEqual(
-            self.invalid_form_2.errors["job_number"],
+            self.invalid_form_2.errors["title"],
             ["100文字以下になるように変更してください。"]
         )
 

@@ -19,7 +19,7 @@ class TranslationModelTests(TestCase):
         )
         cls.translation_obj = Translation.objects.create(
             translation_file=None,
-            job_number="ABC123",
+            title="ABC123",
             field="Chemical",
             client="ABC Co., Ltd.",
             translator="Lee",
@@ -36,10 +36,10 @@ class TranslationModelTests(TestCase):
         self.assertNotEqual(field_label, "translation_file")
         self.assertNotEqual(field_label, "")
 
-    def test_job_number_label(self):
-        field_label = self.translation_obj._meta.get_field("job_number").verbose_name
+    def test_title_label(self):
+        field_label = self.translation_obj._meta.get_field("title").verbose_name
         self.assertEqual(field_label, "job number")
-        self.assertNotEqual(field_label, "job_number")
+        self.assertNotEqual(field_label, "title")
         self.assertNotEqual(field_label, "")
 
     def test_field_label(self):
@@ -84,9 +84,9 @@ class TranslationModelTests(TestCase):
     def test_translation_file_field_when_created(self):
         self.assertEqual(self.translation_obj.translation_file, None)
 
-    def test_job_number_field_when_created(self):
-        self.assertEqual(self.translation_obj.job_number, "ABC123")
-        self.assertNotEqual(self.translation_obj.job_number, "")
+    def test_title_field_when_created(self):
+        self.assertEqual(self.translation_obj.title, "ABC123")
+        self.assertNotEqual(self.translation_obj.title, "")
 
     def test_field_field_when_created(self):
         self.assertEqual(self.translation_obj.field, "Chemical")
@@ -117,11 +117,11 @@ class TranslationModelTests(TestCase):
 
     # Check field values are correct when updated
 
-    def test_job_number_field_when_updated(self):
-        self.translation_obj.job_number = "ZZZ369"
+    def test_title_field_when_updated(self):
+        self.translation_obj.title = "ZZZ369"
         self.translation_obj.save()
-        self.assertEqual(self.translation_obj.job_number, "ZZZ369")
-        self.assertNotEqual(self.translation_obj.job_number, "ABC123")
+        self.assertEqual(self.translation_obj.title, "ZZZ369")
+        self.assertNotEqual(self.translation_obj.title, "ABC123")
 
     def test_field_field_when_updated(self):
         self.translation_obj.field = "Mechanical"
@@ -160,8 +160,8 @@ class TranslationModelTests(TestCase):
         self.assertEqual(null_bool, True)
         self.assertNotEqual(null_bool, False)
 
-    def test_job_number_max_length(self):
-        max_length = self.translation_obj._meta.get_field("job_number").max_length
+    def test_title_max_length(self):
+        max_length = self.translation_obj._meta.get_field("title").max_length
         self.assertEqual(max_length, 100)
 
     def test_field_max_length(self):
@@ -193,7 +193,7 @@ class TranslationModelTests(TestCase):
     def test_created_by_related_name(self):
         user_created_translations = self.testuser.created_translations.all()
         self.assertEqual(len(user_created_translations), 1)
-        self.assertEqual(user_created_translations[0].job_number, "ABC123")
+        self.assertEqual(user_created_translations[0].title, "ABC123")
         self.assertEqual(user_created_translations[0].client, "ABC Co., Ltd.")
 
     def test_created_by_foreign_key_set_to_null_when_user_is_deleted(self):
@@ -205,7 +205,7 @@ class TranslationModelTests(TestCase):
         )
         new_translation_obj = Translation.objects.create(
             translation_file=None,
-            job_number="ABC123",
+            title="ABC123",
             field="Chemical",
             client="ABC Co., Ltd.",
             translator="Lee",
