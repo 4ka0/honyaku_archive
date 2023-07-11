@@ -64,13 +64,13 @@ def home_table_sort(request, filter, direction):
             resources_table_list = sorted(
                 chain(glossaries, translations),
                 key=lambda item: item.title,
-                reverse=False
+                reverse=True
             )
         else:
             resources_table_list = sorted(
                 chain(glossaries, translations),
                 key=lambda item: item.title,
-                reverse=True
+                reverse=False
             )
 
     elif filter == "type":

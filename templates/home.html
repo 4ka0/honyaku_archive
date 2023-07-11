@@ -29,16 +29,16 @@
                         <!-- Arrow links for sorting -->
                         <a href=""
                            class="ps-2"
-                           hx-get="{% url 'home_table_sort' filter='title' direction='ascend' %}"
-                           hx-target="#resource-list"
-                           hx-swap="innerHTML" >
-                            {% include "_home_table_arrow_up.html" %}
-                        </a>
-                        <a href=""
                            hx-get="{% url 'home_table_sort' filter='title' direction='descend' %}"
                            hx-target="#resource-list"
                            hx-swap="innerHTML" >
                             {% include "_home_table_arrow_down.html" %}
+                        </a>
+                        <a href=""
+                           hx-get="{% url 'home_table_sort' filter='title' direction='ascend' %}"
+                           hx-target="#resource-list"
+                           hx-swap="innerHTML" >
+                            {% include "_home_table_arrow_up.html" %}
                         </a>
                     </th>
 
