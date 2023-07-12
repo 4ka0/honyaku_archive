@@ -28,13 +28,14 @@
                         リソース名
                         <!-- Arrow links for sorting -->
                         <a href=""
-                           class="ps-2"
+                           class="ps-2 table-gray-icon"
                            hx-get="{% url 'home_table_sort' filter='title' direction='descend' %}"
                            hx-target="#resource-list"
                            hx-swap="innerHTML" >
                             {% include "_home_table_arrow_down.html" %}
                         </a>
                         <a href=""
+                           class="table-gray-icon"
                            hx-get="{% url 'home_table_sort' filter='title' direction='ascend' %}"
                            hx-target="#resource-list"
                            hx-swap="innerHTML" >

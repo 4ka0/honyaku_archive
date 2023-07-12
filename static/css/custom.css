@@ -95,25 +95,20 @@ tr {
     text-align: center;
 }
 
-.table-icons {
-    text-decoration: none;
-}
-
-.table-icons:hover {
-    color: #e76f51;
-    text-decoration: none;
-}
-
 .table-muted-text {
     color: #909090;
 }
 
-.table-cell-icon {
+.table-blue-icon {
     text-decoration: none;
-    color: #909090;
 }
 
-.table-cell-icon:hover {
+.table-gray-icon {
+    color: #909090;
+    text-decoration: none;
+}
+
+.table-blue-icon:hover, .table-gray-icon:hover {
     color: #e76f51;
     text-decoration: none;
 }

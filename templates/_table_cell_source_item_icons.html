@@ -1,13 +1,13 @@
 <!-- Link to copy source text to clipboard.
      "#0" is used for the href to avoid automatic navigation (scrolling) to
      the top of the page after the link is clicked. -->
-<a href="#0" class="table-cell-icon ps-2" id="copy-link" onclick="copyText('{{ item.source }}');">
+<a href="#0" class="table-gray-icon ps-2" id="copy-link" onclick="copyText('{{ item.source }}');">
     {% include "_table_copy_icon.html" %}
 </a>
 
 <!-- Link to perform search for this item.
      "#" is used for the href to allow automatic navigation (scrolling) to
      the top after the link is clicked. -->
-<a href="#" class="table-cell-icon ps-1" id="search-link" onclick="searchText('{{ item.source }}');">
+<a href="#" class="table-gray-icon ps-1" id="search-link" onclick="searchText('{{ item.source }}');">
     {% include "_table_search_icon.html" %}
 </a>
