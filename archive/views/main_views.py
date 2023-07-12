@@ -58,48 +58,19 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 def home_table_sort(request, filter, direction):
     glossaries = Glossary.objects.all()
     translations = Translation.objects.all()
+    resources = chain(glossaries, translations)
+
+    if direction == "ascend":
+        direction = True
+    else:
+        direction = False
 
     if filter == "title":
-        if direction == "ascend":
-            resources_table_list = sorted(
-                chain(glossaries, translations),
-                key=lambda item: item.title,
-                reverse=True
-            )
-        else:
-            resources_table_list = sorted(
-                chain(glossaries, translations),
-                key=lambda item: item.title,
-                reverse=False
-            )
-
+        resources_table_list = sorted(resources, key=lambda item: item.title, reverse=direction)
     elif filter == "type":
-        if direction == "ascend":
-            resources_table_list = sorted(
-                chain(glossaries, translations),
-                key=lambda item: item.type,
-                reverse=False
-            )
-        else:
-            resources_table_list = sorted(
-                chain(glossaries, translations),
-                key=lambda item: item.type,
-                reverse=True
-            )
-
+        resources_table_list = sorted(resources, key=lambda item: item.type, reverse=direction)
     else:
-        if direction == "ascend":
-            resources_table_list = sorted(
-                chain(glossaries, translations),
-                key=lambda item: item.created_on,
-                reverse=False
-            )
-        else:
-            resources_table_list = sorted(
-                chain(glossaries, translations),
-                key=lambda item: item.created_on,
-                reverse=True
-            )
+        resources_table_list = sorted(resources, key=lambda item: item.created_on, reverse=direction)
 
     return render(request, '_home_table_list.html', {'resources_table_list': resources_table_list})
 
