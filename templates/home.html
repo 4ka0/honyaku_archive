@@ -24,30 +24,64 @@
                     <!-- Table column headings -->
 
                     <!-- Resource title column -->
-                    <th scope="col" style="width: 60%">
+                    <th scope="col" style="width: 55%">
                         リソース名
                         <!-- Arrow links for sorting -->
                         <a href=""
                            class="ps-2 table-gray-icon"
-                           hx-get="{% url 'home_table_sort' filter='title' direction='descend' %}"
-                           hx-target="#resource-list"
-                           hx-swap="innerHTML" >
-                            {% include "_home_table_arrow_down.html" %}
-                        </a>
-                        <a href=""
-                           class="table-gray-icon"
                            hx-get="{% url 'home_table_sort' filter='title' direction='ascend' %}"
                            hx-target="#resource-list"
                            hx-swap="innerHTML" >
                             {% include "_home_table_arrow_up.html" %}
                         </a>
+                        <a href=""
+                           class="table-gray-icon"
+                           hx-get="{% url 'home_table_sort' filter='title' direction='descend' %}"
+                           hx-target="#resource-list"
+                           hx-swap="innerHTML" >
+                            {% include "_home_table_arrow_down.html" %}
+                        </a>
                     </th>
 
                     <!-- Resource type column -->
-                    <th scope="col" style="width: 15%">種類</th>
+                    <th scope="col" style="width: 25%">
+                        種類
+                        <!-- Arrow links for sorting -->
+                        <a href=""
+                           class="ps-2 table-gray-icon"
+                           hx-get="{% url 'home_table_sort' filter='type' direction='ascend' %}"
+                           hx-target="#resource-list"
+                           hx-swap="innerHTML" >
+                            {% include "_home_table_arrow_up.html" %}
+                        </a>
+                        <a href=""
+                           class="table-gray-icon"
+                           hx-get="{% url 'home_table_sort' filter='type' direction='descend' %}"
+                           hx-target="#resource-list"
+                           hx-swap="innerHTML" >
+                            {% include "_home_table_arrow_down.html" %}
+                        </a>
+                    </th>
 
                     <!-- Resource created date column -->
-                    <th scope="col" style="width: 25%">作成日時</th>
+                    <th scope="col" style="width: 30%">
+                        作成日時
+                        <!-- Arrow links for sorting -->
+                        <a href=""
+                           class="ps-2 table-gray-icon"
+                           hx-get="{% url 'home_table_sort' filter='created_on' direction='ascend' %}"
+                           hx-target="#resource-list"
+                           hx-swap="innerHTML" >
+                            {% include "_home_table_arrow_up.html" %}
+                        </a>
+                        <a href=""
+                           class="table-gray-icon"
+                           hx-get="{% url 'home_table_sort' filter='created_on' direction='descend' %}"
+                           hx-target="#resource-list"
+                           hx-swap="innerHTML" >
+                            {% include "_home_table_arrow_down.html" %}
+                        </a>
+                    </th>
                 </tr>
             </thead>
 

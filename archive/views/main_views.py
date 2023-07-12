@@ -56,14 +56,19 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
 
 def home_table_sort(request, filter, direction):
+    """
+    View to sort and redisplay the glossaries and translations displayed in the
+    table shown on the homepage.
+    """
+
     glossaries = Glossary.objects.all()
     translations = Translation.objects.all()
     resources = chain(glossaries, translations)
 
     if direction == "ascend":
-        direction = True
-    else:
         direction = False
+    else:
+        direction = True
 
     if filter == "title":
         resources_table_list = sorted(resources, key=lambda item: item.title, reverse=direction)
