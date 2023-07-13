@@ -93,7 +93,17 @@ class SearchView(LoginRequiredMixin, ListView):
         Overridden to find Entry and Segment objects containing the query.
         """
 
-        query = self.request.GET.get("query").strip()
+        raw_query = self.request.GET.get("query")
+
+        # Check if query is surrounded with double quotes.
+        # If surrounded, remove only the quote symbols.
+        #    (I.e. leave whitespace directly inside quote symbols.)
+        # If not surrounded, strip any surrounding whitespace.
+        if raw_query.startswith('"') and raw_query.endswith('"'):
+            query = raw_query[1:-1]
+        else:
+            query = raw_query.strip()
+
         resource = self.request.GET.get("resource")
 
         # Search all resources (glossary entries and translation segments)
