@@ -16,9 +16,9 @@ def highlight_query(text, query):
     the CSS class 'highlight_query'.
     """
 
-    print("")
-    print("text:" + text)
-    print("query:" + query)
+    # Remove quotation marks if included at start and end of query.
+    if query.startswith('"') and query.endswith('"'):
+        query = query[1:-1]
 
     # Necessary to escape characters that may be interpreted as html in the text
     # and query strings to avoid erroneous highlighting.
@@ -26,13 +26,8 @@ def highlight_query(text, query):
     text = escape(text)
     html_escaped_query = escape(query)
 
-    print("html_escaped_query:" + html_escaped_query)
-
     # Also necessary to escape regular expression metacharacters in the query.
     regex_escaped_query = re.escape(html_escaped_query)
-
-    print("regex_escaped_query:" + regex_escaped_query)
-    print("")
 
     matches = re.finditer(regex_escaped_query, text, re.IGNORECASE)
 
