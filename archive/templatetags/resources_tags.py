@@ -10,10 +10,15 @@ register = template.Library()
 
 @register.filter
 def highlight_query(text, query):
-    """ Function to highlight the query substring within the text string.
-        'Highlight' means to wrap the query substring with a span tag that
-        includes the CSS class 'highlight_query'.
-        """
+    """
+    Function to highlight the query substring within the text string.
+    'Highlight' means to wrap the query substring with a span tag that includes
+    the CSS class 'highlight_query'.
+    """
+
+    print("")
+    print("text:" + text)
+    print("query:" + query)
 
     # Necessary to escape characters that may be interpreted as html in the text
     # and query strings to avoid erroneous highlighting.
@@ -21,8 +26,13 @@ def highlight_query(text, query):
     text = escape(text)
     html_escaped_query = escape(query)
 
+    print("html_escaped_query:" + html_escaped_query)
+
     # Also necessary to escape regular expression metacharacters in the query.
     regex_escaped_query = re.escape(html_escaped_query)
+
+    print("regex_escaped_query:" + regex_escaped_query)
+    print("")
 
     matches = re.finditer(regex_escaped_query, text, re.IGNORECASE)
 
