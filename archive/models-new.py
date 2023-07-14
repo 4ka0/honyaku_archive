@@ -1,17 +1,22 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.conf import settings
 
 
 class Resource(models.Model):
-    RESOURCE_TYPE = (
-        ("GLOSSARY", "用語集"),
-        ("TRANSLATION", "翻訳"),
-    )
 
     upload_file = models.FileField(
         null=True,
         upload_to="uploaded_resources",
+    )
+
+    RESOURCE_TYPES = (
+        ("GLOSSARY", "用語集"),
+        ("TRANSLATION", "翻訳"),
+    )
+    resource_type = models.CharField(
+        choices=RESOURCE_TYPES,
+        max_length=20,
     )
 
     title = models.CharField(max_length=100)
@@ -19,10 +24,6 @@ class Resource(models.Model):
     client = models.CharField(max_length=100, blank=True)
     translator = models.CharField(max_length=100, blank=True)
     notes = models.TextField(blank=True)
-    type = models.CharField(
-        choices=RESOURCE_TYPE,
-        max_length=20,
-    )
 
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
