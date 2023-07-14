@@ -56,7 +56,7 @@ class TestTranslationUploadForm(TestCase):
         # Invalid form 1 (no file)
         cls.invalid_form_1 = TranslationUploadForm(form_data)
 
-        # Invalid form 2 (no job number)
+        # Invalid form 2 (no title)
         form_data = {
             "title": "",
             "field": "電気",
@@ -231,7 +231,7 @@ class TestTranslationUploadForm(TestCase):
         self.assertFalse(self.invalid_form_1.is_valid())
         self.assertEqual(self.invalid_form_1.errors, {'translation_file': ['このフィールドは入力必須です。']})
 
-    # Test invalid form 2 (no job number)
+    # Test invalid form 2 (no title)
 
     def test_form_with_invalid_input_no_title(self):
         self.assertFalse(self.invalid_form_2.is_valid())

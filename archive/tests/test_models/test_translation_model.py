@@ -38,8 +38,7 @@ class TranslationModelTests(TestCase):
 
     def test_title_label(self):
         field_label = self.translation_obj._meta.get_field("title").verbose_name
-        self.assertEqual(field_label, "job number")
-        self.assertNotEqual(field_label, "title")
+        self.assertEqual(field_label, "title")
         self.assertNotEqual(field_label, "")
 
     def test_field_label(self):

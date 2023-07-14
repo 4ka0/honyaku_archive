@@ -52,7 +52,7 @@ class ResourcesTagTests(TestCase):
 
     def setUp(self):
         self.client.force_login(self.test_user)
-        self.url = reverse('search_results')
+        self.url = reverse('search')
 
     # Basic tests
 
