@@ -1,8 +1,11 @@
 from django.urls import path
 
-from .views.main_views import (
+from .views.homepage_views import (
     HomePageView,
     home_table_sort,
+)
+
+from .views.search_views import (
     SearchView,
 )
 
