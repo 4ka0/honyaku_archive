@@ -6,10 +6,8 @@ from ...forms.segment_forms import SegmentForm
 
 
 class TestEntryForm(TestCase):
-
     @classmethod
     def setUpTestData(cls):
-
         cls.empty_form = SegmentForm()
 
         cls.valid_form = SegmentForm(
@@ -31,44 +29,38 @@ class TestEntryForm(TestCase):
     # Source field
 
     def test_source_field_label(self):
-        self.assertEqual(
-            self.empty_form.fields['source'].label,
-            '① 原文'
-        )
+        self.assertEqual(self.empty_form.fields["source"].label, "① 原文")
 
     def test_source_field_label_required(self):
         self.assertTrue(self.empty_form.fields["source"].required)
 
     def test_source_field_required_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['source'].error_messages['required'],
-            'このフィールドは入力必須です。',
+            self.empty_form.fields["source"].error_messages["required"],
+            "このフィールドは入力必須です。",
         )
 
     def test_source_field_widget(self):
-        self.assertIsInstance(self.empty_form.fields['source'].widget, Textarea)
-        self.assertEqual(self.empty_form.fields['source'].widget.attrs['rows'], 6)
+        self.assertIsInstance(self.empty_form.fields["source"].widget, Textarea)
+        self.assertEqual(self.empty_form.fields["source"].widget.attrs["rows"], 6)
 
     # Target field
 
     def test_target_field_label(self):
-        self.assertEqual(
-            self.empty_form.fields['target'].label,
-            '② 訳文'
-        )
+        self.assertEqual(self.empty_form.fields["target"].label, "② 訳文")
 
     def test_target_field_label_required(self):
         self.assertTrue(self.empty_form.fields["target"].required)
 
     def test_target_field_required_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['target'].error_messages['required'],
-            'このフィールドは入力必須です。',
+            self.empty_form.fields["target"].error_messages["required"],
+            "このフィールドは入力必須です。",
         )
 
     def test_target_field_widget(self):
-        self.assertIsInstance(self.empty_form.fields['target'].widget, Textarea)
-        self.assertEqual(self.empty_form.fields['target'].widget.attrs['rows'], 6)
+        self.assertIsInstance(self.empty_form.fields["target"].widget, Textarea)
+        self.assertEqual(self.empty_form.fields["target"].widget.attrs["rows"], 6)
 
     # Test Meta fields
 
@@ -78,7 +70,7 @@ class TestEntryForm(TestCase):
     def test_meta_fields(self):
         self.assertEqual(
             self.empty_form._meta.fields,
-            ('source', 'target'),
+            ("source", "target"),
         )
 
     # Test valid form

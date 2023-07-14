@@ -38,34 +38,34 @@ class SearchView(LoginRequiredMixin, ListView):
         if resource == "すべてのリソース":
             entry_queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length('source'))
+            ).order_by(Length("source"))
             segment_queryset = Segment.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length('source'))
+            ).order_by(Length("source"))
             queryset = list(chain(entry_queryset, segment_queryset))
 
         # Search all glossary entries
         elif resource == "すべての用語集":
             queryset = Entry.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length('source'))
+            ).order_by(Length("source"))
 
         # Search all translation segments
         elif resource == "すべての翻訳":
             queryset = Segment.objects.filter(
                 Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length('source'))
+            ).order_by(Length("source"))
 
         # Search specific resource
         else:
             entry_queryset = Entry.objects.filter(
                 Q(glossary__title=resource),
-                Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length('source'))
+                Q(source__icontains=query) | Q(target__icontains=query),
+            ).order_by(Length("source"))
             segment_queryset = Segment.objects.filter(
                 Q(translation__title=resource),
-                Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length('source'))
+                Q(source__icontains=query) | Q(target__icontains=query),
+            ).order_by(Length("source"))
             queryset = list(chain(entry_queryset, segment_queryset))
 
         return queryset
@@ -81,10 +81,12 @@ class SearchView(LoginRequiredMixin, ListView):
         target_resource = self.request.GET.get("resource")
 
         hits = len(self.get_queryset())
-        context.update({
-            "query": query,
-            "target_resource": target_resource,
-            "hits": hits,
-        })
+        context.update(
+            {
+                "query": query,
+                "target_resource": target_resource,
+                "hits": hits,
+            }
+        )
 
         return context

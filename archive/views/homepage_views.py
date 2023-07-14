@@ -4,13 +4,10 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from ..models import (
-    Entry, Glossary, Segment, Translation
-)
+from ..models import Entry, Glossary, Segment, Translation
 
 
 class HomePageView(LoginRequiredMixin, TemplateView):
-
     template_name = "home.html"
 
     def get_context_data(self, **kwargs):
@@ -26,7 +23,7 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         resources_list = sorted(
             chain(glossaries, translations),
             key=lambda item: item.created_on,
-            reverse=True
+            reverse=True,
         )
 
         num_of_glossaries = len(glossaries)
@@ -40,16 +37,18 @@ class HomePageView(LoginRequiredMixin, TemplateView):
         autofocus_searchbar = True
 
         context = super(HomePageView, self).get_context_data(**kwargs)
-        context.update({
-            "resources_list": resources_list,
-            "num_of_glossaries": num_of_glossaries,
-            "num_of_translations": num_of_translations,
-            "num_of_resources": num_of_resources,
-            "num_of_gloss_entries": num_of_gloss_entries,
-            "num_of_trans_segments": num_of_trans_segments,
-            "num_of_all_entries": num_of_all_entries,
-            "autofocus_searchbar": autofocus_searchbar,
-        })
+        context.update(
+            {
+                "resources_list": resources_list,
+                "num_of_glossaries": num_of_glossaries,
+                "num_of_translations": num_of_translations,
+                "num_of_resources": num_of_resources,
+                "num_of_gloss_entries": num_of_gloss_entries,
+                "num_of_trans_segments": num_of_trans_segments,
+                "num_of_all_entries": num_of_all_entries,
+                "autofocus_searchbar": autofocus_searchbar,
+            }
+        )
         return context
 
 
@@ -69,10 +68,16 @@ def home_table_sort(request, filter, direction):
         direction = True
 
     if filter == "title":
-        resources_list = sorted(resources, key=lambda item: item.title, reverse=direction)
+        resources_list = sorted(
+            resources, key=lambda item: item.title, reverse=direction
+        )
     elif filter == "type":
-        resources_list = sorted(resources, key=lambda item: item.type, reverse=direction)
+        resources_list = sorted(
+            resources, key=lambda item: item.type, reverse=direction
+        )
     else:
-        resources_list = sorted(resources, key=lambda item: item.created_on, reverse=direction)
+        resources_list = sorted(
+            resources, key=lambda item: item.created_on, reverse=direction
+        )
 
-    return render(request, '_home_table_list.html', {'resources_list': resources_list})
+    return render(request, "_home_table_list.html", {"resources_list": resources_list})

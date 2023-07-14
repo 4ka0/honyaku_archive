@@ -4,7 +4,6 @@ from django.conf import settings
 
 
 class Resource(models.Model):
-
     RESOURCE_TYPE = (
         ("GLOSSARY", "用語集"),
         ("TRANSLATION", "翻訳"),
@@ -52,7 +51,6 @@ class Resource(models.Model):
 
 
 class Entry(models.Model):
-
     resource = models.ForeignKey(
         Resource,
         related_name="entries",

@@ -49,7 +49,9 @@ def append_or_create(request, form):
         new_notes = form.cleaned_data["notes"]
         if new_notes:
             if existing_glossary_obj.notes:
-                existing_glossary_obj.notes = existing_glossary_obj.notes + "\n" + new_notes
+                existing_glossary_obj.notes = (
+                    existing_glossary_obj.notes + "\n" + new_notes
+                )
             else:
                 existing_glossary_obj.notes = new_notes
         existing_glossary_obj.updated_by = request.user
@@ -62,7 +64,7 @@ def append_or_create(request, form):
         notes=form.cleaned_data["notes"],
         created_by=request.user,
         updated_by=request.user,
-        type="glossary"
+        type="glossary",
     )
     new_glossary_obj.save()
     return new_glossary_obj
@@ -83,15 +85,12 @@ def build_entries(glossary_obj, request):
     # > 'cp932' codec can't decode byte 0xef
 
     with open(glossary_obj.glossary_file.path, encoding="utf-8") as f:
-
         reader = csv.reader(f, delimiter="\t")
 
         # Loop for creating new Entry objects from content of uploaded file.
         for row in reader:
-
             # Each row should contain 2 or 3 elements, otherwise ignored.
             if (len(row) == 2) or (len(row) == 3):
-
                 # Handling for optional notes item
                 if len(row) == 3:
                     notes = row[2]
@@ -133,9 +132,11 @@ class GlossaryDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(GlossaryDetailView, self).get_context_data(**kwargs)
         num_of_entries = context["glossary"].entries.all().count()
-        context.update({
-            "num_of_entries": num_of_entries,
-        })
+        context.update(
+            {
+                "num_of_entries": num_of_entries,
+            }
+        )
         return context
 
 
@@ -227,10 +228,12 @@ class GlossaryAllEntryView(LoginRequiredMixin, DetailView):
         context = super(GlossaryAllEntryView, self).get_context_data(**kwargs)
         all_entries = context["glossary"].entries.all()
         num_of_entries = context["glossary"].entries.all().count()
-        context.update({
-            "all_entries": all_entries,
-            "num_of_entries": num_of_entries,
-        })
+        context.update(
+            {
+                "all_entries": all_entries,
+                "num_of_entries": num_of_entries,
+            }
+        )
         return context
 
 

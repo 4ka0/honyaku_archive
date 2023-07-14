@@ -6,7 +6,6 @@ from ...forms.glossary_forms import GlossaryForm
 
 
 class TestGlossaryForm(TestCase):
-
     @classmethod
     def setUpTestData(cls):
         cls.empty_form = GlossaryForm()
@@ -24,8 +23,10 @@ class TestGlossaryForm(TestCase):
         )
         cls.invalid_form_2 = GlossaryForm(
             {
-                "title": ("Title exceeding 100 chars Title exceeding 100 chars"
-                          "Title exceeding 100 chars Title exceeding 100 chars"),
+                "title": (
+                    "Title exceeding 100 chars Title exceeding 100 chars"
+                    "Title exceeding 100 chars Title exceeding 100 chars"
+                ),
                 "notes": "This is a glossary for testing.",
             }
         )
@@ -33,32 +34,32 @@ class TestGlossaryForm(TestCase):
     # Test fields
 
     def test_title_field_label(self):
-        self.assertEqual(self.empty_form.fields['title'].label, '① 用語集のタイトル')
+        self.assertEqual(self.empty_form.fields["title"].label, "① 用語集のタイトル")
 
     def test_title_field_required(self):
         self.assertTrue(self.empty_form.fields["title"].required)
 
     def test_title_field_required_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['title'].error_messages['required'],
-            'このフィールドは入力必須です。'
+            self.empty_form.fields["title"].error_messages["required"],
+            "このフィールドは入力必須です。",
         )
 
     def test_title_field_max_length_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['title'].error_messages['max_length'],
-            '100文字以下になるように変更してください。'
+            self.empty_form.fields["title"].error_messages["max_length"],
+            "100文字以下になるように変更してください。",
         )
 
     def test_notes_field_label(self):
-        self.assertEqual(self.empty_form.fields['notes'].label, '② 備考（任意）')
+        self.assertEqual(self.empty_form.fields["notes"].label, "② 備考（任意）")
 
     def test_notes_field_required(self):
-        self.assertFalse(self.empty_form.fields['notes'].required)
+        self.assertFalse(self.empty_form.fields["notes"].required)
 
     def test_notes_field_widget(self):
-        self.assertIsInstance(self.empty_form.fields['notes'].widget, Textarea)
-        self.assertEqual(self.empty_form.fields['notes'].widget.attrs['rows'], 6)
+        self.assertIsInstance(self.empty_form.fields["notes"].widget, Textarea)
+        self.assertEqual(self.empty_form.fields["notes"].widget.attrs["rows"], 6)
 
     # Test Meta fields
 
@@ -66,7 +67,7 @@ class TestGlossaryForm(TestCase):
         self.assertEqual(self.empty_form._meta.model, Glossary)
 
     def test_meta_fields(self):
-        self.assertEqual(self.empty_form._meta.fields, ('title', 'notes'))
+        self.assertEqual(self.empty_form._meta.fields, ("title", "notes"))
 
     # Test form with input
 
@@ -76,7 +77,9 @@ class TestGlossaryForm(TestCase):
         self.assertEqual(self.valid_form.errors, {})
         self.assertEqual(self.valid_form.errors.as_text(), "")
         self.assertEqual(self.valid_form.cleaned_data["title"], "Test Glossary 1")
-        self.assertEqual(self.valid_form.cleaned_data["notes"], "This is a glossary for testing.")
+        self.assertEqual(
+            self.valid_form.cleaned_data["notes"], "This is a glossary for testing."
+        )
 
     def test_form_with_no_input(self):
         self.assertFalse(self.empty_form.is_bound)
@@ -93,6 +96,5 @@ class TestGlossaryForm(TestCase):
         self.assertFalse(self.invalid_form_2.is_valid())
         self.assertNotEqual(self.invalid_form_2.errors, {})
         self.assertEqual(
-            self.invalid_form_2.errors["title"],
-            ["100文字以下になるように変更してください。"]
+            self.invalid_form_2.errors["title"], ["100文字以下になるように変更してください。"]
         )

@@ -44,7 +44,7 @@ class Entry(models.Model):
         related_name="entries",
         on_delete=models.CASCADE,
         null=True,
-        blank=True
+        blank=True,
     )
     source = models.CharField(max_length=255)
     target = models.CharField(max_length=255)
@@ -115,7 +115,7 @@ class Segment(models.Model):
         related_name="segments",
         on_delete=models.CASCADE,
         null=True,
-        blank=True
+        blank=True,
     )
     source = models.TextField(blank=True)
     target = models.TextField(blank=True)

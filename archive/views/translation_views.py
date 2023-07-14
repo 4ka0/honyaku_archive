@@ -4,12 +4,15 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+
 # from django.http import FileResponse
 
 from ..models import Segment, Translation
 from ..forms.translation_forms import TranslationUploadForm, TranslationUpdateForm
 
-from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
+from translate.storage.tmx import (
+    tmxfile,
+)  # For reading tmx files (from translate-toolkit)
 from docx import Document  # For reading docx files
 
 
@@ -20,9 +23,11 @@ class TranslationDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(TranslationDetailView, self).get_context_data(**kwargs)
         num_of_segments = context["translation"].segments.all().count()
-        context.update({
-            "num_of_segments": num_of_segments,
-        })
+        context.update(
+            {
+                "num_of_segments": num_of_segments,
+            }
+        )
         return context
 
 
@@ -86,7 +91,8 @@ def build_segments(request, translation_obj):
     """
 
     import time
-    st = time.time()
+
+    st = time.time()  # Test-related
 
     # Select appropriate parser
     if translation_obj.translation_file.path.endswith(".tmx"):
@@ -94,6 +100,7 @@ def build_segments(request, translation_obj):
     else:
         new_segments = docx_parser(request, translation_obj)
 
+    # Test-related
     et = time.time()
     elapsed_time = et - st
     print("**********")
@@ -109,7 +116,9 @@ def build_segments(request, translation_obj):
         """
         # Output success message if Translation and Segment objects successfully created in database
         if Translation.objects.filter(job_number__iexact=translation_obj.job_number).exists():
-            if Segment.objects.filter(translation__job_number__iexact=translation_obj.job_number).exists:
+            if Segment.objects.filter(
+                    translation__job_number__iexact=translation_obj.job_number
+                ).exists:
                 messages.success(request, '翻訳のアップロードが成功しました。')
         else:
             messages.error(request, '翻訳のアップロードに失敗しました。')
@@ -126,7 +135,6 @@ def tmx_parser(translation_obj):
     tmx_file = tmxfile(translation_obj.translation_file)
 
     for node in tmx_file.unit_iter():
-
         # Prevent None from being entered in DB for source (TextField)
         if node.source is None:
             source_text = ""
@@ -143,7 +151,11 @@ def tmx_parser(translation_obj):
             # handle all 32 control characters included at the start of the Unicode chart. The
             # latter approach has been used as it should be more robust in theory. Control
             # characters are replaced with "", which can be handled easily/cleanly in the template.
-            if (node.target and len(node.target) == 1 and ord(node.target) in range(0, 33)):
+            if (
+                node.target
+                and len(node.target) == 1
+                and ord(node.target) in range(0, 33)
+            ):
                 target_text = ""
             else:
                 target_text = node.target
@@ -169,12 +181,9 @@ def docx_parser(request, translation_obj):
     new_segments = []
 
     if document.tables:
-
         if len(document.tables) > 1:
             messages.warning(
-                request,
-                ('選択したファイルに複数のテーブルが見つかりました。\n'
-                 '最初のテーブルのみが読み込まれています。')
+                request, ("選択したファイルに複数のテーブルが見つかりました。\n" "最初のテーブルのみが読み込まれています。")
             )
 
         table = document.tables[0]
@@ -200,15 +209,10 @@ def docx_parser(request, translation_obj):
         # Create list of Segment objects from text data.
         new_segments = [
             Segment(translation=translation_obj, source=row[0], target=row[1])
-            for row
-            in table_data
+            for row in table_data
         ]
 
     else:
-        messages.error(
-            request,
-            ('翻訳のアップロードに失敗しました。\n'
-             '選択したファイルにテーブルが見つかりません。')
-        )
+        messages.error(request, ("翻訳のアップロードに失敗しました。\n" "選択したファイルにテーブルが見つかりません。"))
 
     return new_segments

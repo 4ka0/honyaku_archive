@@ -7,7 +7,6 @@ from freezegun import freeze_time
 
 
 class GlossaryModelTests(TestCase):
-
     @classmethod
     @freeze_time("2022-11-11")
     def setUpTestData(cls):

@@ -7,7 +7,6 @@ from freezegun import freeze_time
 
 
 class TranslationModelTests(TestCase):
-
     @classmethod
     @freeze_time("2022-11-11")
     def setUpTestData(cls):
@@ -31,7 +30,9 @@ class TranslationModelTests(TestCase):
     # Check field labels are correct when object created
 
     def test_translation_file_label(self):
-        field_label = self.translation_obj._meta.get_field("translation_file").verbose_name
+        field_label = self.translation_obj._meta.get_field(
+            "translation_file"
+        ).verbose_name
         self.assertEqual(field_label, "translation file")
         self.assertNotEqual(field_label, "translation_file")
         self.assertNotEqual(field_label, "")
@@ -108,7 +109,9 @@ class TranslationModelTests(TestCase):
         self.assertNotEqual(self.translation_obj.type, "")
 
     def test_created_on_field_when_created(self):
-        self.assertEqual("2022-11-11 00:00:00+00:00", str(self.translation_obj.created_on))
+        self.assertEqual(
+            "2022-11-11 00:00:00+00:00", str(self.translation_obj.created_on)
+        )
         self.assertNotEqual("", str(self.translation_obj.created_on))
 
     def test__created_by_field_when_created(self):
@@ -185,7 +188,9 @@ class TranslationModelTests(TestCase):
         self.assertNotEqual(blank_bool, False)
 
     def test_created_on_auto_now_add_is_true(self):
-        auto_now_add_bool = self.translation_obj._meta.get_field("created_on").auto_now_add
+        auto_now_add_bool = self.translation_obj._meta.get_field(
+            "created_on"
+        ).auto_now_add
         self.assertEqual(auto_now_add_bool, True)
         self.assertNotEqual(auto_now_add_bool, False)
 

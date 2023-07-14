@@ -7,10 +7,8 @@ from ...forms.entry_forms import EntryForm
 
 
 class TestEntryForm(TestCase):
-
     @classmethod
     def setUpTestData(cls):
-
         # Test user
         User = get_user_model()
         cls.testuser = User.objects.create_user(
@@ -128,86 +126,77 @@ class TestEntryForm(TestCase):
     # Test fields
 
     def test_entry_source_field_label(self):
-        self.assertEqual(
-            self.empty_form.fields['source'].label,
-            '① 原文'
-        )
+        self.assertEqual(self.empty_form.fields["source"].label, "① 原文")
 
     def test_entry_source_field_label_required(self):
         self.assertTrue(self.empty_form.fields["source"].required)
 
     def test_entry_source_field_required_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['source'].error_messages['required'],
-            'このフィールドは入力必須です。',
+            self.empty_form.fields["source"].error_messages["required"],
+            "このフィールドは入力必須です。",
         )
 
     def test_entry_source_field_max_length_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['source'].error_messages['max_length'],
-            '255文字以下になるように変更してください。',
+            self.empty_form.fields["source"].error_messages["max_length"],
+            "255文字以下になるように変更してください。",
         )
 
     def test_target_source_field_label(self):
-        self.assertEqual(
-            self.empty_form.fields['target'].label,
-            '② 訳文'
-        )
+        self.assertEqual(self.empty_form.fields["target"].label, "② 訳文")
 
     def test_target_source_field_label_required(self):
         self.assertTrue(self.empty_form.fields["target"].required)
 
     def test_target_source_field_required_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['target'].error_messages['required'],
-            'このフィールドは入力必須です。',
+            self.empty_form.fields["target"].error_messages["required"],
+            "このフィールドは入力必須です。",
         )
 
     def test_target_source_field_max_length_error_message(self):
         self.assertEqual(
-            self.empty_form.fields['target'].error_messages['max_length'],
-            '255文字以下になるように変更してください。',
+            self.empty_form.fields["target"].error_messages["max_length"],
+            "255文字以下になるように変更してください。",
         )
 
     def test_glossary_field_label(self):
-        self.assertEqual(
-            self.empty_form.fields['glossary'].label,
-            '③ 既存の用語集に関連付けますか？'
-        )
+        self.assertEqual(self.empty_form.fields["glossary"].label, "③ 既存の用語集に関連付けますか？")
 
     def test_glossary_field_queryset(self):
-        expected = list(Glossary.objects.all().order_by('title'))
-        existing_glossary_queryset = list(self.empty_form.fields['glossary'].queryset)
+        expected = list(Glossary.objects.all().order_by("title"))
+        existing_glossary_queryset = list(self.empty_form.fields["glossary"].queryset)
         self.assertEqual(existing_glossary_queryset, expected)
 
     def test_glossary_field_required(self):
-        self.assertEqual(self.empty_form.fields['glossary'].required, False)
+        self.assertEqual(self.empty_form.fields["glossary"].required, False)
 
     def test_new_glossary_field_label(self):
         self.assertEqual(
-            self.empty_form.fields['new_glossary'].label,
-            '④ または、この用語のために新しい用語集を作成しますか？',
+            self.empty_form.fields["new_glossary"].label,
+            "④ または、この用語のために新しい用語集を作成しますか？",
         )
 
     def test_new_glossary_field_widget(self):
-        self.assertIsInstance(self.empty_form.fields['new_glossary'].widget, TextInput)
+        self.assertIsInstance(self.empty_form.fields["new_glossary"].widget, TextInput)
         self.assertEqual(
-            self.empty_form.fields['new_glossary'].widget.attrs['placeholder'],
-            '新しい用語集のタイトルを入力してください。',
+            self.empty_form.fields["new_glossary"].widget.attrs["placeholder"],
+            "新しい用語集のタイトルを入力してください。",
         )
 
     def test_new_glossary_field_required(self):
-        self.assertEqual(self.empty_form.fields['new_glossary'].required, False)
+        self.assertEqual(self.empty_form.fields["new_glossary"].required, False)
 
     def test_notes_field_label(self):
-        self.assertEqual(self.empty_form.fields['notes'].label, '⑤ 備考（任意）')
+        self.assertEqual(self.empty_form.fields["notes"].label, "⑤ 備考（任意）")
 
     def test_notes_field_widget(self):
-        self.assertIsInstance(self.empty_form.fields['notes'].widget, Textarea)
-        self.assertEqual(self.empty_form.fields['notes'].widget.attrs['rows'], 6)
+        self.assertIsInstance(self.empty_form.fields["notes"].widget, Textarea)
+        self.assertEqual(self.empty_form.fields["notes"].widget.attrs["rows"], 6)
 
     def test_notes_field_required(self):
-        self.assertEqual(self.empty_form.fields['notes'].required, False)
+        self.assertEqual(self.empty_form.fields["notes"].required, False)
 
     # Test Meta fields
 
@@ -217,7 +206,7 @@ class TestEntryForm(TestCase):
     def test_meta_fields(self):
         self.assertEqual(
             self.empty_form._meta.fields,
-            ('source', 'target', 'glossary', 'new_glossary', 'notes'),
+            ("source", "target", "glossary", "new_glossary", "notes"),
         )
 
     # Test valid forms
@@ -227,13 +216,19 @@ class TestEntryForm(TestCase):
         self.assertTrue(self.valid_form_with_existing_glossary.is_valid())
         self.assertEqual(self.valid_form_with_existing_glossary.errors, {})
         self.assertEqual(self.valid_form_with_existing_glossary.errors.as_text(), "")
-        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["source"], "テスト")
-        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["target"], "test")
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["source"], "テスト"
+        )
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["target"], "test"
+        )
         self.assertEqual(
             self.valid_form_with_existing_glossary.cleaned_data["glossary"],
-            self.glossary_obj_1
+            self.glossary_obj_1,
         )
-        self.assertEqual(self.valid_form_with_existing_glossary.cleaned_data["new_glossary"], "")
+        self.assertEqual(
+            self.valid_form_with_existing_glossary.cleaned_data["new_glossary"], ""
+        )
         self.assertEqual(
             self.valid_form_with_existing_glossary.cleaned_data["notes"],
             "Some test notes.",
@@ -244,9 +239,15 @@ class TestEntryForm(TestCase):
         self.assertTrue(self.valid_form_with_new_glossary.is_valid())
         self.assertEqual(self.valid_form_with_new_glossary.errors, {})
         self.assertEqual(self.valid_form_with_new_glossary.errors.as_text(), "")
-        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["source"], "テスト")
-        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["target"], "test")
-        self.assertEqual(self.valid_form_with_new_glossary.cleaned_data["glossary"], None)
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["source"], "テスト"
+        )
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["target"], "test"
+        )
+        self.assertEqual(
+            self.valid_form_with_new_glossary.cleaned_data["glossary"], None
+        )
         self.assertEqual(
             self.valid_form_with_new_glossary.cleaned_data["new_glossary"],
             "Test Glossary",
@@ -307,33 +308,51 @@ class TestEntryForm(TestCase):
         )
 
     def test_form_with_invalid_input_glossary_and_new_glossary_both_given(self):
-        self.assertFalse(self.invalid_form_glossary_and_new_glossary_both_given.is_valid())
-        self.assertNotEqual(self.invalid_form_glossary_and_new_glossary_both_given.errors, {})
+        self.assertFalse(
+            self.invalid_form_glossary_and_new_glossary_both_given.is_valid()
+        )
+        self.assertNotEqual(
+            self.invalid_form_glossary_and_new_glossary_both_given.errors, {}
+        )
         self.assertEqual(
             self.invalid_form_glossary_and_new_glossary_both_given.errors["glossary"],
             ["③または④のいずれかを選択してください。"],
         )
         self.assertEqual(
-            self.invalid_form_glossary_and_new_glossary_both_given.errors["new_glossary"],
+            self.invalid_form_glossary_and_new_glossary_both_given.errors[
+                "new_glossary"
+            ],
             ["③または④のいずれかを選択してください。"],
         )
 
     def test_form_with_invalid_input_glossary_and_new_glossary_none_given(self):
-        self.assertFalse(self.invalid_form_glossary_and_new_glossary_none_given.is_valid())
-        self.assertNotEqual(self.invalid_form_glossary_and_new_glossary_none_given.errors, {})
+        self.assertFalse(
+            self.invalid_form_glossary_and_new_glossary_none_given.is_valid()
+        )
+        self.assertNotEqual(
+            self.invalid_form_glossary_and_new_glossary_none_given.errors, {}
+        )
         self.assertEqual(
             self.invalid_form_glossary_and_new_glossary_none_given.errors["glossary"],
             ["③または④のいずれかを選択してください。"],
         )
         self.assertEqual(
-            self.invalid_form_glossary_and_new_glossary_none_given.errors["new_glossary"],
+            self.invalid_form_glossary_and_new_glossary_none_given.errors[
+                "new_glossary"
+            ],
             ["③または④のいずれかを選択してください。"],
         )
 
     def test_form_with_invalid_input_new_glossary_title_already_exists(self):
-        self.assertFalse(self.invalid_form_glossary_new_glossary_title_already_exists.is_valid())
-        self.assertNotEqual(self.invalid_form_glossary_new_glossary_title_already_exists.errors, {})
+        self.assertFalse(
+            self.invalid_form_glossary_new_glossary_title_already_exists.is_valid()
+        )
+        self.assertNotEqual(
+            self.invalid_form_glossary_new_glossary_title_already_exists.errors, {}
+        )
         self.assertEqual(
-            self.invalid_form_glossary_new_glossary_title_already_exists.errors["new_glossary"],
+            self.invalid_form_glossary_new_glossary_title_already_exists.errors[
+                "new_glossary"
+            ],
             ["このタイトルの用語集はすでに存在しています。"],
         )
