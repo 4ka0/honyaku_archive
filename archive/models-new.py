@@ -51,10 +51,11 @@ class Resource(models.Model):
         return reverse("resource_detail", args=[str(self.id)])
 
 
-class Entry(models.Model):
+class Item(models.Model):
+
     resource = models.ForeignKey(
         Resource,
-        related_name="entries",
+        related_name="items",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -67,24 +68,24 @@ class Entry(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name="created_entries",
+        related_name="created_items",
         null=True,
         on_delete=models.SET_NULL,
     )
     updated_on = models.DateTimeField(auto_now=True)
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        related_name="updated_entries",
+        related_name="updated_items",
         null=True,
         on_delete=models.SET_NULL,
     )
 
     class Meta:
-        verbose_name = "entry"
-        verbose_name_plural = "entries"
+        verbose_name = "item"
+        verbose_name_plural = "items"
 
     def __str__(self):
         return f"{self.source} : {self.target}"
 
     def get_absolute_url(self):
-        return reverse("entry_detail", args=[str(self.id)])
+        return reverse("item_detail", args=[str(self.id)])
