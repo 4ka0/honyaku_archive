@@ -172,4 +172,4 @@ db.sqlite3
 media/
 htmlcov/
 misc/
-
+staticfiles
