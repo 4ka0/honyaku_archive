@@ -256,7 +256,7 @@ class ResourceModelTests(TestCase):
         max_length = resource._meta.get_field("translator").max_length
         self.assertEqual(max_length, 100)
 
-    def test_client_blank(self):
+    def test_translator_blank(self):
         resource = Resource.objects.get(id=1)
         blank_bool = resource._meta.get_field("translator").blank
         self.assertEqual(blank_bool, True)
