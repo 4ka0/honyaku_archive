@@ -2,10 +2,11 @@ from django import forms
 from django.core.validators import FileExtensionValidator
 from django.utils.safestring import mark_safe
 
-from ..models import Glossary
+from ..models import Glossary, Resource
 
 
 class GlossaryForm(forms.ModelForm):
+
     title = forms.CharField(
         label="① 用語集のタイトル",
         error_messages={
@@ -20,7 +21,7 @@ class GlossaryForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Glossary
+        model = Resource
         fields = ("title", "notes")
 
 

@@ -9,7 +9,47 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from ..forms.entry_forms import EntryAddToGlossaryForm
 from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm
-from ..models import Entry, Glossary
+from ..models import Entry, Glossary, Resource
+
+
+class GlossaryCreateView(LoginRequiredMixin, CreateView):
+    model = Resource
+    form_class = GlossaryForm
+    template_name = "glossary_create.html"
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.created_by = self.request.user
+        obj.updated_by = self.request.user
+        obj.resource_type = "GLOSSARY"
+        obj.save()
+        return HttpResponseRedirect(obj.get_absolute_url())
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            if request.GET.get("previous_url"):
+                previous_url = request.GET.get("previous_url")
+                return HttpResponseRedirect(previous_url)
+        else:
+            return super(GlossaryCreateView, self).post(request, *args, **kwargs)
+
+
+class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Resource
+    template_name = "glossary_update.html"
+    form_class = GlossaryForm
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.updated_by = self.request.user
+        obj.save()
+        return HttpResponseRedirect(obj.get_absolute_url())
+
+
+class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Resource
+    template_name = "glossary_delete.html"
+    success_url = reverse_lazy("home")
 
 
 class GlossaryUploadView(LoginRequiredMixin, View):
@@ -125,6 +165,7 @@ def build_entries(glossary_obj, request):
     glossary_obj.glossary_file.delete()
 
 
+"""
 class GlossaryDetailView(LoginRequiredMixin, DetailView):
     model = Glossary
     template_name = "glossary_detail.html"
@@ -138,40 +179,7 @@ class GlossaryDetailView(LoginRequiredMixin, DetailView):
             }
         )
         return context
-
-
-class GlossaryCreateView(LoginRequiredMixin, CreateView):
-    model = Glossary
-    form_class = GlossaryForm
-    template_name = "glossary_create.html"
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.created_by = self.request.user
-        obj.updated_by = self.request.user
-        obj.type = "glossary"
-        obj.save()
-
-        """
-        if self.request.GET.get("previous_url"):
-            previous_url = self.request.GET.get("previous_url")
-            return HttpResponseRedirect(previous_url)
-        """
-        return HttpResponseRedirect(obj.get_absolute_url())
-
-    def post(self, request, *args, **kwargs):
-        if "cancel" in request.POST:
-            if request.GET.get("previous_url"):
-                previous_url = request.GET.get("previous_url")
-                return HttpResponseRedirect(previous_url)
-        else:
-            return super(GlossaryCreateView, self).post(request, *args, **kwargs)
-
-
-class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
-    model = Glossary
-    template_name = "glossary_delete.html"
-    success_url = reverse_lazy("home")
+"""
 
 
 class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
@@ -206,18 +214,6 @@ class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
                 return HttpResponseRedirect(previous_url)
         else:
             return super(GlossaryAddEntryView, self).post(request, *args, **kwargs)
-
-
-class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
-    model = Glossary
-    template_name = "glossary_update.html"
-    form_class = GlossaryForm
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.updated_by = self.request.user
-        obj.save()
-        return HttpResponseRedirect(obj.get_absolute_url())
 
 
 class GlossaryAllEntryView(LoginRequiredMixin, DetailView):
