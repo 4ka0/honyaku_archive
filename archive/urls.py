@@ -9,6 +9,10 @@ from .views.search_views import (
     SearchView,
 )
 
+from .views.resource_views import (
+    ResourceDetailView,
+)
+
 from .views.entry_views import (
     EntryCreateView,
     EntryDetailView,
@@ -18,7 +22,7 @@ from .views.entry_views import (
 
 from .views.glossary_views import (
     GlossaryUploadView,
-    GlossaryDetailView,
+    # GlossaryDetailView,
     GlossaryCreateView,
     GlossaryDeleteView,
     GlossaryAddEntryView,
@@ -41,9 +45,11 @@ urlpatterns = [
 
     path("search/", SearchView.as_view(), name="search"),
 
+    path("resource/<int:pk>/", ResourceDetailView.as_view(), name="resource_detail"),
+
     path("glossary/new/", GlossaryCreateView.as_view(), name="glossary_create"),
     path("glossary/upload/", GlossaryUploadView.as_view(), name="glossary_upload"),
-    path("glossary/<int:pk>/", GlossaryDetailView.as_view(), name="glossary_detail"),
+    # path("glossary/<int:pk>/", GlossaryDetailView.as_view(), name="glossary_detail"),
     path("glossary/<int:pk>/edit/", GlossaryUpdateView.as_view(), name="glossary_update"),
     path("glossary/<int:pk>/delete/", GlossaryDeleteView.as_view(), name="glossary_delete"),
     path("glossary/<int:pk>/all/", GlossaryAllEntryView.as_view(), name="glossary_all_entries"),
