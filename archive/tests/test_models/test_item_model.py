@@ -77,12 +77,11 @@ class ItemModelTests(TestCase):
         self.assertNotEqual(field_label, "updated_by")
         self.assertNotEqual(field_label, "")
 
-    # Up to here
     # Check field values are correct when object created
 
     def test_resource_field_when_created(self):
-        self.assertEqual(self.item.Resource, self.resource)
-        self.assertNotEqual(self.item.Resource, None)
+        self.assertEqual(self.item.resource, self.resource)
+        self.assertNotEqual(self.item.resource, None)
 
     def test_source_field_when_created(self):
         self.assertEqual(self.item.source, "テスト")
@@ -112,19 +111,19 @@ class ItemModelTests(TestCase):
 
     # Check field values are correct when updated
 
-    def test_Resource_field_when_updated(self):
+    def test_resource_field_when_updated(self):
         new_resource = Resource.objects.create(
-            title="Test Resource 1",
+            resource_type="GLOSSARY",
+            title="Test Resource 2",
             notes="Test note 2.",
-            type="用語集",
             created_by=self.testuser,
             updated_by=self.testuser,
         )
-        self.item.Resource = new_resource
+        self.item.resource = new_resource
         self.item.save()
-        self.assertEqual(self.item.Resource, new_resource)
-        self.assertEqual(self.item.Resource.title, "Test Resource 1")
-        self.assertNotEqual(self.item.Resource, self.resource)
+        self.assertEqual(self.item.resource, new_resource)
+        self.assertEqual(self.item.resource.title, "Test Resource 2")
+        self.assertNotEqual(self.item.resource, self.resource)
 
     def test_source_field_when_updated(self):
         self.item.source = "情報"
@@ -171,11 +170,11 @@ class ItemModelTests(TestCase):
 
     # Check field properties
 
-    def test_Item_deleted_when_Resource_deleted(self):
+    def test_item_deleted_when_resource_deleted(self):
         new_resource = Resource.objects.create(
+            resource_type="GLOSSARY",
             title="Test Resource 3",
-            notes="Test note.",
-            type="用語集",
+            notes="Test note 3.",
             created_by=self.testuser,
             updated_by=self.testuser,
         )
@@ -193,13 +192,15 @@ class ItemModelTests(TestCase):
         self.assertEqual(Resource.objects.filter(title="Test Resource 3").count(), 0)
         self.assertEqual(Item.objects.filter(resource=new_resource).count(), 0)
 
-    def test_source_max_length(self):
-        max_length = self.item._meta.get_field("source").max_length
-        self.assertEqual(max_length, 255)
+    def test_source_blank_is_true(self):
+        blank_bool = self.item._meta.get_field("source").blank
+        self.assertEqual(blank_bool, True)
+        self.assertNotEqual(blank_bool, False)
 
-    def test_target_max_length(self):
-        max_length = self.item._meta.get_field("target").max_length
-        self.assertEqual(max_length, 255)
+    def test_target_blank_is_true(self):
+        blank_bool = self.item._meta.get_field("target").blank
+        self.assertEqual(blank_bool, True)
+        self.assertNotEqual(blank_bool, False)
 
     def test_notes_blank_is_true(self):
         blank_bool = self.item._meta.get_field("notes").blank
@@ -227,24 +228,24 @@ class ItemModelTests(TestCase):
         self.assertNotEqual(null_bool, False)
 
     def test_created_by_related_name(self):
-        user_created_entries = self.testuser.created_entries.all()
-        self.assertEqual(len(user_created_entries), 1)
-        self.assertEqual(user_created_entries[0].source, "テスト")
-        self.assertEqual(user_created_entries[0].target, "test")
+        user_created_items = self.testuser.created_items.all()
+        self.assertEqual(len(user_created_items), 1)
+        self.assertEqual(user_created_items[0].source, "テスト")
+        self.assertEqual(user_created_items[0].target, "test")
 
-    def test_updated_by_related_name_when_Item_created(self):
-        user_updated_entries = self.testuser.updated_entries.all()
-        self.assertEqual(len(user_updated_entries), 1)
-        self.assertEqual(user_updated_entries[0].source, "テスト")
-        self.assertEqual(user_updated_entries[0].target, "test")
+    def test_updated_by_related_name_when_item_created(self):
+        user_updated_items = self.testuser.updated_items.all()
+        self.assertEqual(len(user_updated_items), 1)
+        self.assertEqual(user_updated_items[0].source, "テスト")
+        self.assertEqual(user_updated_items[0].target, "test")
 
-    def test_updated_by_related_name_when_Item_updated(self):
+    def test_updated_by_related_name_when_item_updated(self):
         self.item.source = "概念"
         self.item.save()
-        user_updated_entries = self.testuser.updated_entries.all()
-        self.assertEqual(len(user_updated_entries), 1)
-        self.assertEqual(user_updated_entries[0].source, "概念")
-        self.assertNotEqual(user_updated_entries[0].source, "テスト")
+        user_updated_items = self.testuser.updated_items.all()
+        self.assertEqual(len(user_updated_items), 1)
+        self.assertEqual(user_updated_items[0].source, "概念")
+        self.assertNotEqual(user_updated_items[0].source, "テスト")
 
     def test_created_by_foreign_key_set_to_null_when_user_is_deleted(self):
         User = get_user_model()
@@ -254,13 +255,13 @@ class ItemModelTests(TestCase):
             password="testuser1234",
         )
         new_resource_2 = Resource.objects.create(
-            title="New Resource 2",
+            resource_type="GLOSSARY",
+            title="Test Resource 4",
             notes="Test note.",
-            type="用語集",
-            created_by=testuser_2,
-            updated_by=testuser_2,
+            created_by=self.testuser,
+            updated_by=self.testuser,
         )
-        new_Item_2 = Item.objects.create(
+        new_item_2 = Item.objects.create(
             resource=new_resource_2,
             source="コミュニケーション",
             target="communication",
@@ -268,10 +269,10 @@ class ItemModelTests(TestCase):
             created_by=testuser_2,
             updated_by=testuser_2,
         )
-        self.assertEqual(new_Item_2.created_by, testuser_2)
+        self.assertEqual(new_item_2.created_by, testuser_2)
         testuser_2.delete()
-        new_Item_2.refresh_from_db()
-        self.assertEqual(new_Item_2.created_by, None)
+        new_item_2.refresh_from_db()
+        self.assertEqual(new_item_2.created_by, None)
 
     def test_updated_by_foreign_key_set_to_null_when_user_is_deleted(self):
         User = get_user_model()
@@ -280,38 +281,38 @@ class ItemModelTests(TestCase):
             email="test_user_2@email.com",
             password="testuser1234",
         )
-        new_Resource_3 = Resource.objects.create(
-            title="New Resource 2",
+        new_resource_3 = Resource.objects.create(
+            resource_type="GLOSSARY",
+            title="Test Resource 5",
             notes="Test note.",
-            type="用語集",
-            created_by=testuser_3,
-            updated_by=testuser_3,
+            created_by=self.testuser,
+            updated_by=self.testuser,
         )
-        new_Item_3 = Item.objects.create(
-            resource=new_Resource_3,
+        new_item_3 = Item.objects.create(
+            resource=new_resource_3,
             source="コミュニケーション",
             target="communication",
             notes="Just a test.",
             created_by=testuser_3,
             updated_by=testuser_3,
         )
-        self.assertEqual(new_Item_3.updated_by, testuser_3)
+        self.assertEqual(new_item_3.updated_by, testuser_3)
         testuser_3.delete()
-        new_Item_3.refresh_from_db()
-        self.assertEqual(new_Item_3.updated_by, None)
+        new_item_3.refresh_from_db()
+        self.assertEqual(new_item_3.updated_by, None)
 
     # Check meta fields
 
     def test_verbose_name(self):
         verbose_name = self.item._meta.verbose_name
-        self.assertEqual(verbose_name, "Item")
+        self.assertEqual(verbose_name, "item")
         self.assertNotEqual(verbose_name, "")
 
     def test_verbose_name_plural(self):
         verbose_name_plural = self.item._meta.verbose_name_plural
-        self.assertEqual(verbose_name_plural, "entries")
+        self.assertEqual(verbose_name_plural, "items")
         self.assertNotEqual(verbose_name_plural, "")
-        self.assertNotEqual(verbose_name_plural, "Item")
+        self.assertNotEqual(verbose_name_plural, "item")
 
     # Check class methods
 
