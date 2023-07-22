@@ -11,10 +11,10 @@ class ResourceDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ResourceDetailView, self).get_context_data(**kwargs)
-        num_of_entries = context["resource"].items.all().count()
+        num_of_items = context["resource"].items.all().count()
         context.update(
             {
-                "num_of_entries": num_of_entries,
+                "num_of_items": num_of_items,
             }
         )
         return context
