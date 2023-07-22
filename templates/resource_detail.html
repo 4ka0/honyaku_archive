@@ -40,8 +40,39 @@
 
                         <tr>
                             <td style="width: 25%">エントリー数:</td>
-                            <td>{{ num_of_entries|intcomma }}</td>
+                            <td>{{ num_of_items|intcomma }}</td>
                         </tr>
+
+                        {% if object.resource_type == "TRANSLATION" %}
+
+                            <tr>
+                                <td>翻訳者:</td>
+                                {% if object.translator %}
+                                    <td>{{ object.translator }}</td>
+                                {% else %}
+                                    <td>（なし）</td>
+                                {% endif %}
+                            </tr>
+
+                            <tr>
+                                <td>顧客:</td>
+                                {% if object.client %}
+                                    <td>{{ object.client }}</td>
+                                {% else %}
+                                    <td>（不明）</td>
+                                {% endif %}
+                            </tr>
+
+                            <tr>
+                                <td>分野:</td>
+                                {% if object.field %}
+                                    <td>{{ object.field }}</td>
+                                {% else %}
+                                    <td>（不明）</td>
+                                {% endif %}
+                            </tr>
+
+                        {% endif %}
 
                         <tr>
                             <td>作成日時:</td>
@@ -76,7 +107,7 @@
         </div>
 
 
-        <!-- Glossary content table -->
+        <!-- Resource content table -->
 
         {% if num_of_entries > 0 %}
 

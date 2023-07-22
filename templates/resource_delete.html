@@ -31,8 +31,8 @@
 
                     {% if object.resource_type == "TRANSLATION" %}
 
-                        <dt class="col-3">翻訳者：</dt>
-                        <dd class="col-9">
+                        <dt class="col-4">翻訳者：</dt>
+                        <dd class="col-8">
                             {% if object.translator %}
                                 <p>{{ object.translator }}</p>
                             {% else %}
@@ -40,8 +40,8 @@
                             {% endif %}
                         </dd>
 
-                        <dt class="col-3">顧客：</dt>
-                        <dd class="col-9">
+                        <dt class="col-4">顧客：</dt>
+                        <dd class="col-8">
                             {% if object.client %}
                                 <p>{{ object.client }}</p>
                             {% else %}
@@ -49,8 +49,8 @@
                             {% endif %}
                         </dd>
 
-                        <dt class="col-3">分野：</dt>
-                        <dd class="col-9">
+                        <dt class="col-4">分野：</dt>
+                        <dd class="col-8">
                             {% if object.field %}
                                 <p>{{ object.field }}</p>
                             {% else %}
