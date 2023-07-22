@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from ..forms.entry_forms import EntryAddToGlossaryForm
 from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm
-from ..models import Entry, Glossary, Resource
+from ..models import Entry, Glossary, Resource, Item
 
 
 class GlossaryCreateView(LoginRequiredMixin, CreateView):
@@ -68,9 +68,9 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 
         form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
-            glossary_obj = append_or_create(request, form)
-            build_entries(glossary_obj, request)
-            return HttpResponseRedirect(glossary_obj.get_absolute_url())
+            resource_obj = append_or_create(request, form)
+            build_entries(resource_obj, request)
+            return HttpResponseRedirect(resource_obj.get_absolute_url())
 
         return render(request, self.template_name, {"form": form})
 
@@ -78,53 +78,55 @@ class GlossaryUploadView(LoginRequiredMixin, View):
 def append_or_create(request, form):
     """
     Helper method for GlossaryUploadView.
-    Either returns an existing Glossary object or creates and returns a new
-    Glossary object with which the uploaded data is to be associated.
+    Either returns an existing Resource object to which the uploaded data
+    is to be appended, or creates and returns a new Resource object with which
+    the uploaded data is to be associated.
     """
 
-    existing_glossary_obj = form.cleaned_data["existing_glossary"]
+    existing_resource_obj = form.cleaned_data["existing_glossary"]
 
-    if existing_glossary_obj:
-        existing_glossary_obj.glossary_file = form.cleaned_data["glossary_file"]
+    if existing_resource_obj:
+        existing_resource_obj.upload_file = form.cleaned_data["upload_file"]
         new_notes = form.cleaned_data["notes"]
         if new_notes:
-            if existing_glossary_obj.notes:
-                existing_glossary_obj.notes = (
-                    existing_glossary_obj.notes + "\n" + new_notes
+            if existing_resource_obj.notes:
+                existing_resource_obj.notes = (
+                    existing_resource_obj.notes + "\n" + new_notes
                 )
             else:
-                existing_glossary_obj.notes = new_notes
-        existing_glossary_obj.updated_by = request.user
-        existing_glossary_obj.save()
-        return existing_glossary_obj
+                existing_resource_obj.notes = new_notes
+        existing_resource_obj.updated_by = request.user
+        existing_resource_obj.save()
+        return existing_resource_obj
 
-    new_glossary_obj = Glossary(
-        glossary_file=form.cleaned_data["glossary_file"],
+    new_resource_obj = Resource(
+        upload_file=form.cleaned_data["upload_file"],
+        resource_type="GLOSSARY",
         title=form.cleaned_data["title"],
         notes=form.cleaned_data["notes"],
         created_by=request.user,
         updated_by=request.user,
-        type="glossary",
     )
-    new_glossary_obj.save()
-    return new_glossary_obj
+    new_resource_obj.save()
+    return new_resource_obj
 
 
-def build_entries(glossary_obj, request):
+def build_entries(resource_obj, request):
     """
     Helper method for GlossaryUploadView.
-    Builds Entry objects from the content of an uploaded text file.
-    Receives new Glossary object.
+    Receives Resource object.
+    Builds Item objects from the content of an uploaded text file, and
+    associates these with the Resource object.
     """
 
-    new_entries = []
+    new_items = []
 
     # Regular open() used here to make it possible to set the encoding.
     # Otherwise, if FileField.open() is used, receive following error with
     # Windows text files.
     # > 'cp932' codec can't decode byte 0xef
 
-    with open(glossary_obj.glossary_file.path, encoding="utf-8") as f:
+    with open(resource_obj.upload_file.path, encoding="utf-8") as f:
         reader = csv.reader(f, delimiter="\t")
 
         # Loop for creating new Entry objects from content of uploaded file.
@@ -146,26 +148,29 @@ def build_entries(glossary_obj, request):
                 # if form.is_valid():
                 #     new_entries.append(new_entry)
 
-                new_entry = Entry(
+                new_item = Item(
+                    resource=resource_obj,
                     source=row[0],
                     target=row[1],
-                    glossary=glossary_obj,
                     notes=notes,
                     created_on=timezone.now(),
                     created_by=request.user,
                     updated_on=timezone.now(),
                     updated_by=request.user,
                 )
-                new_entries.append(new_entry)
+                new_items.append(new_item)
 
         # Add all new Entry objects to the database in a single write.
-        Entry.objects.bulk_create(new_entries)
+        Item.objects.bulk_create(new_items)
 
     # Delete the uploaded text file, no longer needed.
-    glossary_obj.glossary_file.delete()
+    resource_obj.upload_file.delete()
 
 
 """
+# Nolonger needed.
+# Replaced with ResourceDetailView.
+
 class GlossaryDetailView(LoginRequiredMixin, DetailView):
     model = Glossary
     template_name = "glossary_detail.html"

@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import FileExtensionValidator
 from django.utils.safestring import mark_safe
 
-from ..models import Glossary, Resource
+from ..models import Resource
 
 
 class GlossaryForm(forms.ModelForm):
@@ -26,7 +26,8 @@ class GlossaryForm(forms.ModelForm):
 
 
 class GlossaryUploadForm(forms.ModelForm):
-    glossary_file = forms.FileField(
+
+    upload_file = forms.FileField(
         label="① ファイルを選択してください。",
         error_messages={"required": "このフィールドは入力必須です。"},
         validators=[
@@ -38,7 +39,7 @@ class GlossaryUploadForm(forms.ModelForm):
     )
     existing_glossary = forms.ModelChoiceField(
         label="② 既存の用語集に追加しますか？",
-        queryset=Glossary.objects.all().order_by("title"),
+        queryset=Resource.objects.filter(resource_type="GLOSSARY").order_by("title"),
         required=False,
     )
     title = forms.CharField(
@@ -57,13 +58,15 @@ class GlossaryUploadForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Glossary
-        fields = ("glossary_file", "existing_glossary", "title", "notes")
+        model = Resource
+        fields = ("upload_file", "existing_glossary", "title", "notes")
 
     def clean(self):
         """
-        Overridden to handle error checking for the new glossary and the
-        existing glossary fields.
+        Overridden to handle error checking for the existing_glossary and the
+        title fields. Only one of these should be entered. The existing_glossary
+        field is used when adding upload content to an existing glossary, and the
+        title field is used when creating a new glossary for the upload content.
         """
 
         cleaned_data = super().clean()
@@ -82,29 +85,16 @@ class GlossaryUploadForm(forms.ModelForm):
             self.add_error("existing_glossary", msg)
             self.add_error("title", msg)
 
-        # If a new glossary is to be created, and the entered title for the new
-        # glossary already exists, output error.
+        # If a new glossary is to be created, and there is already a glossary
+        # having the entered title, output error.
         if title and not existing_glossary:
-            if Glossary.objects.filter(title__iexact=title).exists():
+            if (
+                Resource.objects
+                .filter(resource_type="GLOSSARY")
+                .filter(title__iexact=title)
+                .exists()
+            ):
                 msg = "このタイトルの用語集はすでに存在しています。"
                 self.add_error("title", msg)
 
         return cleaned_data
-
-
-"""
-class GlossaryExportForm(forms.ModelForm):
-    glossaries = forms.ModelMultipleChoiceField(
-        queryset=Glossary.objects.all(),
-        label='Select glossaries to be exported',
-        required=True,
-        widget=forms.SelectMultiple(attrs={'size': 20}),
-        error_messages={
-            "required": "Please select at least one glossary.",
-        },
-    )
-
-    class Meta:
-        model = Glossary
-        fields = ('glossaries',)
-"""
