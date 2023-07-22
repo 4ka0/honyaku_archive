@@ -1,5 +1,6 @@
-from django.views.generic import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, DetailView
 
 from ..models import Resource
 
@@ -17,3 +18,9 @@ class ResourceDetailView(LoginRequiredMixin, DetailView):
             }
         )
         return context
+
+
+class ResourceDeleteView(LoginRequiredMixin, DeleteView):
+    model = Resource
+    template_name = "resource_delete.html"
+    success_url = reverse_lazy("home")
