@@ -79,7 +79,7 @@
                 <form method="POST" novalidate>
                     {% csrf_token %}
                     <div class="text-center">
-                        <a href="{% url 'glossary_detail' object.pk %}"  class="btn btn-secondary btn-sm me-2" role="button">キャンセル</a>
+                        <a href="{% url 'resource_detail' object.pk %}"  class="btn btn-secondary btn-sm me-2" role="button">キャンセル</a>
                         <button class="btn btn-danger btn-sm" type="submit">削除</button>
                     </div>
 
