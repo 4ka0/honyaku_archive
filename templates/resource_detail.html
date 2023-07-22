@@ -19,18 +19,17 @@
                 <h5 class="d-inline pe-2">用語集の詳細</h5>
                 <small>
                     <a href="{% url 'glossary_update' object.pk %}">詳細を編集する</a> |
-                    <a href="{% url 'glossary_delete' object.pk %}">用語集を削除する</a>
-                </small>
 
             {% else %}
 
                 <h5 class="d-inline pe-2">翻訳の詳細</h5>
                 <small>
                     <a href="{% url 'translation_update' object.pk %}">詳細を編集する</a> |
-                    <a href="{% url 'translation_delete' object.pk %}">翻訳を削除する</a>
-                </small>
 
             {% endif %}
+
+                    <a href="{% url 'resource_delete' object.pk %}">翻訳を削除する</a>
+                </small>
 
         </div>
 
