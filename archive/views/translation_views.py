@@ -1,19 +1,15 @@
-from django.views.generic import View, DetailView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView, DetailView, UpdateView, View
 
-# from django.http import FileResponse
-
-from ..models import Segment, Translation
-from ..forms.translation_forms import TranslationUploadForm, TranslationUpdateForm
-
-from translate.storage.tmx import (
-    tmxfile,
-)  # For reading tmx files (from translate-toolkit)
 from docx import Document  # For reading docx files
+from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
+
+from ..forms.translation_forms import TranslationUpdateForm, TranslationUploadForm
+from ..models import Item, Resource, Translation
 
 
 class TranslationDetailView(LoginRequiredMixin, DetailView):
@@ -32,7 +28,7 @@ class TranslationDetailView(LoginRequiredMixin, DetailView):
 
 
 class TranslationUpdateView(LoginRequiredMixin, UpdateView):
-    model = Translation
+    model = Resource
     template_name = "translation_update.html"
     form_class = TranslationUpdateForm
 
@@ -65,29 +61,29 @@ class TranslationUploadView(LoginRequiredMixin, View):
 
         form = TranslationUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            translation_obj = Translation(
-                translation_file=form.cleaned_data["translation_file"],
+            resource_obj = Resource(
+                upload_file=form.cleaned_data["upload_file"],
                 title=form.cleaned_data["title"],
                 translator=form.cleaned_data["translator"],
                 field=form.cleaned_data["field"],
                 client=form.cleaned_data["client"],
                 notes=form.cleaned_data["notes"],
                 created_by=request.user,
-                type="translation",
+                resource_type="TRANSLATION",
             )
-            successful = build_segments(request, translation_obj)
+            successful = build_items(request, resource_obj)
             if successful:
-                return HttpResponseRedirect(translation_obj.get_absolute_url())
+                return HttpResponseRedirect(resource_obj.get_absolute_url())
             return HttpResponseRedirect(reverse_lazy("home"))
 
         return render(request, self.template_name, {"form": form})
 
 
-def build_segments(request, translation_obj):
+def build_items(request, resource_obj):
     """
     Helper method for TranslationUploadView.
     Chooses appropriate parser to parse the uploaded translation file, and
-    builds Segment objects from the parsed content.
+    builds Item objects from the parsed content.
     """
 
     import time
@@ -95,10 +91,10 @@ def build_segments(request, translation_obj):
     st = time.time()  # Test-related
 
     # Select appropriate parser
-    if translation_obj.translation_file.path.endswith(".tmx"):
-        new_segments = tmx_parser(translation_obj)
+    if resource_obj.upload_file.path.endswith(".tmx"):
+        new_items = tmx_parser(resource_obj)
     else:
-        new_segments = docx_parser(request, translation_obj)
+        new_items = docx_parser(request, resource_obj)
 
     # Test-related
     et = time.time()
@@ -108,10 +104,10 @@ def build_segments(request, translation_obj):
     print("**********")
 
     # Save content to database
-    if new_segments:
-        translation_obj.save()
-        Segment.objects.bulk_create(new_segments)
-        translation_obj.translation_file.delete()  # Uploaded file no longer needed
+    if new_items:
+        resource_obj.save()
+        Item.objects.bulk_create(new_items)
+        resource_obj.upload_file.delete()  # Uploaded file no longer needed
 
         """
         # Output success message if Translation and Segment objects successfully created in database
@@ -130,9 +126,9 @@ def build_segments(request, translation_obj):
         return False
 
 
-def tmx_parser(translation_obj):
-    new_segments = []
-    tmx_file = tmxfile(translation_obj.translation_file)
+def tmx_parser(resource_obj):
+    new_items = []
+    tmx_file = tmxfile(resource_obj.upload_file)
 
     for node in tmx_file.unit_iter():
         # Prevent None from being entered in DB for source (TextField)
@@ -160,25 +156,25 @@ def tmx_parser(translation_obj):
             else:
                 target_text = node.target
 
-        new_segment = Segment(
-            translation=translation_obj,
+        new_segment = Item(
+            resource=resource_obj,
             source=source_text,
             target=target_text,
         )
-        new_segments.append(new_segment)
+        new_items.append(new_segment)
 
-    return new_segments
+    return new_items
 
 
-def docx_parser(request, translation_obj):
+def docx_parser(request, resource_obj):
     """
     Presumes that there is one table in the uploaded file, the table contains
     two columns, the first column is the source text, and the second column is
     the target text.
     """
 
-    document = Document(translation_obj.translation_file)
-    new_segments = []
+    document = Document(resource_obj.upload_file)
+    new_items = []
 
     if document.tables:
         if len(document.tables) > 1:
@@ -207,12 +203,12 @@ def docx_parser(request, translation_obj):
         table_data = [[cell.text for cell in row.cells] for row in table.rows]
 
         # Create list of Segment objects from text data.
-        new_segments = [
-            Segment(translation=translation_obj, source=row[0], target=row[1])
+        new_items = [
+            Item(resource=resource_obj, source=row[0], target=row[1])
             for row in table_data
         ]
 
     else:
         messages.error(request, ("翻訳のアップロードに失敗しました。\n" "選択したファイルにテーブルが見つかりません。"))
 
-    return new_segments
+    return new_items

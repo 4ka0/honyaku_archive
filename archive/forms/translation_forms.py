@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import FileExtensionValidator
 from django.utils.safestring import mark_safe
 
-from ..models import Translation
+from ..models import Resource
 
 
 class TranslationUpdateForm(forms.ModelForm):
@@ -41,12 +41,12 @@ class TranslationUpdateForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Translation
+        model = Resource
         fields = ("title", "translator", "field", "client", "notes")
 
 
 class TranslationUploadForm(forms.ModelForm):
-    translation_file = forms.FileField(
+    upload_file = forms.FileField(
         label="① ファイルを選択してください。",
         # mark_safe() used to include br tag in the label.
         help_text=mark_safe(
@@ -97,13 +97,18 @@ class TranslationUploadForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Translation
-        fields = ("translation_file", "title", "translator", "field", "client", "notes")
+        model = Resource
+        fields = ("upload_file", "title", "translator", "field", "client", "notes")
 
     def clean_title(self):
         title = self.cleaned_data["title"]
         if title:
-            if Translation.objects.filter(title__iexact=title).exists():
+            if (
+                Resource.objects
+                .filter(resource_type="TRANSLATION")
+                .filter(title__iexact=title)
+                .exists()
+            ):
                 msg = "その案件番号の翻訳はすでに存在しています。"
                 self.add_error("title", msg)
         return title
