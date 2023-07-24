@@ -34,7 +34,7 @@ from .views.glossary_views import (
 from .views.segment_views import SegmentUpdateView, SegmentDeleteView
 
 from .views.translation_views import (
-    TranslationDetailView,
+    # TranslationDetailView,
     TranslationUpdateView,
     TranslationDeleteView,
     TranslationUploadView,
@@ -66,7 +66,7 @@ urlpatterns = [
     path("entry/<int:pk>/delete/", EntryDeleteView.as_view(), name="entry_delete"),
 
     path("translation/upload/", TranslationUploadView.as_view(), name="translation_upload"),
-    path("translation/<int:pk>/", TranslationDetailView.as_view(), name="translation_detail"),
+    # path("translation/<int:pk>/", TranslationDetailView.as_view(), name="translation_detail"),
     path("translation/<int:pk>/edit/", TranslationUpdateView.as_view(), name="translation_update"),
     path(
         "translation/<int:pk>/delete/",

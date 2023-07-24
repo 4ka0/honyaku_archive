@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView, DetailView, UpdateView, View
+from django.views.generic import DeleteView, UpdateView, View
 
 from docx import Document  # For reading docx files
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
@@ -11,6 +11,10 @@ from translate.storage.tmx import tmxfile  # For reading tmx files (from transla
 from ..forms.translation_forms import TranslationUpdateForm, TranslationUploadForm
 from ..models import Item, Resource, Translation
 
+
+"""
+# Nolonger needed.
+# Replaced with ResourceDetailView.
 
 class TranslationDetailView(LoginRequiredMixin, DetailView):
     model = Translation
@@ -25,6 +29,7 @@ class TranslationDetailView(LoginRequiredMixin, DetailView):
             }
         )
         return context
+"""
 
 
 class TranslationUpdateView(LoginRequiredMixin, UpdateView):
