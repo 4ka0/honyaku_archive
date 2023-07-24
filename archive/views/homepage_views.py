@@ -1,10 +1,8 @@
-from itertools import chain
-
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from ..models import Entry, Glossary, Segment, Translation, Resource, Item
+from ..models import Resource, Item
 
 
 class HomePageView(LoginRequiredMixin, TemplateView):
