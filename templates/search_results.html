@@ -42,7 +42,9 @@
                                     {% include "_table_cell_source_item_icons.html" %}
 
                                 {% else %}
+
                                     <span class="table-muted-text">（原文なし）</span>
+
                                 {% endif %}
                             </td>
 
@@ -65,27 +67,25 @@
                                     {% endif %}
 
                                 {% else %}
+
                                     <span class="table-muted-text">（訳文なし）</span>
+
                                 {% endif %}
                             </td>
 
                             <!-- Resource name -->
                             <td>
-                                {% if item.glossary %}
-                                    <a href="{% url 'glossary_detail' item.glossary.pk %}">{{ item.glossary }}</a>
-                                {% elif item.translation %}
-                                    <a href="{% url 'translation_detail' item.translation.pk %}">{{ item.translation.title }}</a>
-                                {% endif %}
+                                <a href="{% url 'resource_detail' item.resource.pk %}">{{ item.resource.title }}</a>
                             </td>
 
                             <!-- Actions -->
                             <td class="col-center-align">
                                 <small>
-                                    {% if item.glossary %}
+                                    {% if item.resource.resource_type == "GLOSSARY" %}
 
                                         {% include "_entry_action_icons.html" %}
 
-                                    {% elif item.translation %}
+                                    {% elif item.resource.resource_type == "TRANSLATION" %}
 
                                         {% include "_segment_action_icons.html" %}
 

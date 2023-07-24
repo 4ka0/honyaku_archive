@@ -1,26 +1,20 @@
-from itertools import chain
-
 from django.db.models import Q
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.functions import Length
 
-from ..models import Entry, Segment
+from ..models import Item
 
 
 class SearchView(LoginRequiredMixin, ListView):
     """
-    View to search glossary and translation resources for entries containing
-    a query string.
+    View to search for Item objects containing a query string.
     """
 
     template_name = "search_results.html"
 
     def get_queryset(self):
-        """
-        Overridden to find Entry and Segment objects containing the query.
-        """
-
+        resource = self.request.GET.get("resource")
         raw_query = self.request.GET.get("query")
 
         # Check if query is surrounded with double quotes.
@@ -32,41 +26,42 @@ class SearchView(LoginRequiredMixin, ListView):
         else:
             query = raw_query.strip()
 
-        resource = self.request.GET.get("resource")
-
-        # Search all resources (glossary entries and translation segments)
+        # Search all resources
         if resource == "すべてのリソース":
-            entry_queryset = Entry.objects.filter(
-                Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length("source"))
-            segment_queryset = Segment.objects.filter(
-                Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length("source"))
-            queryset = list(chain(entry_queryset, segment_queryset))
+            queryset = (
+                Item.objects
+                .filter(Q(source__icontains=query) | Q(target__icontains=query))
+                .order_by(Length("source"))
+            )
 
-        # Search all glossary entries
+        # Search all glossaries
         elif resource == "すべての用語集":
-            queryset = Entry.objects.filter(
-                Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length("source"))
+            queryset = (
+                Item.objects
+                .filter(resource__resource_type="GLOSSARY")
+                .filter(Q(source__icontains=query) | Q(target__icontains=query))
+                .order_by(Length("source"))
+            )
 
-        # Search all translation segments
+        # Search all translations
         elif resource == "すべての翻訳":
-            queryset = Segment.objects.filter(
-                Q(source__icontains=query) | Q(target__icontains=query)
-            ).order_by(Length("source"))
+            queryset = (
+                Item.objects
+                .filter(resource__resource_type="TRANSLATION")
+                .filter(Q(source__icontains=query) | Q(target__icontains=query))
+                .order_by(Length("source"))
+            )
 
         # Search specific resource
         else:
-            entry_queryset = Entry.objects.filter(
-                Q(glossary__title=resource),
-                Q(source__icontains=query) | Q(target__icontains=query),
-            ).order_by(Length("source"))
-            segment_queryset = Segment.objects.filter(
-                Q(translation__title=resource),
-                Q(source__icontains=query) | Q(target__icontains=query),
-            ).order_by(Length("source"))
-            queryset = list(chain(entry_queryset, segment_queryset))
+            queryset = (
+                Item.objects
+                .filter(
+                    Q(resource__title=resource),
+                    Q(source__icontains=query) | Q(target__icontains=query),
+                )
+                .order_by(Length("source"))
+            )
 
         return queryset
 
