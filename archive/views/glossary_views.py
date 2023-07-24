@@ -1,7 +1,7 @@
 import csv
 
 from django.utils import timezone
-from django.views.generic import View, DetailView, CreateView, DeleteView, UpdateView
+from django.views.generic import View, CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -221,6 +221,7 @@ class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
             return super(GlossaryAddEntryView, self).post(request, *args, **kwargs)
 
 
+"""
 class GlossaryAllEntryView(LoginRequiredMixin, DetailView):
     model = Glossary
     template_name = "glossary_all.html"
@@ -236,6 +237,7 @@ class GlossaryAllEntryView(LoginRequiredMixin, DetailView):
             }
         )
         return context
+"""
 
 
 """
