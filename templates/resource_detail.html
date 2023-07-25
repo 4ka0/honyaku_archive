@@ -6,11 +6,11 @@
 
     <div class="col mx-5 mt-4 mb-5 wrap-content">
 
-        <!-- Resource heading -->
+        <!-- Resource title -->
 
         <h4 class="my-4">{{ object.title }}</h4>
 
-        <!-- Resource details table -->
+        <!-- Update and delete links -->
 
         <div class="mt-5 mb-4">
 
@@ -19,19 +19,22 @@
                 <h5 class="d-inline pe-2">用語集の詳細</h5>
                 <small>
                     <a href="{% url 'glossary_update' object.pk %}">詳細を編集する</a> |
+                    <a href="{% url 'resource_delete' object.pk %}">用語集を削除する</a>
+                </small>
 
             {% else %}
 
                 <h5 class="d-inline pe-2">翻訳の詳細</h5>
                 <small>
                     <a href="{% url 'translation_update' object.pk %}">詳細を編集する</a> |
-
-            {% endif %}
-
                     <a href="{% url 'resource_delete' object.pk %}">翻訳を削除する</a>
                 </small>
 
+            {% endif %}
+
         </div>
+
+        <!-- Resource details table -->
 
         <div class="row justify-content-start">
             <div class="col-8">
@@ -106,50 +109,52 @@
             </div>
         </div>
 
-
         <!-- Resource content table -->
 
-        {% if num_of_entries > 0 %}
+        {% if num_of_items > 0 %}
 
-            {% if num_of_entries > 999 %}
+            <!-- If resource has entries, display entries -->
 
-                <!-- Don't display table straight away -->
-
-                <br>
-                <p>＊この用語集のサイズが大きい（エントリー数：{{ num_of_entries|intcomma }}）ため、すべてのエントリーを表示するのに時間がかかるかもしれません。</p>
-                <p>
-                    <a href="{% url 'glossary_all_entries' object.pk %}">
-                        全てのエントリーを表示する
-                    </a>
-                </p>
-
-            {% else %}
-
-                <!-- Display table straight away -->
+            <div id="resource-content-table">
 
                 <br>
                 <div class="mb-4 ">
-                    <h5 class="d-inline">用語集の内容</h5>
-                    &nbsp;
-                    <small>
-                        <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
-                            エントリーを追加する
-                        </a>
-                    </small>
+                    <h5 class="d-inline">
+                        {% if object.resource_type == "TRANSLATION" %}
+                            翻訳の内容
+                        {% else %}
+                            用語集の内容
+                        {% endif %}
+                    </h5>
+
+                    {% if object.resource_type == "GLOSSARY" %}
+                        <small class="ps-2">
+                            <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                                エントリーを追加する
+                            </a>
+                        </small>
+                    {% endif %}
                 </div>
 
-                {% include "_glossary_content_table.html" %}
+                <!-- Delete _glossary_content_table.html and _translation_content_table.html -->
+                {% include "_resource_content_table.html" %}
 
-            {% endif %}  <!-- End table display -->
+            </div>
 
-        {% else %}  <!-- If no entries -->
+        {% else %}
 
-            <br>
-            <p>
-                <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
-                    エントリーを追加する
-                </a>
-            </p>
+            <!-- If no entries -->
+
+            {% if object.resource_type == "GLOSSARY" %}
+
+                <br>
+                <p>
+                    <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                        エントリーを追加する
+                    </a>
+                </p>
+
+            {% endif %}
 
         {% endif %}
 
