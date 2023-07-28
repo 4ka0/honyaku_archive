@@ -7,9 +7,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from ..forms.entry_forms import EntryAddToGlossaryForm
-from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm
-from ..models import Entry, Glossary, Resource, Item
+from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm, GlossaryAddItemForm
+from ..models import Resource, Item
 
 
 class GlossaryCreateView(LoginRequiredMixin, CreateView):
@@ -167,6 +166,40 @@ def build_entries(resource_obj, request):
     resource_obj.upload_file.delete()
 
 
+class GlossaryAddItemView(LoginRequiredMixin, CreateView):
+    """
+    Class to add a new Item object to an existing Resource Object.
+    Called from the resource detail page.
+    Receives pk of resource object in question and sets this for the
+    entry.glossary field.
+    """
+
+    model = Item
+    form_class = GlossaryAddItemForm
+    template_name = "glossary_add_item.html"
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.resource = Resource.objects.get(pk=self.kwargs["resource"])
+        obj.created_by = self.request.user
+        obj.updated_by = self.request.user
+        obj.save()
+
+        if self.request.GET.get("previous_url"):
+            previous_url = self.request.GET.get("previous_url")
+            return HttpResponseRedirect(previous_url)
+
+        return HttpResponseRedirect(obj.get_absolute_url())
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            if request.GET.get("previous_url"):
+                previous_url = request.GET.get("previous_url")
+                return HttpResponseRedirect(previous_url)
+        else:
+            return super(GlossaryAddItemView, self).post(request, *args, **kwargs)
+
+
 """
 # Nolonger needed.
 # Replaced with ResourceDetailView.
@@ -185,40 +218,6 @@ class GlossaryDetailView(LoginRequiredMixin, DetailView):
         )
         return context
 """
-
-
-class GlossaryAddEntryView(LoginRequiredMixin, CreateView):
-    """
-    Class to add a new Entry object to an existing Glossary Object.
-    Called from the Glossary detail page.
-    Receives pk of Glossary object in question and sets this for the
-    entry.glossary field.
-    """
-
-    model = Entry
-    form_class = EntryAddToGlossaryForm
-    template_name = "glossary_add_entry.html"
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.glossary = Glossary.objects.get(pk=self.kwargs["glossary"])
-        obj.created_by = self.request.user
-        obj.updated_by = self.request.user
-        obj.save()
-
-        if self.request.GET.get("previous_url"):
-            previous_url = self.request.GET.get("previous_url")
-            return HttpResponseRedirect(previous_url)
-
-        return HttpResponseRedirect(obj.get_absolute_url())
-
-    def post(self, request, *args, **kwargs):
-        if "cancel" in request.POST:
-            if request.GET.get("previous_url"):
-                previous_url = request.GET.get("previous_url")
-                return HttpResponseRedirect(previous_url)
-        else:
-            return super(GlossaryAddEntryView, self).post(request, *args, **kwargs)
 
 
 """

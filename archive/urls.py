@@ -26,7 +26,7 @@ from .views.glossary_views import (
     # GlossaryDetailView,
     GlossaryCreateView,
     # GlossaryDeleteView,
-    GlossaryAddEntryView,
+    GlossaryAddItemView,
     # GlossaryAllEntryView,
     GlossaryUpdateView,
 )
@@ -49,6 +49,7 @@ urlpatterns = [
     # New URLS
     path("resource/<int:pk>/", ResourceDetailView.as_view(), name="resource_detail"),
     path("resource/<int:pk>/delete/", ResourceDeleteView.as_view(), name="resource_delete"),
+    path("glossary/<int:resource>/add/", GlossaryAddItemView.as_view(), name="resource_add_item"),
 
     # Old URLs
     path("glossary/new/", GlossaryCreateView.as_view(), name="glossary_create"),
@@ -57,7 +58,6 @@ urlpatterns = [
     path("glossary/<int:pk>/edit/", GlossaryUpdateView.as_view(), name="glossary_update"),
     # path("glossary/<int:pk>/delete/", GlossaryDeleteView.as_view(), name="glossary_delete"),
     # path("glossary/<int:pk>/all/", GlossaryAllEntryView.as_view(), name="glossary_all_entries"),
-    path("glossary/<int:glossary>/add/", GlossaryAddEntryView.as_view(), name="glossary_add_entry"),
     # path("glossary/export/", GlossaryExportView.as_view(), name="glossary_export"),
 
     path("entry/new/", EntryCreateView.as_view(), name="entry_create"),

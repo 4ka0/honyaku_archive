@@ -126,10 +126,9 @@
                             用語集の内容
                         {% endif %}
                     </h5>
-
                     {% if object.resource_type == "GLOSSARY" %}
                         <small class="ps-2">
-                            <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                            <a href="{% url 'resource_add_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                                 エントリーを追加する
                             </a>
                         </small>
@@ -143,17 +142,12 @@
 
         {% else %}
 
-            <!-- If no entries -->
-
             {% if object.resource_type == "GLOSSARY" %}
-
-                <br>
-                <p>
-                    <a href="{% url 'glossary_add_entry' glossary=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                <small class="ps-2">
+                    <a href="{% url 'resource_add_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                         エントリーを追加する
                     </a>
-                </p>
-
+                </small>
             {% endif %}
 
         {% endif %}
