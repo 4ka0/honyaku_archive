@@ -1,9 +1,9 @@
 from django import forms
 
-from ..models import Entry, Glossary
+from ..models import Item, Resource
 
 
-class EntryForm(forms.ModelForm):
+class GlossaryItemForm(forms.ModelForm):
     source = forms.CharField(
         label="① 原文",
         error_messages={
@@ -18,12 +18,12 @@ class EntryForm(forms.ModelForm):
             "max_length": "255文字以下になるように変更してください。",
         },
     )
-    glossary = forms.ModelChoiceField(
+    resource = forms.ModelChoiceField(
         label="③ 既存の用語集に関連付けますか？",
-        queryset=Glossary.objects.all().order_by("title"),
+        queryset=Resource.objects.all().order_by("title"),
         required=False,
     )
-    new_glossary = forms.CharField(
+    new_resource = forms.CharField(
         label="④ または、この用語のために新しい用語集を作成しますか？",
         widget=forms.TextInput(attrs={"placeholder": "新しい用語集のタイトルを入力してください。"}),
         required=False,
@@ -35,8 +35,8 @@ class EntryForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Entry
-        fields = ("source", "target", "glossary", "new_glossary", "notes")
+        model = Item
+        fields = ("source", "target", "resource", "new_resource", "notes")
 
     def clean(self):
         """
@@ -46,33 +46,38 @@ class EntryForm(forms.ModelForm):
         """
 
         cleaned_data = super().clean()
-        existing_glossary = cleaned_data.get("glossary")
-        new_glossary = cleaned_data.get("new_glossary")
+        existing_resource = cleaned_data.get("resource")
+        new_resource = cleaned_data.get("new_resource")
 
-        # First check the length of new_glossary, then check other aspects.
+        # First check the length of new_resource, then check other aspects.
         # This avoids numerous error messages being displayed for the same
         # field at the same time, which is a bit nicer for the user.
 
-        if len(new_glossary) > 100:
-            self.add_error("new_glossary", "100文字以下になるように変更してください。")
+        if len(new_resource) > 100:
+            self.add_error("new_resource", "100文字以下になるように変更してください。")
         else:
             # If both fields have been entered, output error
-            if existing_glossary and new_glossary:
+            if existing_resource and new_resource:
                 msg = "③または④のいずれかを選択してください。"
-                self.add_error("glossary", msg)
-                self.add_error("new_glossary", msg)
+                self.add_error("resource", msg)
+                self.add_error("new_resource", msg)
 
             # If neither of the fields have been entered, output error
-            if not existing_glossary and not new_glossary:
+            if not existing_resource and not new_resource:
                 msg = "③または④のいずれかを選択してください。"
-                self.add_error("glossary", msg)
-                self.add_error("new_glossary", msg)
+                self.add_error("resource", msg)
+                self.add_error("new_resource", msg)
 
-            # If new term is to be added to a new glossary
-            if new_glossary and not existing_glossary:
-                # If input title for new glossary already exists, output error
-                if Glossary.objects.filter(title__iexact=new_glossary).exists():
+            # If new term is to be added to a new resource
+            if new_resource and not existing_resource:
+                # If input title for new resource already exists, output error
+                if (
+                    Resource.objects
+                    .filter(resource_type="GLOSSARY")
+                    .filter(title__iexact=new_resource)
+                    .exists()
+                ):
                     msg = "このタイトルの用語集はすでに存在しています。"
-                    self.add_error("new_glossary", msg)
+                    self.add_error("new_resource", msg)
 
         return cleaned_data

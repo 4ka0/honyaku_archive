@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.forms.widgets import Textarea
 
 from ...models import Segment
-from ...forms.segment_forms import SegmentForm
+from ...forms.translation_item_forms import SegmentForm
 
 
 class TestEntryForm(TestCase):

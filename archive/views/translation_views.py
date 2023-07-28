@@ -9,27 +9,7 @@ from docx import Document  # For reading docx files
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
 
 from ..forms.translation_forms import TranslationUpdateForm, TranslationUploadForm
-from ..models import Item, Resource, Translation
-
-
-"""
-# Nolonger needed.
-# Replaced with ResourceDetailView.
-
-class TranslationDetailView(LoginRequiredMixin, DetailView):
-    model = Translation
-    template_name = "translation_detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(TranslationDetailView, self).get_context_data(**kwargs)
-        num_of_segments = context["translation"].segments.all().count()
-        context.update(
-            {
-                "num_of_segments": num_of_segments,
-            }
-        )
-        return context
-"""
+from ..models import Item, Resource
 
 
 class TranslationUpdateView(LoginRequiredMixin, UpdateView):
@@ -45,7 +25,7 @@ class TranslationUpdateView(LoginRequiredMixin, UpdateView):
 
 
 class TranslationDeleteView(LoginRequiredMixin, DeleteView):
-    model = Translation
+    model = Resource
     template_name = "translation_delete.html"
     success_url = reverse_lazy("home")
 

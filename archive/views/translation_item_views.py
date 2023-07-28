@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 
 from ..models import Segment
-from ..forms.segment_forms import SegmentForm
+from ..forms.translation_item_forms import SegmentForm
 
 
 class SegmentUpdateView(LoginRequiredMixin, UpdateView):
