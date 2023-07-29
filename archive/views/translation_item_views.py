@@ -1,4 +1,4 @@
-from django.views.generic import UpdateView, DeleteView
+from django.views.generic import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -32,6 +32,7 @@ class TranslationUpdateItemView(LoginRequiredMixin, UpdateView):
             return super(TranslationUpdateItemView, self).post(request, *args, **kwargs)
 
 
+"""
 class TranslationDeleteItemView(LoginRequiredMixin, DeleteView):
     model = Segment
     template_name = "segment_delete.html"
@@ -49,3 +50,4 @@ class TranslationDeleteItemView(LoginRequiredMixin, DeleteView):
                 return HttpResponseRedirect(previous_url)
         else:
             return super(TranslationDeleteItemView, self).post(request, *args, **kwargs)
+"""

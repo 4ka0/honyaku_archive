@@ -1,4 +1,4 @@
-from django.views.generic import UpdateView, DeleteView, CreateView
+from django.views.generic import UpdateView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -84,6 +84,7 @@ class GlossaryUpdateItemView(LoginRequiredMixin, UpdateView):
             return super(GlossaryUpdateItemView, self).post(request, *args, **kwargs)
 
 
+"""
 class GlossaryDeleteItemView(LoginRequiredMixin, DeleteView):
     model = Item
     template_name = "item_delete.html"
@@ -101,3 +102,4 @@ class GlossaryDeleteItemView(LoginRequiredMixin, DeleteView):
                 return HttpResponseRedirect(previous_url)
         else:
             return super(GlossaryDeleteItemView, self).post(request, *args, **kwargs)
+"""

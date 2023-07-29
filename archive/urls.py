@@ -1,14 +1,12 @@
 from django.urls import path
 
-from .views.glossary_item_views import (GlossaryCreateItemView,
-                                        GlossaryDeleteItemView,
-                                        GlossaryUpdateItemView)
+from .views.glossary_item_views import GlossaryCreateItemView, GlossaryUpdateItemView
 from .views.glossary_views import (GlossaryAddItemView, GlossaryCreateView,
                                    GlossaryUpdateView, GlossaryUploadView)
 from .views.homepage_views import HomePageView, home_table_sort
-from .views.resource_views import ResourceDeleteView, ResourceDetailView
+from .views.resource_views import ResourceDeleteView, ResourceDetailView, ResourceDeleteItemView
 from .views.search_views import SearchView
-from .views.translation_item_views import TranslationDeleteItemView, TranslationUpdateItemView
+from .views.translation_item_views import TranslationUpdateItemView
 from .views.translation_views import TranslationUpdateView, TranslationUploadView
 
 urlpatterns = [
@@ -19,6 +17,7 @@ urlpatterns = [
 
     path("resource/<int:pk>/", ResourceDetailView.as_view(), name="resource_detail"),
     path("resource/<int:pk>/delete/", ResourceDeleteView.as_view(), name="resource_delete"),
+    path("resource/item/<int:pk>/delete/", ResourceDeleteItemView.as_view(), name="delete_item"),
 
     path("resource/glossary/new/", GlossaryCreateView.as_view(), name="glossary_create"),
     path("resource/glossary/upload/", GlossaryUploadView.as_view(), name="glossary_upload"),
@@ -30,8 +29,6 @@ urlpatterns = [
          name="glossary_create_item"),
     path("resource/glossary/item/<int:pk>/edit/", GlossaryUpdateItemView.as_view(),
          name="glossary_update_item"),
-    path("resource/glossary/item/<int:pk>/delete/", GlossaryDeleteItemView.as_view(),
-         name="glossary_delete_item"),
 
     path("resource/translation/upload/", TranslationUploadView.as_view(),
          name="translation_upload"),
@@ -40,6 +37,4 @@ urlpatterns = [
 
     path("resource/translation/item/<int:pk>/edit/", TranslationUpdateItemView.as_view(),
          name="translation_update_item"),
-    path("resource/translation/item/<int:pk>/delete/", TranslationDeleteItemView.as_view(),
-         name="translation_delete_item"),
 ]
