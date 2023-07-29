@@ -27,11 +27,11 @@ urlpatterns = [
     path("resource/glossary/<int:resource>/add/", GlossaryAddItemView.as_view(),
          name="glossary_add_item"),
     path("resource/glossary/item/new/", GlossaryCreateItemView.as_view(),
-         name="glossary_item_create"),
+         name="glossary_create_item"),
     path("resource/glossary/item/<int:pk>/edit/", GlossaryUpdateItemView.as_view(),
-         name="glossary_item_update"),
+         name="glossary_update_item"),
     path("resource/glossary/item/<int:pk>/delete/", GlossaryDeleteItemView.as_view(),
-         name="glossary_item_delete"),
+         name="glossary_delete_item"),
 
     path("resource/translation/upload/", TranslationUploadView.as_view(),
          name="translation_upload"),
@@ -39,7 +39,7 @@ urlpatterns = [
          name="translation_update"),
 
     path("resource/translation/item/<int:pk>/edit/", TranslationUpdateItemView.as_view(),
-         name="translation_item_update"),
+         name="translation_update_item"),
     path("resource/translation/item/<int:pk>/delete/", TranslationDeleteItemView.as_view(),
-         name="translation_item_delete"),
+         name="translation_delete_item"),
 ]
