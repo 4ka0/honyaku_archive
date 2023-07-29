@@ -7,7 +7,7 @@ from ..models import Segment
 from ..forms.translation_item_forms import SegmentForm
 
 
-class SegmentUpdateView(LoginRequiredMixin, UpdateView):
+class TranslationUpdateItemView(LoginRequiredMixin, UpdateView):
     model = Segment
     form_class = SegmentForm
     template_name = "segment_update.html"
@@ -29,10 +29,10 @@ class SegmentUpdateView(LoginRequiredMixin, UpdateView):
                 previous_url = request.GET.get("previous_url")
                 return HttpResponseRedirect(previous_url)
         else:
-            return super(SegmentUpdateView, self).post(request, *args, **kwargs)
+            return super(TranslationUpdateItemView, self).post(request, *args, **kwargs)
 
 
-class SegmentDeleteView(LoginRequiredMixin, DeleteView):
+class TranslationDeleteItemView(LoginRequiredMixin, DeleteView):
     model = Segment
     template_name = "segment_delete.html"
 
@@ -40,7 +40,6 @@ class SegmentDeleteView(LoginRequiredMixin, DeleteView):
         if self.request.GET.get("previous_url"):
             previous_url = self.request.GET.get("previous_url")
             return previous_url
-
         return reverse_lazy("home")
 
     def post(self, request, *args, **kwargs):
@@ -49,4 +48,4 @@ class SegmentDeleteView(LoginRequiredMixin, DeleteView):
                 previous_url = request.GET.get("previous_url")
                 return HttpResponseRedirect(previous_url)
         else:
-            return super(SegmentDeleteView, self).post(request, *args, **kwargs)
+            return super(TranslationDeleteItemView, self).post(request, *args, **kwargs)

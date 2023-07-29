@@ -52,9 +52,9 @@
                     <!-- Edit link -->
                     <a
                         {% if object.resource_type == "GLOSSARY" %}
-                            href="{% url 'entry_update' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
+                            href="{% url 'glossary_item_update' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
                         {% else %}
-                            href="{% url 'segment_update' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
+                            href="{% url 'translation_item_update' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
                         {% endif %}
                         class="table-blue-icon pe-2"
                     >
@@ -67,9 +67,9 @@
                     <!-- Delete link -->
                     <a
                         {% if object.resource_type == "GLOSSARY" %}
-                            href="{% url 'entry_delete' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
+                            href="{% url 'glossary_item_delete' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
                         {% else %}
-                            href="{% url 'segment_delete' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
+                            href="{% url 'translation_item_delete' item.pk %}?previous_url={{ request.get_full_path|urlencode }}"
                         {% endif %}
                         class="table-blue-icon"
                     >

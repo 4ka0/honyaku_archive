@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView, UpdateView, View
+from django.views.generic import UpdateView, View
 
 from docx import Document  # For reading docx files
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
@@ -22,12 +22,6 @@ class TranslationUpdateView(LoginRequiredMixin, UpdateView):
         updated_translation.updated_by = self.request.user
         updated_translation.save()
         return HttpResponseRedirect(updated_translation.get_absolute_url())
-
-
-class TranslationDeleteView(LoginRequiredMixin, DeleteView):
-    model = Resource
-    template_name = "translation_delete.html"
-    success_url = reverse_lazy("home")
 
 
 class TranslationUploadView(LoginRequiredMixin, View):

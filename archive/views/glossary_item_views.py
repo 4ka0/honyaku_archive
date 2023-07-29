@@ -7,7 +7,7 @@ from ..models import Item, Resource
 from ..forms.glossary_item_forms import GlossaryItemForm
 
 
-class GlossaryItemCreateView(LoginRequiredMixin, CreateView):
+class GlossaryCreateItemView(LoginRequiredMixin, CreateView):
     model = Item
     form_class = GlossaryItemForm
     template_name = "item_create.html"
@@ -43,10 +43,10 @@ class GlossaryItemCreateView(LoginRequiredMixin, CreateView):
                 previous_url = request.GET.get("previous_url")
                 return HttpResponseRedirect(previous_url)
         else:
-            return super(GlossaryItemCreateView, self).post(request, *args, **kwargs)
+            return super(GlossaryCreateItemView, self).post(request, *args, **kwargs)
 
 
-class GlossaryItemUpdateView(LoginRequiredMixin, UpdateView):
+class GlossaryUpdateItemView(LoginRequiredMixin, UpdateView):
     model = Item
     form_class = GlossaryItemForm
     template_name = "item_update.html"
@@ -81,10 +81,10 @@ class GlossaryItemUpdateView(LoginRequiredMixin, UpdateView):
                 previous_url = request.GET.get("previous_url")
                 return HttpResponseRedirect(previous_url)
         else:
-            return super(GlossaryItemUpdateView, self).post(request, *args, **kwargs)
+            return super(GlossaryUpdateItemView, self).post(request, *args, **kwargs)
 
 
-class GlossaryItemDeleteView(LoginRequiredMixin, DeleteView):
+class GlossaryDeleteItemView(LoginRequiredMixin, DeleteView):
     model = Item
     template_name = "item_delete.html"
 
@@ -100,4 +100,4 @@ class GlossaryItemDeleteView(LoginRequiredMixin, DeleteView):
                 previous_url = request.GET.get("previous_url")
                 return HttpResponseRedirect(previous_url)
         else:
-            return super(GlossaryItemDeleteView, self).post(request, *args, **kwargs)
+            return super(GlossaryDeleteItemView, self).post(request, *args, **kwargs)
