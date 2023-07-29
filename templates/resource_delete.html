@@ -8,7 +8,7 @@
 
             <div class="card-header">
                 <div class="text-center">
-                    {% if object.resource_type == "TRANSLATION" %}
+                    {% if resource.resource_type == "TRANSLATION" %}
                         翻訳を削除する
                     {% else %}
                         用語集を削除する
@@ -22,19 +22,19 @@
 
                     <dt class="col-4">タイトル：</dt>
                     <dd class="col-8">
-                        {% if object.title %}
-                            <p>{{ object.title }}</p>
+                        {% if resource.title %}
+                            <p>{{ resource.title }}</p>
                         {% else %}
                             <p>（不明）</p>
                         {% endif %}
                     </dd>
 
-                    {% if object.resource_type == "TRANSLATION" %}
+                    {% if resource.resource_type == "TRANSLATION" %}
 
                         <dt class="col-4">翻訳者：</dt>
                         <dd class="col-8">
-                            {% if object.translator %}
-                                <p>{{ object.translator }}</p>
+                            {% if resource.translator %}
+                                <p>{{ resource.translator }}</p>
                             {% else %}
                                 <p>（不明）</p>
                             {% endif %}
@@ -42,8 +42,8 @@
 
                         <dt class="col-4">顧客：</dt>
                         <dd class="col-8">
-                            {% if object.client %}
-                                <p>{{ object.client }}</p>
+                            {% if resource.client %}
+                                <p>{{ resource.client }}</p>
                             {% else %}
                                 <p>（不明）</p>
                             {% endif %}
@@ -51,8 +51,8 @@
 
                         <dt class="col-4">分野：</dt>
                         <dd class="col-8">
-                            {% if object.field %}
-                                <p>{{ object.field }}</p>
+                            {% if resource.field %}
+                                <p>{{ resource.field }}</p>
                             {% else %}
                                 <p>（不明）</p>
                             {% endif %}
@@ -62,8 +62,8 @@
 
                     <dt class="col-4">備考：</dt>
                     <dd class="col-8">
-                        {% if object.notes %}
-                            <p>{{ object.notes|linebreaksbr }}</p>
+                        {% if resource.notes %}
+                            <p>{{ resource.notes|linebreaksbr }}</p>
                         {% else %}
                             <p>（なし）</p>
                         {% endif %}
@@ -71,8 +71,8 @@
 
                     <dt class="col-4">作成日時：</dt>
                     <dd class="col-8">
-                        {% if object.created_on %}
-                            <p>{{ object.created_on }}</p>
+                        {% if resource.created_on %}
+                            <p>{{ resource.created_on }}</p>
                         {% else %}
                             <p>（不明）</p>
                         {% endif %}
@@ -80,8 +80,8 @@
 
                     <dt class="col-4">作成者：</dt>
                     <dd class="col-8">
-                        {% if object.created_by %}
-                            <p>{{ object.created_by }}</p>
+                        {% if resource.created_by %}
+                            <p>{{ resource.created_by }}</p>
                         {% else %}
                             <p>（不明）</p>
                         {% endif %}
@@ -89,8 +89,8 @@
 
                     <dt class="col-4">最終更新日時：</dt>
                     <dd class="col-8">
-                        {% if object.updated_on %}
-                            <p>{{ object.updated_on }}</p>
+                        {% if resource.updated_on %}
+                            <p>{{ resource.updated_on }}</p>
                         {% else %}
                             <p>（不明）</p>
                         {% endif %}
@@ -98,8 +98,8 @@
 
                     <dt class="col-4">最終更新者：</dt>
                     <dd class="col-8">
-                        {% if object.updated_by %}
-                            <p>{{ object.updated_by }}</p>
+                        {% if resource.updated_by %}
+                            <p>{{ resource.updated_by }}</p>
                         {% else %}
                             <p>（不明）</p>
                         {% endif %}
@@ -110,7 +110,7 @@
                 <hr class="mt-1">
 
                 <p class="text-center pt-2">
-                    {% if object.resource_type == "TRANSLATION" %}
+                    {% if resource.resource_type == "TRANSLATION" %}
                         上記の翻訳を削除してよろしいですか。
                     {% else %}
                         上記の用語集を削除してよろしいですか。

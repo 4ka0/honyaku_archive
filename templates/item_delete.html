@@ -8,7 +8,11 @@
 
             <div class="card-header">
                 <div class="text-center">
-                    エントリーを削除する
+                    {% if item.resource.resource_type == "TRANSLATION" %}
+                        翻訳セグメントを削除する
+                    {% else %}
+                        用語集エントリーを削除する
+                    {% endif %}
                 </div>
             </div>
 
@@ -18,8 +22,8 @@
 
                     <dt class="col-3">原文：</dt>
                     <dd class="col-9">
-                        {% if object.source %}
-                            <p>{{ object.source }}</p>
+                        {% if item.source %}
+                            <p>{{ item.source }}</p>
                         {% else %}
                             <p>（なし）</p>
                         {% endif %}
@@ -27,36 +31,50 @@
 
                     <dt class="col-3">訳文：</dt>
                     <dd class="col-9">
-                        {% if object.target %}
-                            <p>{{ object.target }}</p>
+                        {% if item.target %}
+                            <p>{{ item.target }}</p>
                         {% else %}
                             <p>（なし）</p>
                         {% endif %}
                     </dd>
 
-                    <dt class="col-3">用語集：</dt>
+                    <dt class="col-3">
+                        {% if item.resource.resource_type == "TRANSLATION" %}
+                            翻訳：
+                        {% else %}
+                            用語集：
+                        {% endif %}
+                    </dt>
                     <dd class="col-9">
-                        {% if object.glossary %}
-                            <p>{{ object.glossary }}</p>
+                        {% if item.resource %}
+                            <p>{{ object.resource }}</p>
                         {% else %}
                             <p>（なし）</p>
                         {% endif %}
                     </dd>
 
-                    <dt class="col-3">備考：</dt>
-                    <dd class="col-9">
-                        {% if object.notes %}
-                            <p>{{ object.notes|linebreaksbr }}</p>
-                        {% else %}
-                            <p>（なし）</p>
-                        {% endif %}
-                    </dd>
+                    {% if item.resource.resource_type == "GLOSSARY" %}
+                        <dt class="col-3">備考：</dt>
+                        <dd class="col-9">
+                            {% if item.notes %}
+                                <p>{{ item.notes|linebreaksbr }}</p>
+                            {% else %}
+                                <p>（なし）</p>
+                            {% endif %}
+                        </dd>
+                    {% endif %}
 
                 </dl>
 
                 <hr class="mt-1">
 
-                <p class="text-center pt-2">上記のエントリーを削除してよろしいですか。</p>
+                <p class="text-center pt-2">
+                    {% if item.resource.resource_type == "TRANSLATION" %}
+                        上記の翻訳セグメントを削除してよろしいですか。
+                    {% else %}
+                        上記の用語集エントリーを削除してよろしいですか。
+                    {% endif %}
+                </p>
 
                 <form method="POST" novalidate>
                     {% csrf_token %}

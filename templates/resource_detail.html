@@ -8,26 +8,26 @@
 
         <!-- Resource title -->
 
-        <h4 class="my-4">{{ object.title }}</h4>
+        <h4 class="my-4">{{ resource.title }}</h4>
 
         <!-- Update and delete links -->
 
         <div class="mt-5 mb-4">
 
-            {% if object.resource_type == "GLOSSARY" %}
+            {% if resource.resource_type == "GLOSSARY" %}
 
                 <h5 class="d-inline pe-2">用語集の詳細</h5>
                 <small>
-                    <a href="{% url 'glossary_update' object.pk %}">詳細を編集する</a> |
-                    <a href="{% url 'resource_delete' object.pk %}">用語集を削除する</a>
+                    <a href="{% url 'glossary_update' resource.pk %}">詳細を編集する</a> |
+                    <a href="{% url 'resource_delete' resource.pk %}">用語集を削除する</a>
                 </small>
 
             {% else %}
 
                 <h5 class="d-inline pe-2">翻訳の詳細</h5>
                 <small>
-                    <a href="{% url 'translation_update' object.pk %}">詳細を編集する</a> |
-                    <a href="{% url 'resource_delete' object.pk %}">翻訳を削除する</a>
+                    <a href="{% url 'translation_update' resource.pk %}">詳細を編集する</a> |
+                    <a href="{% url 'resource_delete' resource.pk %}">翻訳を削除する</a>
                 </small>
 
             {% endif %}
@@ -46,12 +46,12 @@
                             <td>{{ num_of_items|intcomma }}</td>
                         </tr>
 
-                        {% if object.resource_type == "TRANSLATION" %}
+                        {% if resource.resource_type == "TRANSLATION" %}
 
                             <tr>
                                 <td>翻訳者:</td>
-                                {% if object.translator %}
-                                    <td>{{ object.translator }}</td>
+                                {% if resource.translator %}
+                                    <td>{{ resource.translator }}</td>
                                 {% else %}
                                     <td>（なし）</td>
                                 {% endif %}
@@ -59,8 +59,8 @@
 
                             <tr>
                                 <td>顧客:</td>
-                                {% if object.client %}
-                                    <td>{{ object.client }}</td>
+                                {% if resource.client %}
+                                    <td>{{ resource.client }}</td>
                                 {% else %}
                                     <td>（不明）</td>
                                 {% endif %}
@@ -68,8 +68,8 @@
 
                             <tr>
                                 <td>分野:</td>
-                                {% if object.field %}
-                                    <td>{{ object.field }}</td>
+                                {% if resource.field %}
+                                    <td>{{ resource.field }}</td>
                                 {% else %}
                                     <td>（不明）</td>
                                 {% endif %}
@@ -79,8 +79,8 @@
 
                         <tr>
                             <td>作成日時:</td>
-                            {% if object.created_on %}
-                                <td>{{ object.created_on }}</td>
+                            {% if resource.created_on %}
+                                <td>{{ resource.created_on }}</td>
                             {% else %}
                                 <td>（不明）</td>
                             {% endif %}
@@ -88,8 +88,8 @@
 
                         <tr>
                             <td>作成者:</td>
-                            {% if object.created_by %}
-                                <td>{{ object.created_by|title }}</td>
+                            {% if resource.created_by %}
+                                <td>{{ resource.created_by|title }}</td>
                             {% else %}
                                 <td>（不明）</td>
                             {% endif %}
@@ -97,8 +97,8 @@
 
                         <tr>
                             <td>備考:</td>
-                            {% if object.notes %}
-                                <td>{{ object.notes|linebreaksbr|urlizetrunc:50 }}</td>
+                            {% if resource.notes %}
+                                <td>{{ resource.notes|linebreaksbr|urlizetrunc:50 }}</td>
                             {% else %}
                                 <td>（なし）</td>
                             {% endif %}
@@ -120,13 +120,13 @@
                 <br>
                 <div class="mb-4 ">
                     <h5 class="d-inline">
-                        {% if object.resource_type == "TRANSLATION" %}
+                        {% if resource.resource_type == "TRANSLATION" %}
                             翻訳の内容
                         {% else %}
                             用語集の内容
                         {% endif %}
                     </h5>
-                    {% if object.resource_type == "GLOSSARY" %}
+                    {% if resource.resource_type == "GLOSSARY" %}
                         <small class="ps-2">
                             <a href="{% url 'glossary_add_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                                 エントリーを追加する
@@ -141,7 +141,7 @@
 
         {% else %}
 
-            {% if object.resource_type == "GLOSSARY" %}
+            {% if resource.resource_type == "GLOSSARY" %}
                 <small class="ps-2">
                     <a href="{% url 'glossary_add_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                         エントリーを追加する
