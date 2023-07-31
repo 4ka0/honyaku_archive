@@ -81,3 +81,26 @@ class GlossaryItemForm(forms.ModelForm):
                     self.add_error("new_resource", msg)
 
         return cleaned_data
+
+
+class TranslationItemForm(forms.ModelForm):
+    source = forms.CharField(
+        label="① 原文",
+        widget=forms.Textarea(attrs={"rows": 6}),
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        },
+    )
+    target = forms.CharField(
+        label="② 訳文",
+        widget=forms.Textarea(attrs={"rows": 6}),
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        },
+    )
+
+    class Meta:
+        model = Item
+        fields = ("source", "target")
