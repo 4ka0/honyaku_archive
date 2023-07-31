@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.forms.widgets import Textarea
 
 from ...models import Entry
-from ...forms.glossary_item_forms import EntryAddToGlossaryForm
+from ...forms.item_forms import EntryAddToGlossaryForm
 
 
 class TestEntryAddToGlossaryForm(TestCase):

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.forms.widgets import Textarea, TextInput
 
 from ...models import Entry, Glossary
-from ...forms.glossary_item_forms import EntryForm
+from ...forms.item_forms import EntryForm
 
 
 class TestEntryForm(TestCase):

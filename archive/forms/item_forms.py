@@ -4,6 +4,9 @@ from ..models import Item, Resource
 
 
 class GlossaryItemForm(forms.ModelForm):
+    """
+    Form used for creating and updating items that belong to glossaries.
+    """
     source = forms.CharField(
         label="① 原文",
         error_messages={
@@ -84,6 +87,9 @@ class GlossaryItemForm(forms.ModelForm):
 
 
 class TranslationItemForm(forms.ModelForm):
+    """
+    Form used for creating and updating items that belong to translations.
+    """
     source = forms.CharField(
         label="① 原文",
         widget=forms.Textarea(attrs={"rows": 6}),
@@ -104,3 +110,32 @@ class TranslationItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ("source", "target")
+
+
+class GlossaryAddItemForm(forms.ModelForm):
+    """
+    Form used for adding an item to a glossary.
+    """
+    source = forms.CharField(
+        label="① 原文",
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        },
+    )
+    target = forms.CharField(
+        label="② 訳文",
+        error_messages={
+            "required": "このフィールドは入力必須です。",
+            "max_length": "255文字以下になるように変更してください。",
+        },
+    )
+    notes = forms.CharField(
+        label="③ 備考（任意）",
+        widget=forms.Textarea(attrs={"rows": 6}),
+        required=False,
+    )
+
+    class Meta:
+        model = Item
+        fields = ("source", "target", "notes")

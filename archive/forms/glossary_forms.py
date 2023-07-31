@@ -2,11 +2,10 @@ from django import forms
 from django.core.validators import FileExtensionValidator
 from django.utils.safestring import mark_safe
 
-from ..models import Resource, Item
+from ..models import Resource
 
 
 class GlossaryForm(forms.ModelForm):
-
     title = forms.CharField(
         label="① 用語集のタイトル",
         error_messages={
@@ -26,7 +25,6 @@ class GlossaryForm(forms.ModelForm):
 
 
 class GlossaryUploadForm(forms.ModelForm):
-
     upload_file = forms.FileField(
         label="① ファイルを選択してください。",
         error_messages={"required": "このフィールドは入力必須です。"},
@@ -98,29 +96,3 @@ class GlossaryUploadForm(forms.ModelForm):
                 self.add_error("title", msg)
 
         return cleaned_data
-
-
-class GlossaryAddItemForm(forms.ModelForm):
-    source = forms.CharField(
-        label="① 原文",
-        error_messages={
-            "required": "このフィールドは入力必須です。",
-            "max_length": "255文字以下になるように変更してください。",
-        },
-    )
-    target = forms.CharField(
-        label="② 訳文",
-        error_messages={
-            "required": "このフィールドは入力必須です。",
-            "max_length": "255文字以下になるように変更してください。",
-        },
-    )
-    notes = forms.CharField(
-        label="③ 備考（任意）",
-        widget=forms.Textarea(attrs={"rows": 6}),
-        required=False,
-    )
-
-    class Meta:
-        model = Item
-        fields = ("source", "target", "notes")

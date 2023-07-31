@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm, GlossaryAddItemForm
+from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm
 from ..models import Resource, Item
 
 
@@ -164,40 +164,6 @@ def build_entries(resource_obj, request):
 
     # Delete the uploaded text file, no longer needed.
     resource_obj.upload_file.delete()
-
-
-class GlossaryAddItemView(LoginRequiredMixin, CreateView):
-    """
-    Class to add a new Item object to an existing Resource Object.
-    Called from the resource detail page.
-    Receives pk of resource object in question and sets this for the
-    entry.glossary field.
-    """
-
-    model = Item
-    form_class = GlossaryAddItemForm
-    template_name = "glossary_add_item.html"
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.resource = Resource.objects.get(pk=self.kwargs["resource"])
-        obj.created_by = self.request.user
-        obj.updated_by = self.request.user
-        obj.save()
-
-        if self.request.GET.get("previous_url"):
-            previous_url = self.request.GET.get("previous_url")
-            return HttpResponseRedirect(previous_url)
-
-        return HttpResponseRedirect(obj.get_absolute_url())
-
-    def post(self, request, *args, **kwargs):
-        if "cancel" in request.POST:
-            if request.GET.get("previous_url"):
-                previous_url = request.GET.get("previous_url")
-                return HttpResponseRedirect(previous_url)
-        else:
-            return super(GlossaryAddItemView, self).post(request, *args, **kwargs)
 
 
 """
