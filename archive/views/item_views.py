@@ -31,8 +31,8 @@ class ItemUpdateView(LoginRequiredMixin, UpdateView):
 
 class ItemDeleteView(LoginRequiredMixin, DeleteView):
     model = Item
-    template_name = "item_delete.html"
     context_object_name = "item"
+    template_name = "item_delete.html"
 
     def get_success_url(self):
         if self.request.GET.get("previous_url"):
