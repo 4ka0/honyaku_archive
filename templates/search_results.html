@@ -78,18 +78,10 @@
                                 <a href="{% url 'resource_detail' item.resource.pk %}">{{ item.resource.title }}</a>
                             </td>
 
-                            <!-- Actions -->
+                            <!-- Action links -->
                             <td class="col-center-align">
                                 <small>
-                                    {% if item.resource.resource_type == "GLOSSARY" %}
-
-                                        {% include "_entry_action_icons.html" %}
-
-                                    {% elif item.resource.resource_type == "TRANSLATION" %}
-
-                                        {% include "_segment_action_icons.html" %}
-
-                                    {% endif %}
+                                    {% include "_table_action_links.html" %}
                                 </small>
                             </td>
 
