@@ -22,7 +22,7 @@
                     {% if item.source %}
                         {{ item.source }}
                         <!-- Copy to clipboard and search icon links -->
-                        {% include "_table_cell_source_item_icons.html" %}
+                        {% include "_table_cell_source_item_links.html" %}
                     {% else %}
                         <span class="table-muted-text">（原文なし）</span>
                     {% endif %}
@@ -33,7 +33,7 @@
                     {% if item.target %}
                         {{ item.target }}
                         <!-- Copy to clipboard and search icon links -->
-                        {% include "_table_cell_target_item_icons.html" %}
+                        {% include "_table_cell_target_item_links.html" %}
                         <!-- Include notes if present -->
                         {% if item.notes %}
                             <br><br>

@@ -39,7 +39,7 @@
                                     {{ item.source|highlight_query:query }}
 
                                     <!-- Copy to clipboard and search icon links -->
-                                    {% include "_table_cell_source_item_icons.html" %}
+                                    {% include "_table_cell_source_item_links.html" %}
 
                                 {% else %}
 
@@ -56,7 +56,7 @@
                                     {{ item.target|highlight_query:query }}
 
                                     <!-- Copy to clipboard and search icon links -->
-                                    {% include "_table_cell_target_item_icons.html" %}
+                                    {% include "_table_cell_target_item_links.html" %}
 
                                     <!-- Include notes if present -->
                                     {% if item.notes %}
