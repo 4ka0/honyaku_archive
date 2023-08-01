@@ -1,13 +1,13 @@
 <tr>
 
     <td class="align-middle">
-        <a href="{% url 'resource_detail' object.pk %}">{{ object }}</a>
+        <a href="{% url 'resource_detail' resource.pk %}">{{ resource }}</a>
     </td>
 
     <td class="align-middle">
-        {% if object.resource_type == "GLOSSARY" %}
+        {% if resource.resource_type == "GLOSSARY" %}
             用語集
-        {% elif object.resource_type == "TRANSLATION" %}
+        {% elif resource.resource_type == "TRANSLATION" %}
             翻訳
         {% else %}
             不明
@@ -15,7 +15,7 @@
     </td>
 
     <td class="align-middle">
-        {{ object.created_on|date:"d M Y" }}, {{ object.created_on|time:"H:i" }}
+        {{ resource.created_on|date:"d M Y" }}, {{ resource.created_on|time:"H:i" }}
     </td>
 
 </tr>
