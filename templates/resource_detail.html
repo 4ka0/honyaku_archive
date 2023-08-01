@@ -128,7 +128,7 @@
                     </h5>
                     {% if resource.resource_type == "GLOSSARY" %}
                         <small class="ps-2">
-                            <a href="{% url 'glossary_add_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                            <a href="{% url 'create_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                                 エントリーを追加する
                             </a>
                         </small>
@@ -143,7 +143,7 @@
 
             {% if resource.resource_type == "GLOSSARY" %}
                 <small class="ps-2">
-                    <a href="{% url 'glossary_add_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
+                    <a href="{% url 'create_item' resource=object.pk %}?previous_url={{ request.get_full_path|urlencode }}">
                         エントリーを追加する
                     </a>
                 </small>

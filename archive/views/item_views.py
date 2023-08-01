@@ -8,16 +8,34 @@ from ..models import Item, Resource
 
 
 class ItemCreateView(LoginRequiredMixin, CreateView):
+    """
+    Class to create a new Item or add a new Item to a Resource.
+    Either called from the navigation bar (in which case a new Item is to be
+    created), or called from the resource detail page (in which case a new Item
+    is to be added to the Resource object in question).
+    """
     model = Item
     template_name = "item_create.html"
 
     def get_form_class(self):
-        # If to create Item from scratch
-        #    return ItemCreateForm
-        # return ItemAddForm
+        """
+        If this view is called from the resource detail page, the pk of the
+        Resource object in question is passed as the keyword argument "resource".
+        If called from the navigation bar, "resource" should not be present.
+        """
+        if "resource" in self.kwargs:
+            return GlossaryAddItemForm
         return GlossaryItemForm
 
-    def get_success_url(self):
+    def get_success_url(self, new_item):
+        """
+        Redirect to the detail page of the Resource object to which the new
+        Item object belongs. Otherwise redirect to the previous URL, or simply
+        redirect to home.
+        """
+        if new_item.resource:
+            resource = new_item.resource
+            return resource.get_absolute_url()
         if self.request.GET.get("previous_url"):
             previous_url = self.request.GET.get("previous_url")
             return previous_url
@@ -27,7 +45,8 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
         new_item = form.save(commit=False)
         new_item.created_by = self.request.user
         new_item.updated_by = self.request.user
-        # If a new resource is to be created for this item.
+
+        # If a new resource is to be created for the new item.
         new_resource_title = form.cleaned_data.get("new_resource")
         if new_resource_title:
             new_resource = Resource(
@@ -38,8 +57,15 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
             )
             new_resource.save()
             new_item.resource = new_resource
+
+        # If the resource to be associated with the new item has been passed as
+        # a parameter in the URL.
+        if "resource" in self.kwargs:
+            resource_pk = self.kwargs["resource"]
+            new_item.resource = Resource.objects.get(pk=resource_pk)
+
         new_item.save()
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(self.get_success_url(new_item))
 
     def post(self, request, *args, **kwargs):
         if "cancel" in request.POST:
@@ -51,6 +77,11 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
 
 
 class ItemUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Class to update an existing Item.
+    Different forms are used depending on whether the Item belongs to a
+    glossary or a translation.
+    """
     model = Item
     template_name = "item_update.html"
 
@@ -90,37 +121,3 @@ class ItemDeleteView(LoginRequiredMixin, DeleteView):
                 return HttpResponseRedirect(previous_url)
         else:
             return super(ItemDeleteView, self).post(request, *args, **kwargs)
-
-
-class GlossaryAddItemView(LoginRequiredMixin, CreateView):
-    """
-    Class to add a new Item object to an existing Resource Object.
-    Called from the resource detail page.
-    Receives pk of resource object in question and sets this for the
-    entry.glossary field.
-    """
-
-    model = Item
-    form_class = GlossaryAddItemForm
-    template_name = "glossary_add_item.html"
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.resource = Resource.objects.get(pk=self.kwargs["resource"])
-        obj.created_by = self.request.user
-        obj.updated_by = self.request.user
-        obj.save()
-
-        if self.request.GET.get("previous_url"):
-            previous_url = self.request.GET.get("previous_url")
-            return HttpResponseRedirect(previous_url)
-
-        return HttpResponseRedirect(obj.get_absolute_url())
-
-    def post(self, request, *args, **kwargs):
-        if "cancel" in request.POST:
-            if request.GET.get("previous_url"):
-                previous_url = request.GET.get("previous_url")
-                return HttpResponseRedirect(previous_url)
-        else:
-            return super(GlossaryAddItemView, self).post(request, *args, **kwargs)

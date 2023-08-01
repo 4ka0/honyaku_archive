@@ -5,7 +5,7 @@ from ..models import Item, Resource
 
 class GlossaryItemForm(forms.ModelForm):
     """
-    Form used for creating and updating items that belong to glossaries.
+    Form used for creating and updating Item objects that belong to glossaries.
     """
     source = forms.CharField(
         label="① 原文",
@@ -88,7 +88,7 @@ class GlossaryItemForm(forms.ModelForm):
 
 class TranslationItemForm(forms.ModelForm):
     """
-    Form used for creating and updating items that belong to translations.
+    Form used for creating and updating Item objects that belong to translations.
     """
     source = forms.CharField(
         label="① 原文",
@@ -114,7 +114,7 @@ class TranslationItemForm(forms.ModelForm):
 
 class GlossaryAddItemForm(forms.ModelForm):
     """
-    Form used for adding an item to a glossary.
+    Form used for adding an item to an existing glossary.
     """
     source = forms.CharField(
         label="① 原文",
