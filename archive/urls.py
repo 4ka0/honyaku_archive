@@ -1,12 +1,12 @@
 from django.urls import path
 
-from .views.glossary_views import GlossaryUploadView
+from .views.glossary_upload_view import GlossaryUploadView
 from .views.homepage_views import HomePageView, home_table_sort
 from .views.item_views import ItemCreateView, ItemDeleteView, ItemUpdateView
 from .views.resource_views import (ResourceCreateView, ResourceDeleteView,
                                    ResourceDetailView, ResourceUpdateView)
-from .views.search_views import SearchView
-from .views.translation_views import TranslationUploadView
+from .views.search_view import SearchView
+from .views.translation_upload_view import TranslationUploadView
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
