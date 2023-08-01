@@ -1,54 +1,13 @@
 import csv
 
-from django.utils import timezone
-from django.views.generic import View, CreateView, DeleteView, UpdateView
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
+from django.views.generic import View
 
-from ..forms.glossary_forms import GlossaryForm, GlossaryUploadForm
-from ..models import Resource, Item
-
-
-class GlossaryCreateView(LoginRequiredMixin, CreateView):
-    model = Resource
-    form_class = GlossaryForm
-    template_name = "glossary_create.html"
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.created_by = self.request.user
-        obj.updated_by = self.request.user
-        obj.resource_type = "GLOSSARY"
-        obj.save()
-        return HttpResponseRedirect(obj.get_absolute_url())
-
-    def post(self, request, *args, **kwargs):
-        if "cancel" in request.POST:
-            if request.GET.get("previous_url"):
-                previous_url = request.GET.get("previous_url")
-                return HttpResponseRedirect(previous_url)
-        else:
-            return super(GlossaryCreateView, self).post(request, *args, **kwargs)
-
-
-class GlossaryUpdateView(LoginRequiredMixin, UpdateView):
-    model = Resource
-    template_name = "glossary_update.html"
-    form_class = GlossaryForm
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.updated_by = self.request.user
-        obj.save()
-        return HttpResponseRedirect(obj.get_absolute_url())
-
-
-class GlossaryDeleteView(LoginRequiredMixin, DeleteView):
-    model = Resource
-    template_name = "glossary_delete.html"
-    success_url = reverse_lazy("home")
+from ..forms.glossary_forms import GlossaryUploadForm
+from ..models import Item, Resource
 
 
 class GlossaryUploadView(LoginRequiredMixin, View):
@@ -164,26 +123,6 @@ def build_entries(resource_obj, request):
 
     # Delete the uploaded text file, no longer needed.
     resource_obj.upload_file.delete()
-
-
-"""
-# Nolonger needed.
-# Replaced with ResourceDetailView.
-
-class GlossaryDetailView(LoginRequiredMixin, DetailView):
-    model = Glossary
-    template_name = "glossary_detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(GlossaryDetailView, self).get_context_data(**kwargs)
-        num_of_entries = context["glossary"].entries.all().count()
-        context.update(
-            {
-                "num_of_entries": num_of_entries,
-            }
-        )
-        return context
-"""
 
 
 """

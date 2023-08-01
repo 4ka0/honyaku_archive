@@ -3,25 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView, View
+from django.views.generic import View
 
 from docx import Document  # For reading docx files
 from translate.storage.tmx import tmxfile  # For reading tmx files (from translate-toolkit)
 
-from ..forms.translation_forms import TranslationUpdateForm, TranslationUploadForm
+from ..forms.translation_forms import TranslationUploadForm
 from ..models import Item, Resource
-
-
-class TranslationUpdateView(LoginRequiredMixin, UpdateView):
-    model = Resource
-    template_name = "translation_update.html"
-    form_class = TranslationUpdateForm
-
-    def form_valid(self, form):
-        updated_translation = form.save(commit=False)
-        updated_translation.updated_by = self.request.user
-        updated_translation.save()
-        return HttpResponseRedirect(updated_translation.get_absolute_url())
 
 
 class TranslationUploadView(LoginRequiredMixin, View):

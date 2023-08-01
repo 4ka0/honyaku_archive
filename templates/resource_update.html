@@ -10,7 +10,11 @@
 
             <div class="card-header">
                 <div class="text-center">
-                    用語集の詳細を編集する
+                    {% if resource.resource_type == "GLOSSARY" %}
+                        用語集の詳細を編集する
+                    {% else %}
+                        翻訳の詳細を編集する
+                    {% endif %}
                 </div>
             </div>
 

@@ -18,7 +18,7 @@
 
                 <h5 class="d-inline pe-2">用語集の詳細</h5>
                 <small>
-                    <a href="{% url 'glossary_update' resource.pk %}">詳細を編集する</a> |
+                    <a href="{% url 'resource_update' resource.pk %}">詳細を編集する</a> |
                     <a href="{% url 'resource_delete' resource.pk %}">用語集を削除する</a>
                 </small>
 
@@ -26,7 +26,7 @@
 
                 <h5 class="d-inline pe-2">翻訳の詳細</h5>
                 <small>
-                    <a href="{% url 'translation_update' resource.pk %}">詳細を編集する</a> |
+                    <a href="{% url 'resource_update' resource.pk %}">詳細を編集する</a> |
                     <a href="{% url 'resource_delete' resource.pk %}">翻訳を削除する</a>
                 </small>
 

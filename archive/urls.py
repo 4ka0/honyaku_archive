@@ -1,11 +1,12 @@
 from django.urls import path
 
-from .views.glossary_views import GlossaryCreateView, GlossaryUpdateView, GlossaryUploadView
+from .views.glossary_views import GlossaryUploadView
 from .views.homepage_views import HomePageView, home_table_sort
 from .views.item_views import ItemCreateView, ItemDeleteView, ItemUpdateView
-from .views.resource_views import ResourceDeleteView, ResourceDetailView
+from .views.resource_views import (ResourceCreateView, ResourceDeleteView,
+                                   ResourceDetailView, ResourceUpdateView)
 from .views.search_views import SearchView
-from .views.translation_views import TranslationUpdateView, TranslationUploadView
+from .views.translation_views import TranslationUploadView
 
 urlpatterns = [
     path("", HomePageView.as_view(), name="home"),
@@ -18,15 +19,11 @@ urlpatterns = [
     path("resource/item/<int:pk>/edit/", ItemUpdateView.as_view(), name="update_item"),
     path("resource/item/<int:pk>/delete/", ItemDeleteView.as_view(), name="delete_item"),
 
+    path("resource/new/", ResourceCreateView.as_view(), name="create_resource"),
     path("resource/<int:pk>/", ResourceDetailView.as_view(), name="resource_detail"),
+    path("resource/<int:pk>/edit/", ResourceUpdateView.as_view(), name="resource_update"),
     path("resource/<int:pk>/delete/", ResourceDeleteView.as_view(), name="resource_delete"),
 
-    path("resource/glossary/new/", GlossaryCreateView.as_view(), name="glossary_create"),
-    path("resource/glossary/upload/", GlossaryUploadView.as_view(), name="glossary_upload"),
-    path("resource/glossary/<int:pk>/edit/", GlossaryUpdateView.as_view(), name="glossary_update"),
-
-    path("resource/translation/upload/", TranslationUploadView.as_view(),
-         name="translation_upload"),
-    path("resource/translation/<int:pk>/edit/", TranslationUpdateView.as_view(),
-         name="translation_update"),
+    path("glossary/upload/", GlossaryUploadView.as_view(), name="glossary_upload"),
+    path("translation/upload/", TranslationUploadView.as_view(), name="translation_upload"),
 ]
