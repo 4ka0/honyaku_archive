@@ -29,16 +29,17 @@ class ItemCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self, new_item):
         """
-        Redirect to the detail page of the Resource object to which the new
-        Item object belongs. Otherwise redirect to the previous URL, or simply
-        redirect to home.
+        Redirect to the the previous URL if available.
+        Otherwise redirect to the detail page of the Resource object to which
+        the Item object belongs.
+        Otherwise simply redirect to the homepage.
         """
-        if new_item.resource:
-            resource = new_item.resource
-            return resource.get_absolute_url()
         if self.request.GET.get("previous_url"):
             previous_url = self.request.GET.get("previous_url")
             return previous_url
+        if new_item.resource:
+            resource = new_item.resource
+            return resource.get_absolute_url()
         return reverse_lazy("home")
 
     def form_valid(self, form):
