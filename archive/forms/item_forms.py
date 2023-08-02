@@ -23,7 +23,7 @@ class GlossaryItemForm(forms.ModelForm):
     )
     resource = forms.ModelChoiceField(
         label="③ 既存の用語集に関連付けますか？",
-        queryset=Resource.objects.all().order_by("title"),
+        queryset=Resource.objects.filter(resource_type="GLOSSARY").order_by("title"),
         required=False,
     )
     new_resource = forms.CharField(
