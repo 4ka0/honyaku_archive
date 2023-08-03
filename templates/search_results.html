@@ -62,7 +62,7 @@
                                     {% if item.notes %}
                                         <br><br>
                                         <div class="table-muted-text">
-                                            {{ item.notes|linebreaksbr|urlizetrunc:50 }}
+                                            {{ item.notes|highlight_query:query|linebreaksbr|urlizetrunc:50 }}
                                         </div>
                                     {% endif %}
 
