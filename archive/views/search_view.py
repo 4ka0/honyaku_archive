@@ -30,7 +30,7 @@ class SearchView(LoginRequiredMixin, ListView):
         if resource == "すべてのリソース":
             queryset = (
                 Item.objects
-                .filter(Q(source__icontains=query) | Q(target__icontains=query))
+                .filter(Q(source__icontains=query) | Q(target__icontains=query) | Q(notes__icontains=query))
                 .order_by(Length("source"))
             )
 
@@ -39,7 +39,7 @@ class SearchView(LoginRequiredMixin, ListView):
             queryset = (
                 Item.objects
                 .filter(resource__resource_type="GLOSSARY")
-                .filter(Q(source__icontains=query) | Q(target__icontains=query))
+                .filter(Q(source__icontains=query) | Q(target__icontains=query) | Q(notes__icontains=query))
                 .order_by(Length("source"))
             )
 
@@ -48,7 +48,7 @@ class SearchView(LoginRequiredMixin, ListView):
             queryset = (
                 Item.objects
                 .filter(resource__resource_type="TRANSLATION")
-                .filter(Q(source__icontains=query) | Q(target__icontains=query))
+                .filter(Q(source__icontains=query) | Q(target__icontains=query) | Q(notes__icontains=query))
                 .order_by(Length("source"))
             )
 
@@ -58,7 +58,7 @@ class SearchView(LoginRequiredMixin, ListView):
                 Item.objects
                 .filter(
                     Q(resource__title=resource),
-                    Q(source__icontains=query) | Q(target__icontains=query),
+                    Q(source__icontains=query) | Q(target__icontains=query) | Q(notes__icontains=query),
                 )
                 .order_by(Length("source"))
             )
