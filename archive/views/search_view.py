@@ -10,7 +10,6 @@ class SearchView(LoginRequiredMixin, ListView):
     """
     View to search for Item objects containing a query string.
     """
-
     template_name = "search_results.html"
 
     def get_queryset(self):
@@ -69,13 +68,12 @@ class SearchView(LoginRequiredMixin, ListView):
         """
         Overridden to provide data used for the results message.
         """
-
         context = super(SearchView, self).get_context_data(**kwargs)
 
         query = self.request.GET.get("query").strip()
         target_resource = self.request.GET.get("resource")
-
         hits = len(self.get_queryset())
+        
         context.update(
             {
                 "query": query,
