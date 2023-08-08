@@ -73,7 +73,7 @@ class SearchView(LoginRequiredMixin, ListView):
         query = self.request.GET.get("query").strip()
         target_resource = self.request.GET.get("resource")
         hits = len(self.get_queryset())
-        
+
         context.update(
             {
                 "query": query,
