@@ -2,7 +2,7 @@
 // clicked. Used in the navbar search form and the glossary and translation
 // upload forms.
 function showUploadSpinner() {
-    var btn = document.getElementById('upload-button');
+    let btn = document.getElementById('upload-button');
     btn.innerHTML =
         '<span class="spinner-border spinner-border-sm"></span>&nbspアップロード中';
     btn.classList.add('disabled');
@@ -11,7 +11,7 @@ function showUploadSpinner() {
 function showSearchSpinner() {
 
     // Show the spinner within the button when clicked.
-    var btn = document.getElementById('search-button');
+    let btn = document.getElementById('search-button');
     btn.innerHTML =
         '&nbsp<span class="spinner-border spinner-border-sm"></span>&nbsp';
 
@@ -32,9 +32,9 @@ function copyText(text) {
 
 // Function to insert table cell text into the search field in the navbar.
 function searchText(text) {
-    var searchField = document.getElementById("search-input-field");
-    searchField.value = text
-    searchField.select()
+    let searchField = document.getElementById("search-input-field");
+    searchField.value = text;
+    searchField.select();
 }
 
 // Function to select text in the search field in the navbar.
